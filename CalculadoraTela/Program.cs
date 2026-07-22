@@ -2,23 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using CalculadoraTela.Data;
 
-var builder = WebApplication.CreateBuilder(new WebApplicationOptions
-{
-    Args = args
-});
+var builder = WebApplication.CreateBuilder(args);
 
-// 1. OBLIGAR A LA APP A ESCUCHAR EN 0.0.0.0 Y EN EL PUERTO DINÁMICO DE RENDER
+// Configuración de puerto para Render (0.0.0.0 escucha en todas las interfaces)
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
-
-// Desactiva el reloadOnChange para evitar el error de límite de inotify en Linux/Render
-builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
-{
-    config.Sources.Clear();
-    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
-          .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: false)
-          .AddEnvironmentVariables();
-});
 
 // Registrar servicios MVC
 builder.Services.AddControllersWithViews();
@@ -29,7 +17,6 @@ string connectionString;
 
 if (!string.IsNullOrEmpty(databaseUrl))
 {
-    // Si viene en formato URL (postgresql://user:pass@host:port/db)
     if (databaseUrl.StartsWith("postgresql://") || databaseUrl.StartsWith("postgres://"))
     {
         var databaseUri = new Uri(databaseUrl);
@@ -42,21 +29,19 @@ if (!string.IsNullOrEmpty(databaseUrl))
             Username = userInfo[0],
             Password = userInfo.Length > 1 ? userInfo[1] : "",
             Database = databaseUri.AbsolutePath.TrimStart('/'),
-            SslMode = SslMode.Prefer,
-            TrustServerCertificate = true
+            SslMode = SslMode.Prefer
+            // Se eliminó TrustServerCertificate que daba el warning CS0618
         };
 
         connectionString = connBuilder.ToString();
     }
     else
     {
-        // Si ya viene en formato de cadena clave-valor (Host=...;Database=...;...)
         connectionString = databaseUrl;
     }
 }
 else
 {
-    // Entorno local en tu PC
     connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
                       ?? throw new InvalidOperationException("No se encontró 'DefaultConnection'.");
 }
@@ -83,20 +68,15 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configuración del pipeline HTTP
+// Pipeline HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
-// ❌ SE COMENTÓ/ELIMINÓ ESTA LÍNEA PARA EVITAR ERRORES DE CONEXIÓN/REDIRECCIÓN EN RENDER:
-// app.UseHttpsRedirection();
-
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(
