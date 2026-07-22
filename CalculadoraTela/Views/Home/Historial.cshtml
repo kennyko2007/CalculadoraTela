@@ -17,19 +17,37 @@
     }
 </style>
 
-<!-- Navbar Superior -->
+<!-- Navbar Superior con Navegación Separada (Plan C) -->
 <nav class="navbar navbar-dark bg-dark-blue shadow-sm mb-4">
     <div class="container-fluid px-4">
         <a class="navbar-brand fw-bold d-flex align-items-center" href="/Home/Index">
             <i class="bi bi-cpu me-2"></i> Calculadora Tela
         </a>
         <div class="d-flex text-white-50 align-items-center gap-3">
+            <!-- Módulo Principal -->
             <a href="/Home/Index" class="text-white-50 text-decoration-none small">
-                <i class="bi bi-house-door me-1"></i> Calculadora
+                <i class="bi bi-calculator me-1"></i> Ficha Técnica
             </a>
-            <a href="/Home/Historial" class="text-white text-decoration-none small">
-                <i class="bi bi-clock-history me-1"></i> Historial
+            <a href="/Home/Historial" class="text-white text-decoration-none small fw-semibold">
+                <i class="bi bi-clock-history me-1"></i> Historial BD
             </a>
+
+            <span class="text-white-50">|</span>
+
+            <!-- Módulo Operaciones Planta (Independiente) -->
+            <div class="dropdown d-inline">
+                <a class="text-warning text-decoration-none small dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-journals me-1"></i> Control de Planta
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark shadow">
+                    <li><a class="dropdown-item small" href="/Operaciones/Rendimiento"><i class="bi bi-graph-up me-2"></i>Rendimiento (%)</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item small" href="/Operaciones/Ausencias?tipo=Asistencia"><i class="bi bi-person-check me-2"></i>Asistencia</a></li>
+                    <li><a class="dropdown-item small" href="/Operaciones/Ausencias?tipo=Falta"><i class="bi bi-person-x me-2"></i>Faltas</a></li>
+                    <li><a class="dropdown-item small" href="/Operaciones/Ausencias?tipo=Vacaciones"><i class="bi bi-calendar-event me-2"></i>Vacaciones / Bajas</a></li>
+                    <li><a class="dropdown-item small" href="/Operaciones/Ausencias?tipo=NoEnMaquina"><i class="bi bi-slash-circle me-2"></i>No en Máquina</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 </nav>
@@ -39,16 +57,16 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h3 class="fw-bold text-dark mb-0">
-                Historial de Cálculos <span class="badge badge-net fs-6 align-middle">Base de Datos</span>
+                Historial de Cálculos <span class="badge badge-net fs-6 align-middle">PostgreSQL</span>
             </h3>
-            <p class="text-muted small mb-0">Listado de registros almacenados en PostgreSQL</p>
+            <p class="text-muted small mb-0">Listado de fichas técnicas registradas y guardadas en la base de datos</p>
         </div>
         <div class="d-flex gap-2">
             <button id="btnEliminarSeleccionados" class="btn btn-danger btn-sm rounded-3 d-none" onclick="eliminarSeleccionados()">
                 <i class="bi bi-trash me-1"></i> Eliminar seleccionados
             </button>
-            <a href="/Home/Index" class="btn btn-outline-secondary btn-sm rounded-3">
-                <i class="bi bi-arrow-left me-1"></i> Volver a Calculadora
+            <a href="/Home/Index" class="btn btn-primary btn-sm rounded-3 fw-bold">
+                <i class="bi bi-plus-lg me-1"></i> Nueva Ficha Técnica
             </a>
         </div>
     </div>
@@ -74,7 +92,7 @@
                                 <th>Fecha</th>
                                 <th class="text-center">Máquina</th>
                                 <th>Tejido (Urd x Trama)</th>
-                                <th>Ficha Técnica</th>
+                                <th>Ficha Técnica (Resumen)</th>
                                 <th class="text-end">Peso Metro (gml)</th>
                                 <th class="text-end">Peso Bolsa (gr/Bol)</th>
                                 <th class="text-end">Producción</th>
@@ -89,7 +107,7 @@
                                         <input type="checkbox" class="form-check-input chk-item" value="@item.Id" onchange="actualizarBotonEliminar()">
                                     </td>
                                     <td class="text-muted small">
-                                        <!-- Guardamos la fecha ISO en UTC para convertirla localmente por JS -->
+                                        <!-- Conversion local por cliente -->
                                         <span class="fecha-local" data-utc="@item.FechaCreacion.ToString("o")">
                                             @item.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
                                         </span>
@@ -105,9 +123,9 @@
                                             @(item.ResumenFicha ?? "--")
                                         </span>
                                     </td>
-                                    <td class="text-end fw-bold">@item.PesoMetroLineal.ToString("0.0")</td>
-                                    <td class="text-end fw-bold">@item.PesoPorBolsa.ToString("0.0")</td>
-                                    <td class="text-end text-success fw-bold">@item.ProduccionEstimada.ToString("0.0")</td>
+                                    <td class="text-end fw-bold">@item.PesoMetroLineal.ToString("0.00")</td>
+                                    <td class="text-end fw-bold">@item.PesoPorBolsa.ToString("0.00")</td>
+                                    <td class="text-end text-success fw-bold">@item.ProduccionEstimada.ToString("0.00")</td>
                                     <td class="text-center pe-3">
                                         <button class="btn btn-outline-danger btn-sm border-0" onclick="eliminarRegistro(@item.Id)" title="Eliminar">
                                             <i class="bi bi-trash"></i>
@@ -125,7 +143,7 @@
 
 @section Scripts {
     <script>
-        // Formateo automático de hora al reloj exacto del cliente (Navegador)
+        // Formateo automático de fecha local según reloj del navegador
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll('.fecha-local').forEach(el => {
                 const utcStr = el.getAttribute('data-utc');
