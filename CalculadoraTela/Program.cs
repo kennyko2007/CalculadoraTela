@@ -23,20 +23,29 @@ string connectionString;
 
 if (!string.IsNullOrEmpty(databaseUrl))
 {
-    // Parsea la Internal Database URL de Render (postgresql://...) sin romper la contraseña
-    var connBuilder = new NpgsqlConnectionStringBuilder(databaseUrl)
+    // Si Render entrega la URL en formato postgres:// o postgresql://, la parseamos con Uri
+    if (databaseUrl.StartsWith("postgres://") || databaseUrl.StartsWith("postgresql://"))
     {
-        SslMode = SslMode.Prefer,
-        TrustServerCertificate = true
-    };
+        var databaseUri = new Uri(databaseUrl);
+        var userInfo = databaseUri.UserInfo.Split(':');
 
-    // Si la URL de Render no traía el puerto explícito, aseguramos el 5432
-    if (connBuilder.Port <= 0)
-    {
-        connBuilder.Port = 5432;
+        var connBuilder = new NpgsqlConnectionStringBuilder
+        {
+            Host = databaseUri.Host,
+            Port = databaseUri.Port > 0 ? databaseUri.Port : 5432,
+            Username = userInfo[0],
+            Password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : "",
+            Database = databaseUri.LocalPath.TrimStart('/'),
+            SslMode = SslMode.Require
+        };
+
+        connectionString = connBuilder.ToString();
     }
-
-    connectionString = connBuilder.ToString();
+    else
+    {
+        // Si la variable ya viene en formato clave=valor estándar
+        connectionString = databaseUrl;
+    }
 }
 else
 {
