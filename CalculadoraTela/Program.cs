@@ -3,6 +3,7 @@ using Npgsql;
 using CalculadoraTela.Data;
 using CalculadoraTela.Services;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 // 1. SOLUCIÓN AL ERROR DE INOTIFY EN LINUX/RENDER: Usar polling para el watcher de archivos
 Environment.SetEnvironmentVariable("DOTNET_USE_POLLING_FILE_WATCHER", "1");
 
