@@ -1,76 +1,111 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace CalculadoraTela.ViewModels;
-
-public class CalculadoraTelaVM
+﻿namespace CalculadoraTela.ViewModels
 {
-    // --- Entradas Principales ---
-    [Display(Name = "Urdimbre Tejido")]
-    public double UrdimbreTejido { get; set; } = 13.0;
+    public class CalculadoraTelaVM
+    {
+        // ==========================================
+        // 1. ENTRADAS: PARÁMETROS DE TEJIDO Y HILO
+        // ==========================================
+        
+        /// <summary> Densidad del tejido en Urdimbre (ej. 13) </summary>
+        public double UrdimbreTejido { get; set; } = 13.0;
 
-    [Display(Name = "Urdimbre Denier")]
-    public double UrdimbreDenier { get; set; } = 1750.0;
+        /// <summary> Densidad del tejido en Trama (ej. 11) </summary>
+        public double TramaTejido { get; set; } = 11.0;
 
-    [Display(Name = "Trama Tejido")]
-    public double TramaTejido { get; set; } = 11.5;
+        /// <summary> Ancho o medida de la cinta en Urdimbre </summary>
+        public double CintaUrdimbre { get; set; } = 2.0;
 
-    [Display(Name = "Trama Denier")]
-    public double TramaDenier { get; set; } = 1500.0;
+        /// <summary> Ancho o medida de la cinta en Trama </summary>
+        public double CintaTrama { get; set; } = 4.0;
 
-    // --- Entradas de Configuración ---
-    [Display(Name = "Laminado")]
-    public double Laminado { get; set; } = 0.0;
+        /// <summary> Titulaje Denier en Urdimbre (ej. 1200) </summary>
+        public double UrdimbreDenier { get; set; } = 1200;
 
-    [Display(Name = "Factor Ancho Refuerzo")]
-    public double AnchoRefuerzoFactor { get; set; } = 1.07;
+        /// <summary> Titulaje Denier en Trama (ej. 1500) </summary>
+        public double TramaDenier { get; set; } = 1500;
 
-    [Display(Name = "Ancho (cm)")]
-    public double Ancho { get; set; } = 184.0;
+        // ==========================================
+        // 2. ENTRADAS: DIMENSIONES Y PROCESOS
+        // ==========================================
 
-    [Display(Name = "Lado")]
-    public double Lado { get; set; } = 2.0;
+        /// <summary> Ancho del tejido en cm (ej. 90.0) </summary>
+        public double Ancho { get; set; } = 90.0;
 
-    [Display(Name = "Corte")]
-    public double Corte { get; set; } = 0.0;
+        /// <summary> Medida del corte en cm </summary>
+        public double Corte { get; set; } = 0.0;
 
-    [Display(Name = "Costura")]
-    public double Costura { get; set; } = 2.0;
+        /// <summary> Medida de la costura en cm </summary>
+        public double Costura { get; set; } = 0.0;
 
-    // --- Entradas Producción ---
-    [Display(Name = "Número de Máquina")]
-    public int MaquinaNumero { get; set; } = 18;
+        /// <summary> Valor de laminado (0 si no aplica) </summary>
+        public double Laminado { get; set; } = 0.0;
 
-    [Display(Name = "Engranaje")]
-    public double Engranaje { get; set; } = 10.5;
+        /// <summary> Factor multiplicador de refuerzo (G5 en Excel, por defecto 1.07) </summary>
+        public double AnchoRefuerzoFactor { get; set; } = 1.07;
 
-    [Display(Name = "Horas de Trabajo")]
-    public double Horas { get; set; } = 10.0;
+        /// <summary> Lado / Caras del tejido (E8 en Excel, por defecto 2.0) </summary>
+        public double Lado { get; set; } = 2.0;
 
-    // --- Salidas / Resultados ---
-    public double ResistenciaUrdimbre { get; set; }
-    public double PesoUrdimbre { get; set; }
-    public double PorcentajeUrdimbre { get; set; }
+        // ==========================================
+        // 3. ENTRADAS: MÁQUINA Y PRODUCCIÓN
+        // ==========================================
 
-    public double ResistenciaTrama { get; set; }
-    public double PesoTrama { get; set; }
-    public double PorcentajeTrama { get; set; }
+        /// <summary> Número o código de máquina (ej. 18) </summary>
+        public double MaquinaNumero { get; set; } = 18;
 
-    // Refuerzos (Fila 5 y 6 del Excel)
-    public double UrdimbreRefuerzoTejido => UrdimbreTejido * 2;
-    public double UrdimbreRefuerzoResistencia { get; set; }
-    public double TramaRefuerzoResistencia { get; set; }
+        /// <summary> Medida del engranaje en máquina (ej. 10.5) </summary>
+        public double Engranaje { get; set; } = 10.5;
 
-    // Pesos Totales
-    public double PesoTejidoBase { get; set; }  // G2
-    public double PesoConLaminado { get; set; } // G4
-    public double PesoConRefuerzo { get; set; } // G5
-    public double PesoMetroLineal { get; set; } // G7
-    public double PesoPorBolsa { get; set; }   // G9
+        /// <summary> Horas proyectadas de trabajo (ej. 10) </summary>
+        public double Horas { get; set; } = 10.0;
 
-    // Producción
-    public double FactorMaquina { get; set; }
-    public double ProduccionEstimada { get; set; }
+        // ==========================================
+        // 4. SALIDAS CALCULADAS (PROCESADAS EN C#)
+        // ==========================================
 
-    // Nomenclatura del Excel (Celda A11)
-    public string ResumenFicha { get; set; } = string.Empty;
+        /// <summary> Peso unitario Urdimbre </summary>
+        public double PesoUrdimbre { get; set; }
+
+        /// <summary> Peso unitario Trama </summary>
+        public double PesoTrama { get; set; }
+
+        /// <summary> Resistencia Urdimbre </summary>
+        public double ResistenciaUrdimbre { get; set; }
+
+        /// <summary> Resistencia Trama </summary>
+        public double ResistenciaTrama { get; set; }
+
+        /// <summary> Resistencia del refuerzo de Urdimbre </summary>
+        public double ResistenciaUrdimbreRefuerzo { get; set; }
+
+        /// <summary> Porcentaje de participación Urdimbre (%) </summary>
+        public double PorcentajeUrdimbre { get; set; }
+
+        /// <summary> Porcentaje de participación Trama (%) </summary>
+        public double PorcentajeTrama { get; set; }
+
+        /// <summary> Cantidad de cintas (Calculado con la función EVEN) </summary>
+        public int Cantidad { get; set; }
+
+        /// <summary> Peso base del tejido en gm2 </summary>
+        public double PesoTejidoBase { get; set; }
+
+        /// <summary> Peso con laminado en gm2 (H4 en Excel) </summary>
+        public double PesoConLaminado { get; set; }
+
+        /// <summary> Peso con refuerzo en gmp (H5 en Excel) </summary>
+        public double PesoConRefuerzo { get; set; }
+
+        /// <summary> Peso por metro lineal en gml (H7 en Excel) </summary>
+        public double PesoMetroLineal { get; set; }
+
+        /// <summary> Peso en gramos por bolsa gr/Bol (H9 en Excel) </summary>
+        public double PesoPorBolsa { get; set; }
+
+        /// <summary> Producción total estimada en metros </summary>
+        public double ProduccionEstimada { get; set; }
+
+        /// <summary> Cadena resumen de la Ficha Técnica (A11 en Excel) </summary>
+        public string ResumenFicha { get; set; } = string.Empty;
+    }
 }
