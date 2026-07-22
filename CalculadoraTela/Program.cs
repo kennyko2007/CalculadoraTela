@@ -7,6 +7,10 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     Args = args
 });
 
+// 1. OBLIGAR A LA APP A ESCUCHAR EN EL PUERTO DINÁMICO DE RENDER
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://*:{port}");
+
 // Desactiva el reloadOnChange para evitar el error de límite de inotify en Linux/Render
 builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
 {
@@ -86,7 +90,9 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// ❌ SE COMENTÓ/ELIMINÓ ESTA LÍNEA PARA EVITAR ERRORES DE CONEXIÓN/REDIRECCIÓN EN RENDER:
+// app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
