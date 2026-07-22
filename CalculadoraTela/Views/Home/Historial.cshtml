@@ -5,12 +5,19 @@
 }
 
 <style>
-    body { background-color: #f8fafc; }
-    .bg-dark-blue { background-color: #0f172a !important; }
-    .badge-net { background-color: #1e40af; color: #ffffff; }
+    body { 
+        background-color: #f8fafc; 
+    }
+    .bg-dark-blue { 
+        background-color: #0f172a !important; 
+    }
+    .badge-net { 
+        background-color: #1e40af; 
+        color: #ffffff; 
+    }
 </style>
 
-<!-- Navbar -->
+<!-- Navbar Superior -->
 <nav class="navbar navbar-dark bg-dark-blue shadow-sm mb-4">
     <div class="container-fluid px-4">
         <a class="navbar-brand fw-bold d-flex align-items-center" href="/Home/Index">
@@ -28,6 +35,7 @@
 </nav>
 
 <div class="container-fluid px-4 pb-5">
+    <!-- Encabezado de Página -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h3 class="fw-bold text-dark mb-0">
@@ -76,12 +84,17 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
+                                // Ajuste directo a UTC-4 (Hora Bolivia) garantizado para servidores Linux/Windows
+                                var horaBolivia = item.FechaCreacion.Kind == DateTimeKind.Utc 
+                                    ? item.FechaCreacion.AddHours(-4) 
+                                    : item.FechaCreacion;
+
                                 <tr id="fila-@item.Id">
                                     <td class="ps-3">
                                         <input type="checkbox" class="form-check-input chk-item" value="@item.Id" onchange="actualizarBotonEliminar()">
                                     </td>
                                     <td class="text-muted small">
-                                        @item.FechaCreacion.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
+                                        @horaBolivia.ToString("dd/MM/yyyy HH:mm")
                                     </td>
                                     <td class="text-center">
                                         <span class="badge bg-light text-dark border">M-@(item.MaquinaNumero)</span>
