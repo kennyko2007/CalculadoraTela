@@ -84,17 +84,15 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                                // Ajuste directo a UTC-4 (Hora Bolivia) garantizado para servidores Linux/Windows
-                                var horaBolivia = item.FechaCreacion.Kind == DateTimeKind.Utc 
-                                    ? item.FechaCreacion.AddHours(-4) 
-                                    : item.FechaCreacion;
-
                                 <tr id="fila-@item.Id">
                                     <td class="ps-3">
                                         <input type="checkbox" class="form-check-input chk-item" value="@item.Id" onchange="actualizarBotonEliminar()">
                                     </td>
                                     <td class="text-muted small">
-                                        @horaBolivia.ToString("dd/MM/yyyy HH:mm")
+                                        <!-- Guardamos la fecha ISO en UTC para convertirla localmente por JS -->
+                                        <span class="fecha-local" data-utc="@item.FechaCreacion.ToString("o")">
+                                            @item.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
+                                        </span>
                                     </td>
                                     <td class="text-center">
                                         <span class="badge bg-light text-dark border">M-@(item.MaquinaNumero)</span>
@@ -127,6 +125,25 @@
 
 @section Scripts {
     <script>
+        // Formateo automático de hora al reloj exacto del cliente (Navegador)
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('.fecha-local').forEach(el => {
+                const utcStr = el.getAttribute('data-utc');
+                if (utcStr) {
+                    const date = new Date(utcStr);
+                    if (!isNaN(date)) {
+                        const dia = String(date.getDate()).padStart(2, '0');
+                        const mes = String(date.getMonth() + 1).padStart(2, '0');
+                        const anio = date.getFullYear();
+                        const horas = String(date.getHours()).padStart(2, '0');
+                        const minutos = String(date.getMinutes()).padStart(2, '0');
+
+                        el.innerText = `${dia}/${mes}/${anio} ${horas}:${minutos}`;
+                    }
+                }
+            });
+        });
+
         function toggleSelectAll(master) {
             document.querySelectorAll('.chk-item').forEach(chk => chk.checked = master.checked);
             actualizarBotonEliminar();
