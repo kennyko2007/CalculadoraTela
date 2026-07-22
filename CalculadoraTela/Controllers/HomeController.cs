@@ -39,7 +39,6 @@ public class HomeController : Controller
         }
         catch (Exception ex)
         {
-            // Si ocurre un error al cargar el historial, te mostrará el detalle exacto en pantalla
             return Content($"Error crítico al cargar el historial: {ex.Message} --- Detalle: {ex.InnerException?.Message}");
         }
     }
@@ -102,5 +101,35 @@ public class HomeController : Controller
                 inner = ex.InnerException?.Message 
             });
         }
+    }
+
+    // --- MÉTODOS PARA ELIMINAR ---
+
+    [HttpPost]
+    public async Task<IActionResult> Eliminar(int id)
+    {
+        var registro = await _context.Calculos.FindAsync(id);
+        if (registro != null)
+        {
+            _context.Calculos.Remove(registro);
+            await _context.SaveChangesAsync();
+            return Json(new { success = true });
+        }
+        return Json(new { success = false, message = "Registro no encontrado." });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> EliminarSeleccionados([FromBody] List<int> ids)
+    {
+        if (ids == null || !ids.Any())
+        {
+            return Json(new { success = false, message = "No se seleccionó ningún registro." });
+        }
+
+        var registros = await _context.Calculos.Where(c => ids.Contains(c.Id)).ToListAsync();
+        _context.Calculos.RemoveRange(registros);
+        await _context.SaveChangesAsync();
+
+        return Json(new { success = true });
     }
 }
