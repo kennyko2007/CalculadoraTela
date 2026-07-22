@@ -1,18 +1,30 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using CalculadoraTela.Data;
-using CalculadoraTela.Services; // 👈 1. Agregado para acceder al servicio
+using CalculadoraTela.Services;
+
+// 1. SOLUCIÓN AL ERROR DE INOTIFY EN LINUX/RENDER: Usar polling para el watcher de archivos
+Environment.SetEnvironmentVariable("DOTNET_USE_POLLING_FILE_WATCHER", "1");
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurar el puerto para Render
+// Desactiva reloadOnChange para evitar que intente abrir observadores de archivos en Linux
+builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
+{
+    config.Sources.Clear();
+    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+          .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: false)
+          .AddEnvironmentVariables();
+});
+
+// Configurar el puerto dinámico para Render
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 // Registrar servicios MVC
 builder.Services.AddControllersWithViews();
 
-// 👈 2. REGISTRAR TU SERVICIO PARA INYECCIÓN DE DEPENDENCIAS
+// Registrar servicio de la calculadora
 builder.Services.AddScoped<CalculadoraService>();
 
 // --- CONFIGURACIÓN DE CADENA DE CONEXIÓN (RENDER vs LOCAL) ---
