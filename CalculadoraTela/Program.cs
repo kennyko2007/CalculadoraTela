@@ -2,13 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using CalculadoraTela.Data;
 
-// Inicializamos el WebApplicationBuilder deshabilitando los observadores de archivos predeterminados
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
     Args = args
 });
 
-// Desactiva reloadOnChange para evitar el error de límite de inotify en Render/Linux
+// Desactiva el reloadOnChange para evitar el error de límite de inotify en Linux/Render
 builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
 {
     config.Sources.Clear();
@@ -26,24 +25,34 @@ string connectionString;
 
 if (!string.IsNullOrEmpty(databaseUrl))
 {
-    // Parsea la URL nativa de Render (postgresql://...) de forma segura sin dañar contraseñas
-    var connBuilder = new NpgsqlConnectionStringBuilder(databaseUrl)
+    // Si viene en formato URL (postgresql://user:pass@host:port/db)
+    if (databaseUrl.StartsWith("postgresql://") || databaseUrl.StartsWith("postgres://"))
     {
-        SslMode = SslMode.Prefer,
-        TrustServerCertificate = true
-    };
+        var databaseUri = new Uri(databaseUrl);
+        var userInfo = databaseUri.UserInfo.Split(':');
 
-    // Asegura el puerto 5432 si la URL no lo especifica explícitamente
-    if (connBuilder.Port <= 0)
-    {
-        connBuilder.Port = 5432;
+        var connBuilder = new NpgsqlConnectionStringBuilder
+        {
+            Host = databaseUri.Host,
+            Port = databaseUri.Port > 0 ? databaseUri.Port : 5432,
+            Username = userInfo[0],
+            Password = userInfo.Length > 1 ? userInfo[1] : "",
+            Database = databaseUri.AbsolutePath.TrimStart('/'),
+            SslMode = SslMode.Prefer,
+            TrustServerCertificate = true
+        };
+
+        connectionString = connBuilder.ToString();
     }
-
-    connectionString = connBuilder.ToString();
+    else
+    {
+        // Si ya viene en formato de cadena clave-valor (Host=...;Database=...;...)
+        connectionString = databaseUrl;
+    }
 }
 else
 {
-    // Entorno local (PC)
+    // Entorno local en tu PC
     connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
                       ?? throw new InvalidOperationException("No se encontró 'DefaultConnection'.");
 }
