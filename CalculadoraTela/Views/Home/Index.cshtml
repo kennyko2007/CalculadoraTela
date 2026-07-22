@@ -4,7 +4,6 @@
     ViewData["Title"] = "Calculadora de Tela";
 }
 
-<!-- Estilos personalizados para diseño oscuro y elegante -->
 <style>
     body {
         background-color: #f8fafc;
@@ -64,7 +63,7 @@
             <a href="/Home/Index" class="text-white text-decoration-none small">
                 <i class="bi bi-house-door me-1"></i> Calculadora
             </a>
-            <a href="/Home/Historial" class="text-white text-decoration-none small">
+            <a href="/Home/Historial" class="text-white-50 text-decoration-none small">
                 <i class="bi bi-clock-history me-1"></i> Historial
             </a>
         </div>
@@ -320,6 +319,7 @@
             .catch(err => console.error('Error al calcular:', err));
         }
 
+        // Manejo del guardado sin redirección
         document.getElementById('btnGuardar').addEventListener('click', function () {
             const formData = new FormData(document.getElementById('formCalculadora'));
             const data = Object.fromEntries(formData.entries());
@@ -332,10 +332,9 @@
             .then(res => res.json())
             .then(res => {
                 if (res && res.success) {
-                    // Redirección forzada y limpia a la pestaña de historial
-                    window.location.replace('/Home/Historial');
+                    alert('¡Registro guardado exitosamente en el historial!');
                 } else {
-                    alert('Ocurrió un error al guardar el registro.');
+                    alert('Ocurrió un error al guardar el registro: ' + (res.message || 'Desconocido'));
                 }
             })
             .catch(err => {
