@@ -76,7 +76,8 @@ public class HomeController : Controller
             PesoMetroLineal = calculado.PesoMetroLineal,
             PesoPorBolsa = calculado.PesoPorBolsa,
             ProduccionEstimada = calculado.ProduccionEstimada,
-            ResumenFicha = calculado.ResumenFicha
+            // Corrección aplicada: Se asegura un valor formateado y no nulo para ResumenFicha
+            ResumenFicha = $"{calculado.Ancho:0.0}x{calculado.Lado:0.0} | {calculado.UrdimbreTejido:0.0}x{calculado.TramaTejido:0.0}"
         };
 
         _context.Calculos.Add(entidad);
