@@ -1,4 +1,174 @@
-﻿@page
-@model CalculadoraTela.Shared._LayoutModel
-@{
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Calculadora Tela</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <!-- Fuente Inter (Google Fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .bg-dark-blue {
+            background-color: #0f172a !important;
+        }
+
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .navbar-dark .navbar-nav .nav-link:hover,
+        .navbar-dark .navbar-nav .nav-link.active {
+            color: #ffffff;
+        }
+
+        .dropdown-menu-dark {
+            background-color: #1e293b;
+            border-color: #334155;
+        }
+
+        .dropdown-menu-dark .dropdown-item {
+            color: #cbd5e1;
+            font-size: 0.85rem;
+        }
+
+        .dropdown-menu-dark .dropdown-item:hover {
+            background-color: #334155;
+            color: #ffffff;
+        }
+
+        footer {
+            background-color: #0f172a;
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navbar Principal -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark-blue shadow-sm py-2">
+            <div class="container-fluid px-4">
+                
+                <!-- Brand / Logo -->
+                <a class="navbar-brand fw-bold d-flex align-items-center me-4" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-cpu text-warning me-2 fs-5"></i>
+                    <span>Calculadora<span class="text-warning">Tela</span></span>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
+                        
+                        <!-- Ficha Técnica -->
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-calculator me-1"></i> Ficha Técnica
+                            </a>
+                        </li>
+
+                        <!-- Historial BD -->
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center" asp-controller="Home" asp-action="Historial">
+                                <i class="bi bi-clock-history me-1"></i> Historial BD
+                            </a>
+                        </li>
+
+                        <!-- Separador visual -->
+                        <li class="nav-item d-none d-lg-block text-white-50 px-2">|</li>
+
+                        <!-- Módulo Operaciones (Dropdown) -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-warning fw-semibold d-flex align-items-center" href="#" id="operacionesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-gear-wide-connected me-1"></i> Operaciones
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark shadow-lg rounded-3" aria-labelledby="operacionesDropdown">
+                                <li>
+                                    <a class="dropdown-item py-2" asp-controller="Operaciones" asp-action="Rendimiento">
+                                        <i class="bi bi-graph-up text-warning me-2"></i>Rendimiento (%)
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider border-secondary"></li>
+                                <li>
+                                    <a class="dropdown-item py-2" asp-controller="Operaciones" asp-action="Ausencias" asp-route-tipo="Asistencia">
+                                        <i class="bi bi-person-check text-success me-2"></i>Asistencia
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item py-2" asp-controller="Operaciones" asp-action="Ausencias" asp-route-tipo="Falta">
+                                        <i class="bi bi-person-x text-danger me-2"></i>Faltas
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item py-2" asp-controller="Operaciones" asp-action="Ausencias" asp-route-tipo="Vacaciones">
+                                        <i class="bi bi-calendar-event text-info me-2"></i>Vacaciones / Bajas
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item py-2" asp-controller="Operaciones" asp-action="Ausencias" asp-route-tipo="NoEnMaquina">
+                                        <i class="bi bi-slash-circle text-warning me-2"></i>No en Máquina
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <!-- Estado del Sistema -->
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2 small">
+                            <i class="bi bi-circle-fill me-1" style="font-size: 0.5rem;"></i> Sistema Conectado
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Cuerpo Principal de la Aplicación -->
+    <main role="main" class="py-3">
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-3 mt-auto">
+        <div class="container-fluid px-4 text-center text-md-between d-md-flex align-items-center">
+            <span class="mb-2 mb-md-0">&copy; @DateTime.Now.Year - <strong>CalculadoraTela</strong> - Sistema de Control Operativo</span>
+            <div>
+                <span class="text-white-50 small">Módulo de Planta y Eficiencia v1.0</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/bootstrap.bundle.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
