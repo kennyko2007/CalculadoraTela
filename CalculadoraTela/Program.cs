@@ -3,30 +3,28 @@ using Npgsql;
 using CalculadoraTela.Data;
 using CalculadoraTela.Services;
 
+// 1. Solución a errores de compatibilidad en Linux/Render
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-// 1. SOLUCIÓN AL ERROR DE INOTIFY EN LINUX/RENDER: Usar polling para el watcher de archivos
 Environment.SetEnvironmentVariable("DOTNET_USE_POLLING_FILE_WATCHER", "1");
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Desactiva reloadOnChange para evitar que intente abrir observadores de archivos en Linux
-builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
-{
-    config.Sources.Clear();
-    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
-          .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: false)
-          .AddEnvironmentVariables();
-});
+// 2. Desactivar reloadOnChange usando la sintaxis moderna (Elimina la advertencia ASP0013)
+builder.Configuration.Sources.Clear();
+builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+                     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: false)
+                     .AddEnvironmentVariables();
 
-// Configurar el puerto dinámico para Render
+// Configurar el puerto para Render
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
-// Registrar servicios MVC
+// Registrar servicios MVC y la calculadora
 builder.Services.AddControllersWithViews();
-
-// Registrar servicio de la calculadora
 builder.Services.AddScoped<CalculadoraService>();
+
+// Silenciar avisos amarillos de DataProtection
+builder.Logging.AddFilter("Microsoft.AspNetCore.DataProtection", LogLevel.Error);
 
 // --- CONFIGURACIÓN DE CADENA DE CONEXIÓN (RENDER vs LOCAL) ---
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
@@ -83,8 +81,6 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "Ocurrió un error al inicializar la base de datos.");
     }
 }
-
-app.UseDeveloperExceptionPage();
 
 app.UseStaticFiles();
 app.UseRouting();
