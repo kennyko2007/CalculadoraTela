@@ -1,346 +1,224 @@
 ﻿@model CalculadoraTela.ViewModels.CalculadoraTelaVM
 
 @{
-    ViewData["Title"] = "Calculadora de Tela";
+    ViewData["Title"] = "Calculadora de Tela - Ficha Técnica";
 }
 
-<style>
-    body {
-        background-color: #f8fafc;
-    }
-
-    .bg-dark-blue {
-        background-color: #0f172a !important;
-    }
-
-    .btn-dark-blue {
-        background-color: #1e3a8a;
-        color: #ffffff;
-        border: none;
-        transition: all 0.2s ease-in-out;
-    }
-
-    .btn-dark-blue:hover {
-        background-color: #0f172a;
-        color: #ffffff;
-    }
-
-    .badge-net {
-        background-color: #1e40af;
-        color: #ffffff;
-    }
-
-    .metro-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 0;
-        border-bottom: 1px dashed #e2e8f0;
-    }
-
-    .metro-item:last-child {
-        border-bottom: none;
-    }
-
-    .metro-label {
-        color: #64748b;
-        font-weight: 500;
-    }
-
-    .metro-value {
-        font-weight: 700;
-        color: #0f172a;
-    }
-</style>
-
-<!-- Navbar Superior con Azul Oscuro -->
-<nav class="navbar navbar-dark bg-dark-blue shadow-sm mb-4">
-    <div class="container-fluid px-4">
-        <a class="navbar-brand fw-bold d-flex align-items-center" href="/Home/Index">
-            <i class="bi bi-cpu me-2"></i> Calculadora Tela
-        </a>
-        <div class="d-flex text-white-50 align-items-center gap-3">
-            <a href="/Home/Index" class="text-white text-decoration-none small">
-                <i class="bi bi-house-door me-1"></i> Calculadora
-            </a>
-            <a href="/Home/Historial" class="text-white-50 text-decoration-none small">
-                <i class="bi bi-clock-history me-1"></i> Historial
-            </a>
-        </div>
-    </div>
-</nav>
-
 <div class="container-fluid px-4 pb-5">
-    <!-- Encabezado de Página -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <div>
-            <h3 class="fw-bold text-dark mb-0">
-                Calculadora de Tela <span class="badge badge-net fs-6 align-middle">.NET 10</span>
-            </h3>
-            <p class="text-muted small mb-0">Panel de control de parámetros textiles y métricas de producción</p>
-        </div>
-        <a href="/Home/Historial" class="btn btn-outline-secondary btn-sm rounded-3">
-            <i class="bi bi-clock-history me-1"></i> Ver Historial
-        </a>
-    </div>
-
-    <!-- Banner Ficha Técnica Limpio -->
-    <div class="card bg-dark text-warning border-0 shadow-sm mb-4" style="background-color: #111827 !important;">
-        <div class="card-body p-3">
-            <span class="badge bg-secondary text-warning mb-2" style="font-size: 0.7rem;">FICHA TÉCNICA GENERADA</span>
-            <h4 class="font-monospace fw-bold mb-0 text-warning d-flex flex-wrap gap-3 align-items-center" style="letter-spacing: 0.5px;">
-                <span id="lblFichaAnchoLado">@(Model.Ancho.ToString("0.0"))x@(Model.Lado.ToString("0.0"))</span>
-                <span id="lblFichaTejido">@(Model.UrdimbreTejido.ToString("0.0"))x@(Model.TramaTejido.ToString("0.0"))</span>
-                <span id="lblFichaGm2">@(Model.PesoTejidoBase.ToString("0.0"))gm2</span>
-                <span id="lblFichaGmp">@(Model.PesoConRefuerzo.ToString("0.0"))gmp</span>
-                <span id="lblFichaGml">@(Model.PesoMetroLineal.ToString("0.0"))gml</span>
-                <span id="lblFichaGrBol">@(Model.PesoPorBolsa.ToString("0.0"))gr/Bol</span>
-            </h4>
-        </div>
-    </div>
-
-    <!-- Formulario / Panel principal -->
-    <form id="formCalculadora">
-        <div class="row g-4">
-            <!-- Columna Izquierda: Parámetros -->
-            <div class="col-lg-6">
-                <!-- 1. Especificaciones de Hilo -->
-                <div class="card border-0 shadow-sm rounded-3 mb-3">
-                    <div class="card-body">
-                        <h6 class="fw-bold text-primary mb-3"><i class="bi bi-diagram-3 me-2"></i>1. Especificaciones de Hilo y Tejido</h6>
-                        <div class="row g-3">
-                            <div class="col-6">
-                                <label class="form-label text-muted small">Urdimbre Tejido</label>
-                                <input asp-for="UrdimbreTejido" type="number" step="any" class="form-control calc-trigger">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label text-muted small">Urdimbre Denier</label>
-                                <input asp-for="UrdimbreDenier" type="number" step="any" class="form-control calc-trigger">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label text-muted small">Trama Tejido</label>
-                                <input asp-for="TramaTejido" type="number" step="any" class="form-control calc-trigger">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label text-muted small">Trama Denier</label>
-                                <input asp-for="TramaDenier" type="number" step="any" class="form-control calc-trigger">
-                            </div>
-                        </div>
-                    </div>
+    <div class="row g-4">
+        
+        <!-- ==========================================
+             COLUMNA IZQUIERDA: FORMULARIO DE ENTRADA
+             ========================================== -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h5 class="fw-bold text-dark mb-0">
+                        <i class="bi bi-sliders me-2 text-primary"></i>Parámetros de la Tela
+                    </h5>
                 </div>
-
-                <!-- 2. Dimensiones y Acabados -->
-                <div class="card border-0 shadow-sm rounded-3 mb-3">
-                    <div class="card-body">
-                        <h6 class="fw-bold text-primary mb-3"><i class="bi bi-aspect-ratio me-2"></i>2. Dimensiones y Acabados</h6>
-                        <div class="row g-3">
-                            <div class="col-6">
-                                <label class="form-label text-muted small">Laminado</label>
-                                <input asp-for="Laminado" type="number" step="any" class="form-control calc-trigger">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label text-muted small">Factor Ancho Refuerzo</label>
-                                <input asp-for="AnchoRefuerzoFactor" type="number" step="any" class="form-control calc-trigger">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label text-muted small">Ancho (cm)</label>
-                                <input asp-for="Ancho" type="number" step="any" class="form-control calc-trigger">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label text-muted small">Lado</label>
-                                <input asp-for="Lado" type="number" step="any" class="form-control calc-trigger">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label text-muted small">Corte</label>
-                                <input asp-for="Corte" type="number" step="any" class="form-control calc-trigger">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label text-muted small">Costura</label>
-                                <input asp-for="Costura" type="number" step="any" class="form-control calc-trigger">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. Parámetros de Producción -->
-                <div class="card border-0 shadow-sm rounded-3">
-                    <div class="card-body">
-                        <h6 class="fw-bold text-primary mb-3"><i class="bi bi-gear me-2"></i>3. Parámetros de Producción</h6>
-                        <div class="row g-3">
-                            <div class="col-4">
-                                <label class="form-label text-muted small">Número de Máquina</label>
-                                <input asp-for="MaquinaNumero" type="number" step="any" class="form-control calc-trigger">
-                            </div>
-                            <div class="col-4">
-                                <label class="form-label text-muted small">Engranaje</label>
-                                <input asp-for="Engranaje" type="number" step="any" class="form-control calc-trigger">
-                            </div>
-                            <div class="col-4">
-                                <label class="form-label text-muted small">Horas de Trabajo</label>
-                                <input asp-for="Horas" type="number" step="any" class="form-control calc-trigger">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Columna Derecha: Resultados -->
-            <div class="col-lg-6">
-                <!-- Tabla de Resistencia y Peso -->
-                <div class="card border-0 shadow-sm rounded-3 mb-3">
-                    <div class="card-body">
-                        <h6 class="fw-bold text-success mb-3"><i class="bi bi-check-circle me-2"></i>Resultados de Resistencia y Peso</h6>
-                        <table class="table table-borderless align-middle mb-0">
-                            <thead>
-                                <tr class="text-muted small border-bottom">
-                                    <th>Concepto</th>
-                                    <th class="text-end">Resistencia</th>
-                                    <th class="text-end">Peso</th>
-                                    <th class="text-end">%</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="fw-bold">Urdimbre</td>
-                                    <td class="text-end" id="resUrdimbre">@Model.ResistenciaUrdimbre.ToString("0.0")</td>
-                                    <td class="text-end" id="pesoUrdimbre">@Model.PesoUrdimbre.ToString("0.0")</td>
-                                    <td class="text-end"><span class="badge bg-light text-dark border" id="porcUrdimbre">@Model.PorcentajeUrdimbre.ToString("0.0")%</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-bold">Trama</td>
-                                    <td class="text-end" id="resTrama">@Model.ResistenciaTrama.ToString("0.0")</td>
-                                    <td class="text-end" id="pesoTrama">@Model.PesoTrama.ToString("0.0")</td>
-                                    <td class="text-end"><span class="badge bg-light text-dark border" id="porcTrama">@Model.PorcentajeTrama.ToString("0.0")%</span></td>
-                                </tr>
-                                <tr class="border-top">
-                                    <td class="fw-bold text-primary">Urdimbre Ref.</td>
-                                    <td class="text-end text-primary fw-bold" id="resUrdimbreRef">--</td>
-                                    <td class="text-end">-</td>
-                                    <td class="text-end">-</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Resumen Metrológico Limpio -->
-                <div class="card border-0 shadow-sm rounded-3 mb-3">
-                    <div class="card-body">
-                        <h6 class="fw-bold text-primary mb-3"><i class="bi bi-box me-2"></i>Resumen Metrológico</h6>
+                <div class="card-body p-4">
+                    <form id="formCalculo" onsubmit="procesarCalculo(event)">
                         
-                        <div class="metro-item">
-                            <span class="metro-label">Peso Tejido Base</span>
-                            <span class="metro-value"><span id="lblPesoBase">@Model.PesoTejidoBase.ToString("0.0")</span> <small class="fw-normal text-muted">gm2</small></span>
+                        <!-- 1. Tejido Urdimbre y Trama -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">Urdimbre Tejido</label>
+                                <input type="number" step="0.1" class="form-control" name="UrdimbreTejido" value="@Model.UrdimbreTejido" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">Trama Tejido</label>
+                                <input type="number" step="0.1" class="form-control" name="TramaTejido" value="@Model.TramaTejido" required>
+                            </div>
                         </div>
-                        <div class="metro-item">
-                            <span class="metro-label">Peso con Laminado</span>
-                            <span class="metro-value"><span id="lblPesoLaminado">@Model.PesoConLaminado.ToString("0.0")</span> <small class="fw-normal text-muted">gm2</small></span>
-                        </div>
-                        <div class="metro-item">
-                            <span class="metro-label">Peso con Refuerzo</span>
-                            <span class="metro-value"><span id="lblPesoRefuerzo">@Model.PesoConRefuerzo.ToString("0.0")</span> <small class="fw-normal text-muted">gmp</small></span>
-                        </div>
-                        <div class="metro-item">
-                            <span class="metro-label">Peso Metro Lineal</span>
-                            <span class="metro-value"><span id="lblPesoGml">@Model.PesoMetroLineal.ToString("0.0")</span> <small class="fw-normal text-muted">gml</small></span>
-                        </div>
-                        <div class="metro-item">
-                            <span class="metro-label">Peso por Bolsa</span>
-                            <span class="metro-value"><span id="lblPesoBolsa">@Model.PesoPorBolsa.ToString("0.0")</span> <small class="fw-normal text-muted">gr/Bol</small></span>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Producción Estimada -->
-                <div class="card text-white border-0 shadow-sm rounded-3 mb-3" style="background-color: #0d9488 !important;">
-                    <div class="card-body p-3 d-flex justify-content-between align-items-center">
-                        <div>
-                            <div class="small text-uppercase opacity-75 fw-bold">Producción Estimada</div>
-                            <div class="display-6 fw-bold" id="lblProduccion">@Model.ProduccionEstimada.ToString("0.0")</div>
+                        <!-- 2. Denier -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">Urdimbre Denier</label>
+                                <input type="number" class="form-control" name="UrdimbreDenier" value="@Model.UrdimbreDenier" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">Trama Denier</label>
+                                <input type="number" class="form-control" name="TramaDenier" value="@Model.TramaDenier" required>
+                            </div>
                         </div>
-                        <i class="bi bi-speedometer2 display-4 opacity-50"></i>
-                    </div>
-                </div>
 
-                <!-- Botón Guardar en Historial -->
-                <button type="button" id="btnGuardar" class="btn btn-dark-blue w-100 py-3 rounded-3 fw-bold shadow-sm">
-                    <i class="bi bi-bookmark-check me-2"></i> Guardar Registro en Historial
-                </button>
+                        <!-- 3. Dimensiones del Producto -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-secondary">Ancho (cm)</label>
+                                <input type="number" step="0.1" class="form-control" name="Ancho" value="@Model.Ancho" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-secondary">Corte (cm)</label>
+                                <input type="number" step="0.1" class="form-control" name="Corte" value="@Model.Corte">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-secondary">Costura (cm)</label>
+                                <input type="number" step="0.1" class="form-control" name="Costura" value="@Model.Costura">
+                            </div>
+                        </div>
+
+                        <!-- 4. Laminado y Refuerzos -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-secondary">Laminado</label>
+                                <input type="number" step="0.1" class="form-control" name="Laminado" value="@Model.Laminado">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-secondary">Factor Refuerzo</label>
+                                <input type="number" step="0.01" class="form-control" name="AnchoRefuerzoFactor" value="@Model.AnchoRefuerzoFactor">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-secondary">Lado / Caras</label>
+                                <input type="number" step="0.1" class="form-control" name="Lado" value="@Model.Lado">
+                            </div>
+                        </div>
+
+                        <!-- 5. Parámetros de Máquina -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-secondary">Máquina N°</label>
+                                <input type="number" class="form-control" name="MaquinaNumero" value="@Model.MaquinaNumero" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-secondary">Engranaje</label>
+                                <input type="number" step="0.01" class="form-control" name="Engranaje" value="@Model.Engranaje" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-secondary">Horas Proyectadas</label>
+                                <input type="number" step="0.1" class="form-control" name="Horas" value="@Model.Horas" required>
+                            </div>
+                        </div>
+
+                        <!-- Botón de Acción Principal -->
+                        <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm">
+                            <i class="bi bi-calculator me-2"></i> Calcular Ficha Técnica
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
-    </form>
+
+        <!-- ==========================================
+             COLUMNA DERECHA: CUADRO VERDE DE RESULTADOS
+             ========================================== -->
+        <div class="col-lg-5">
+            <div id="cuadroResultadoVerde" class="card border-0 shadow text-white rounded-3 bg-success bg-gradient p-4 sticky-top" style="top: 20px;">
+                
+                <!-- Encabezado del Cuadro Verde -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0">
+                        <i class="bi bi-check-circle-fill me-2"></i> Ficha Técnica Generada
+                    </h5>
+                    <span class="badge bg-light text-success fw-bold px-3 py-2 rounded-pill">Sincronizado</span>
+                </div>
+
+                <hr class="border-light opacity-25 my-2">
+
+                <!-- Resumen en Formato Cadena Concatenada (A11 de Excel) -->
+                <div class="p-3 rounded bg-black bg-opacity-20 font-monospace small mb-3 text-center border border-light border-opacity-10">
+                    <span class="d-block text-white-50 small mb-1">CÓDIGO DE FICHA TÉCNICA</span>
+                    <strong class="fs-6 text-warning" id="lblResumenFicha">
+                        @(string.IsNullOrEmpty(Model.ResumenFicha) ? "90x0 \\ 13x11 \\ 0gm2 \\ 0gmp \\ 0gml \\ 0gr/Bol." : Model.ResumenFicha)
+                    </strong>
+                </div>
+
+                <!-- Tarjetas de Resultados Clave -->
+                <div class="row g-3 text-center my-1">
+                    
+                    <!-- Peso Metro Lineal (H7) -->
+                    <div class="col-6">
+                        <div class="p-3 bg-white bg-opacity-10 rounded border border-light border-opacity-25">
+                            <small class="d-block text-white-50 text-uppercase fw-semibold" style="font-size: 0.75rem;">Peso Metro Lineal</small>
+                            <span class="fs-3 fw-bold" id="lblPesoMetro">@Model.PesoMetroLineal.ToString("0.00")</span>
+                            <small class="d-inline text-white-50">gml</small>
+                        </div>
+                    </div>
+
+                    <!-- Peso por Bolsa (H9) -->
+                    <div class="col-6">
+                        <div class="p-3 bg-white bg-opacity-10 rounded border border-light border-opacity-25">
+                            <small class="d-block text-white-50 text-uppercase fw-semibold" style="font-size: 0.75rem;">Peso por Bolsa</small>
+                            <span class="fs-3 fw-bold" id="lblPesoBolsa">@Model.PesoPorBolsa.ToString("0.00")</span>
+                            <small class="d-inline text-white-50">gr</small>
+                        </div>
+                    </div>
+
+                    <!-- Producción Estimada (E13) -->
+                    <div class="col-12">
+                        <div class="p-3 bg-white bg-opacity-10 rounded border border-light border-opacity-25">
+                            <small class="d-block text-white-50 text-uppercase fw-semibold" style="font-size: 0.75rem;">Producción Estimada</small>
+                            <span class="fs-2 fw-bold text-warning" id="lblProduccion">@Model.ProduccionEstimada.ToString("0.00")</span>
+                            <small class="fs-5 text-white">metros</small>
+                        </div>
+                    </div>
+
+                    <!-- Datos Complementarios (gm2 y gmp) -->
+                    <div class="col-6">
+                        <div class="p-2 bg-black bg-opacity-10 rounded">
+                            <small class="text-white-50 d-block">Peso Con Laminado</small>
+                            <strong id="lblPesoLaminado">@Model.PesoConLaminado.ToString("0.00")</strong> <small>gm2</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2 bg-black bg-opacity-10 rounded">
+                            <small class="text-white-50 d-block">Peso Con Refuerzo</small>
+                            <strong id="lblPesoRefuerzo">@Model.PesoConRefuerzo.ToString("0.00")</strong> <small>gmp</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pie de tarjeta con estatus de base de datos -->
+                <div class="mt-4 pt-2 small text-white-50 text-center border-top border-light border-opacity-10">
+                    <i class="bi bi-database-check me-1"></i> Cálculo procesado y respaldado en PostgreSQL.
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 @section Scripts {
     <script>
-        function f1(val) {
-            if (val === null || val === undefined || isNaN(val)) return '--';
-            return Number(val).toFixed(1);
-        }
-
-        document.querySelectorAll('.calc-trigger').forEach(input => {
-            input.addEventListener('input', calcular);
-        });
-
-        function calcular() {
-            const formData = new FormData(document.getElementById('formCalculadora'));
+        function procesarCalculo(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
+
+            // Convertir campos numéricos de texto a float/int para C#
+            for (let key in data) {
+                if (data[key] !== "") {
+                    data[key] = parseFloat(data[key]);
+                }
+            }
 
             fetch('/Home/Calcular', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json' 
+                },
                 body: JSON.stringify(data)
             })
-            .then(res => res.json())
             .then(res => {
-                document.getElementById('lblFichaAnchoLado').innerText = `${f1(res.ancho)}x${f1(res.lado)}`;
-                document.getElementById('lblFichaTejido').innerText = `${f1(res.urdimbreTejido)}x${f1(res.tramaTejido)}`;
-                document.getElementById('lblFichaGm2').innerText = `${f1(res.pesoTejidoBase)}gm2`;
-                document.getElementById('lblFichaGmp').innerText = `${f1(res.pesoConRefuerzo)}gmp`;
-                document.getElementById('lblFichaGml').innerText = `${f1(res.pesoMetroLineal)}gml`;
-                document.getElementById('lblFichaGrBol').innerText = `${f1(res.pesoPorBolsa)}gr/Bol`;
-
-                document.getElementById('resUrdimbre').innerText = f1(res.resistenciaUrdimbre);
-                document.getElementById('pesoUrdimbre').innerText = f1(res.pesoUrdimbre);
-                document.getElementById('porcUrdimbre').innerText = f1(res.porcentajeUrdimbre) + '%';
-
-                document.getElementById('resTrama').innerText = f1(res.resistenciaTrama);
-                document.getElementById('pesoTrama').innerText = f1(res.pesoTrama);
-                document.getElementById('porcTrama').innerText = f1(res.porcentajeTrama) + '%';
-
-                document.getElementById('lblPesoBase').innerText = f1(res.pesoTejidoBase);
-                document.getElementById('lblPesoLaminado').innerText = f1(res.pesoConLaminado);
-                document.getElementById('lblPesoRefuerzo').innerText = f1(res.pesoConRefuerzo);
-                document.getElementById('lblPesoGml').innerText = f1(res.pesoMetroLineal);
-                document.getElementById('lblPesoBolsa').innerText = f1(res.pesoPorBolsa);
-
-                document.getElementById('lblProduccion').innerText = f1(res.produccionEstimada);
+                if (!res.ok) throw new Error("Error en el servidor al calcular");
+                return res.json();
             })
-            .catch(err => console.error('Error al calcular:', err));
-        }
-
-        // Manejo del guardado sin redirección
-        document.getElementById('btnGuardar').addEventListener('click', function () {
-            const formData = new FormData(document.getElementById('formCalculadora'));
-            const data = Object.fromEntries(formData.entries());
-
-            fetch('/Home/GuardarHistorial', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            })
-            .then(res => res.json())
             .then(res => {
-                if (res && res.success) {
-                    alert('¡Registro guardado exitosamente en el historial!');
-                } else {
-                    alert('Ocurrió un error al guardar el registro: ' + (res.message || 'Desconocido'));
-                }
+                // Actualizar los elementos dentro del Cuadro Verde
+                document.getElementById('lblResumenFicha').innerText = res.resumenFicha || '--';
+                document.getElementById('lblPesoMetro').innerText = res.pesoMetroLineal.toFixed(2);
+                document.getElementById('lblPesoBolsa').innerText = res.pesoPorBolsa.toFixed(2);
+                document.getElementById('lblProduccion').innerText = res.produccionEstimada.toFixed(2);
+                document.getElementById('lblPesoLaminado').innerText = res.pesoConLaminado.toFixed(2);
+                document.getElementById('lblPesoRefuerzo').innerText = res.pesoConRefuerzo.toFixed(2);
             })
             .catch(err => {
-                console.error('Error al guardar:', err);
-                alert('No se pudo conectar con el servidor.');
+                console.error("Error al procesar el cálculo:", err);
+                alert("Ocurrió un error al realizar el cálculo. Revisa la consola.");
             });
-        });
+        }
     </script>
 }
