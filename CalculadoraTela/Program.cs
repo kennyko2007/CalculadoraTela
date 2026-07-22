@@ -2,7 +2,17 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using CalculadoraTela.Data; // Tu namespace de AppDbContext
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args
+});
+
+// Evita el error de inotify limit (file watchers) en Linux/Render
+builder.Configuration.Sources.Clear();
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: false)
+    .AddEnvironmentVariables();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -13,7 +23,7 @@ string connectionString;
 
 if (!string.IsNullOrEmpty(databaseUrl))
 {
-    // Parsea la URL nativa de Render sin romper caracteres de la contraseña
+    // Parsea la Internal Database URL de Render (postgresql://...) sin romper la contraseña
     var connBuilder = new NpgsqlConnectionStringBuilder(databaseUrl)
     {
         SslMode = SslMode.Prefer,
@@ -30,12 +40,12 @@ if (!string.IsNullOrEmpty(databaseUrl))
 }
 else
 {
-    // Si estás ejecutando en la PC local, lee de appsettings.json
+    // Si estás ejecutando localmente en tu PC, lee appsettings.json
     connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
                       ?? throw new InvalidOperationException("No se encontró 'DefaultConnection'.");
 }
 
-// Configuración de Entity Framework con Npgsql
+// Configuración de Entity Framework Core con Npgsql
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
@@ -48,7 +58,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<AppDbContext>();
-        context.Database.EnsureCreated(); // Crea la tabla Calculos si no existe
+        context.Database.EnsureCreated(); // Crea las tablas en PostgreSQL si no existen
     }
     catch (Exception ex)
     {
@@ -57,7 +67,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configuración del pipeline HTTP
+// Configuración del pipeline de peticiones HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
