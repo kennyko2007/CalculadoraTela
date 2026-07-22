@@ -7,9 +7,9 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     Args = args
 });
 
-// 1. OBLIGAR A LA APP A ESCUCHAR EN EL PUERTO DINÁMICO DE RENDER
+// 1. OBLIGAR A LA APP A ESCUCHAR EN 0.0.0.0 Y EN EL PUERTO DINÁMICO DE RENDER
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-builder.WebHost.UseUrls($"http://*:{port}");
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 // Desactiva el reloadOnChange para evitar el error de límite de inotify en Linux/Render
 builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
