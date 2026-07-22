@@ -330,7 +330,7 @@
             .catch(err => console.error('Error al calcular:', err));
         }
 
-        // Guardar Registro en PostgreSQL
+        // Guardar Registro en PostgreSQL (Se queda en la misma página mostrando alerta)
         document.getElementById('btnGuardar').addEventListener('click', function () {
             const formData = new FormData(document.getElementById('formCalculadora'));
             const data = Object.fromEntries(formData.entries());
@@ -344,7 +344,7 @@
             .then(res => {
                 if (res.success) {
                     alert('¡Registro guardado exitosamente en el historial!');
-                    window.location.href = '/Home/Historial';
+                    // Se remueve la redirección automática para que el usuario decida cuándo ir al historial
                 } else {
                     alert('Ocurrió un error al guardar el registro.');
                 }
