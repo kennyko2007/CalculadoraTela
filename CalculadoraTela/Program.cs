@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-// Reemplaza 'CalculadoraTela.Data' si tu DbContext está en otra carpeta/namespace
-using CalculadoraTela.Data; 
+using CalculadoraTela.Data; // Incluye la referencia a tu AppDbContext
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,15 +13,14 @@ string connectionString;
 
 if (!string.IsNullOrEmpty(databaseUrl))
 {
-    // Si estamos en Render, parseamos la Internal Database URL (postgresql://...)
+    // Parsea la Internal Database URL de Render (postgresql://...)
     var databaseUri = new Uri(databaseUrl);
     var userInfo = databaseUri.UserInfo.Split(':');
 
     var connectionBuilder = new NpgsqlConnectionStringBuilder
     {
         Host = databaseUri.Host,
-        // Si el puerto de la URI no es válido o es -1, forzamos el 5432 estándar de Postgres
-        Port = databaseUri.Port > 0 ? databaseUri.Port : 5432,
+        Port = databaseUri.Port > 0 ? databaseUri.Port : 5432, // Forzado a 5432 para evitar -1
         Username = userInfo[0],
         Password = userInfo.Length > 1 ? userInfo[1] : "",
         Database = databaseUri.AbsolutePath.TrimStart('/'),
@@ -34,26 +32,25 @@ if (!string.IsNullOrEmpty(databaseUrl))
 }
 else
 {
-    // Si estamos corriendo localmente en la PC, lee de appsettings.json
+    // Si estás en tu PC local, lee appsettings.json
     connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-                      ?? throw new InvalidOperationException("No se encontró la cadena 'DefaultConnection'.");
+                      ?? throw new InvalidOperationException("No se encontró 'DefaultConnection'.");
 }
 
-// Configuración del DbContext con PostgreSQL (Npgsql)
-// NOTA: Si tu DbContext no se llama 'ApplicationDbContext', cambia el nombre aquí
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+// Configuración del DbContext con Npgsql usando AppDbContext
+builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 var app = builder.Build();
 
-// --- APLICAR MIGRACIONES Y CREAR BASE DE DATOS AL INICIAR ---
+// --- CREAR BASE DE DATOS Y TABLAS AL INICIAR ---
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     try
     {
-        var context = services.GetRequiredService<ApplicationDbContext>();
-        context.Database.EnsureCreated(); // Crea las tablas automáticamente en Postgres
+        var context = services.GetRequiredService<AppDbContext>();
+        context.Database.EnsureCreated(); // Crea la tabla Calculos automáticamente
     }
     catch (Exception ex)
     {
@@ -62,7 +59,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configure the HTTP request pipeline.
+// Pipeline de peticiones HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
