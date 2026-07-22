@@ -1,21 +1,28 @@
-# 1. Imagen para la compilación (SDK de .NET 10.0)
+# 1. ETAPA DE COMPILACIÓN (SDK de .NET 10.0)
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
-# Copiar el archivo del proyecto y restaurar las dependencias
+# Copiar archivo del proyecto y restaurar dependencias
 COPY ["CalculadoraTela.csproj", "./"]
 RUN dotnet restore "CalculadoraTela.csproj"
 
-# Copiar el resto del código fuente y compilar la aplicación en modo Release
+# Copiar todo el código fuente y publicar en modo Release
 COPY . .
 RUN dotnet publish "CalculadoraTela.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# 2. Imagen final para ejecución en producción (Runtime de ASP.NET 10.0)
+# 2. ETAPA FINAL DE EJECUCIÓN (Runtime de ASP.NET Core 10.0)
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
+
+# Instalar la librería GSSAPI/Kerberos para eliminar el error "libgssapi_krb5.so.2"
+RUN apt-get update && \
+    apt-get install -y libgssapi-krb5-2 && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copiar la aplicación compilada
 COPY --from=build /app/publish .
 
-# Puerto por defecto expuesto en contenedores ASP.NET Core
+# Configurar puertos y entorno para Render
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://+:8080
 
