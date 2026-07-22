@@ -1,37 +1,73 @@
-using CalculadoraTela.Data;
-using CalculadoraTela.Services;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using CalculadoraTela.Data; // Tu namespace de AppDbContext
 
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<CalculadoraService>();
-
-// Configuración de Base de Datos para Render / PostgreSQL
-string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-// Render provee la variable de entorno DATABASE_URL automáticamente al enlazar PostgreSQL
-var envConnectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
-if (!string.IsNullOrEmpty(envConnectionString))
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
-    // Convertir el formato URI de Render (postgres://user:pass@host:port/db) al formato Npgsql
-    var databaseUri = new Uri(envConnectionString);
-    var userInfo = databaseUri.UserInfo.Split(':');
-    connectionString = $"Host={databaseUri.Host};Port={databaseUri.Port};Database={databaseUri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true";
+    Args = args
+});
+
+// Evita el error de inotify limit (file watchers) en Linux/Render
+builder.Configuration.Sources.Clear();
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: false)
+    .AddEnvironmentVariables();
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
+// --- CONFIGURACIÓN DE CADENA DE CONEXIÓN (RENDER vs LOCAL) ---
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+string connectionString;
+
+if (!string.IsNullOrEmpty(databaseUrl))
+{
+    // Parsea la Internal Database URL de Render (postgresql://...) sin romper la contraseña
+    var connBuilder = new NpgsqlConnectionStringBuilder(databaseUrl)
+    {
+        SslMode = SslMode.Prefer,
+        TrustServerCertificate = true
+    };
+
+    // Si la URL de Render no traía el puerto explícito, aseguramos el 5432
+    if (connBuilder.Port <= 0)
+    {
+        connBuilder.Port = 5432;
+    }
+
+    connectionString = connBuilder.ToString();
+}
+else
+{
+    // Si estás ejecutando localmente en tu PC, lee appsettings.json
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+                      ?? throw new InvalidOperationException("No se encontró 'DefaultConnection'.");
 }
 
+// Configuración de Entity Framework Core con Npgsql
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 var app = builder.Build();
 
-// Asegurar que las tablas existan en PostgreSQL al arrancar la app en Render
+// --- CREAR BASE DE DATOS Y TABLAS AL INICIAR ---
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    context.Database.EnsureCreated();
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+        context.Database.EnsureCreated(); // Crea las tablas en PostgreSQL si no existen
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Ocurrió un error al inicializar la base de datos.");
+    }
 }
 
+// Configuración del pipeline de peticiones HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -40,7 +76,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
