@@ -3,6 +3,7 @@ using CalculadoraTela.Models;
 using CalculadoraTela.Services;
 using CalculadoraTela.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CalculadoraTela.Controllers;
 
@@ -25,8 +26,20 @@ public class HomeController : Controller
         return View(model);
     }
 
+    // ⬇️ ACCIÓN AGREGADA PARA CARGAR LA VISTA DEL HISTORIAL
+    [HttpGet]
+    public async Task<IActionResult> Historial()
+    {
+        // Consulta todos los cálculos guardados ordenados por fecha descendente
+        var listaHistorial = await _context.Calculos
+            .OrderByDescending(c => c.FechaCreacion)
+            .ToListAsync();
+
+        return View(listaHistorial);
+    }
+
     [HttpPost]
-    public IActionResult Calcular(CalculadoraTelaVM model)
+    public IActionResult Calcular([FromBody] CalculadoraTelaVM model)
     {
         var resultado = _calculadoraService.CalcularValores(model);
         return Json(resultado);
@@ -39,7 +52,8 @@ public class HomeController : Controller
 
         var entidad = new Calculo
         {
-            FechaCreacion = DateTime.Now,
+            // Se usa UtcNow para evitar incompatibilidades de timestamp en PostgreSQL
+            FechaCreacion = DateTime.UtcNow,
             UrdimbreTejido = calculado.UrdimbreTejido,
             UrdimbreDenier = calculado.UrdimbreDenier,
             TramaTejido = calculado.TramaTejido,
