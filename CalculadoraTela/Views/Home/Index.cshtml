@@ -10,12 +10,10 @@
         background-color: #f8fafc;
     }
 
-    /* Azul Marino / Noche Profundo */
     .bg-dark-blue {
         background-color: #0f172a !important;
     }
 
-    /* Botón Guardar / Acción principal */
     .btn-dark-blue {
         background-color: #1e3a8a;
         color: #ffffff;
@@ -28,13 +26,11 @@
         color: #ffffff;
     }
 
-    /* Badge de versión */
     .badge-net {
         background-color: #1e40af;
         color: #ffffff;
     }
 
-    /* Formato de items en Resumen Metrológico */
     .metro-item {
         display: flex;
         justify-content: space-between;
@@ -68,7 +64,7 @@
             <a href="/Home/Index" class="text-white text-decoration-none small">
                 <i class="bi bi-house-door me-1"></i> Calculadora
             </a>
-            <a href="/Home/Historial" class="text-white-50 text-decoration-none small">
+            <a href="/Home/Historial" class="text-white text-decoration-none small">
                 <i class="bi bi-clock-history me-1"></i> Historial
             </a>
         </div>
@@ -278,13 +274,11 @@
 
 @section Scripts {
     <script>
-        // Función auxiliar para formatear los números a un decimal de forma segura
         function f1(val) {
             if (val === null || val === undefined || isNaN(val)) return '--';
             return Number(val).toFixed(1);
         }
 
-        // Recalcular automáticamente al modificar cualquier input
         document.querySelectorAll('.calc-trigger').forEach(input => {
             input.addEventListener('input', calcular);
         });
@@ -300,7 +294,6 @@
             })
             .then(res => res.json())
             .then(res => {
-                // Actualizar Banner Ficha Técnica con 1 decimal
                 document.getElementById('lblFichaAnchoLado').innerText = `${f1(res.ancho)}x${f1(res.lado)}`;
                 document.getElementById('lblFichaTejido').innerText = `${f1(res.urdimbreTejido)}x${f1(res.tramaTejido)}`;
                 document.getElementById('lblFichaGm2').innerText = `${f1(res.pesoTejidoBase)}gm2`;
@@ -308,7 +301,6 @@
                 document.getElementById('lblFichaGml').innerText = `${f1(res.pesoMetroLineal)}gml`;
                 document.getElementById('lblFichaGrBol').innerText = `${f1(res.pesoPorBolsa)}gr/Bol`;
 
-                // Actualizar Tabla Resistencia y Peso con 1 decimal
                 document.getElementById('resUrdimbre').innerText = f1(res.resistenciaUrdimbre);
                 document.getElementById('pesoUrdimbre').innerText = f1(res.pesoUrdimbre);
                 document.getElementById('porcUrdimbre').innerText = f1(res.porcentajeUrdimbre) + '%';
@@ -317,20 +309,17 @@
                 document.getElementById('pesoTrama').innerText = f1(res.pesoTrama);
                 document.getElementById('porcTrama').innerText = f1(res.porcentajeTrama) + '%';
 
-                // Actualizar Resumen Metrológico con 1 decimal
                 document.getElementById('lblPesoBase').innerText = f1(res.pesoTejidoBase);
                 document.getElementById('lblPesoLaminado').innerText = f1(res.pesoConLaminado);
                 document.getElementById('lblPesoRefuerzo').innerText = f1(res.pesoConRefuerzo);
                 document.getElementById('lblPesoGml').innerText = f1(res.pesoMetroLineal);
                 document.getElementById('lblPesoBolsa').innerText = f1(res.pesoPorBolsa);
 
-                // Actualizar Producción con 1 decimal
                 document.getElementById('lblProduccion').innerText = f1(res.produccionEstimada);
             })
             .catch(err => console.error('Error al calcular:', err));
         }
 
-        // Guardar Registro en PostgreSQL (Se queda en la misma página mostrando alerta)
         document.getElementById('btnGuardar').addEventListener('click', function () {
             const formData = new FormData(document.getElementById('formCalculadora'));
             const data = Object.fromEntries(formData.entries());
@@ -342,14 +331,17 @@
             })
             .then(res => res.json())
             .then(res => {
-                if (res.success) {
-                    alert('¡Registro guardado exitosamente en el historial!');
-                    // Se remueve la redirección automática para que el usuario decida cuándo ir al historial
+                if (res && res.success) {
+                    // Redirección forzada y limpia a la pestaña de historial
+                    window.location.replace('/Home/Historial');
                 } else {
                     alert('Ocurrió un error al guardar el registro.');
                 }
             })
-            .catch(err => console.error('Error al guardar:', err));
+            .catch(err => {
+                console.error('Error al guardar:', err);
+                alert('No se pudo conectar con el servidor.');
+            });
         });
     </script>
 }
