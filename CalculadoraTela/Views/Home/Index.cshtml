@@ -61,14 +61,14 @@
 <!-- Navbar Superior con Azul Oscuro -->
 <nav class="navbar navbar-dark bg-dark-blue shadow-sm mb-4">
     <div class="container-fluid px-4">
-        <a class="navbar-brand fw-bold d-flex align-items-center" asp-action="Index">
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="/Home/Index">
             <i class="bi bi-cpu me-2"></i> Calculadora Tela
         </a>
         <div class="d-flex text-white-50 align-items-center gap-3">
-            <a asp-action="Index" class="text-white text-decoration-none small">
+            <a href="/Home/Index" class="text-white text-decoration-none small">
                 <i class="bi bi-house-door me-1"></i> Calculadora
             </a>
-            <a asp-action="Historial" class="text-white-50 text-decoration-none small">
+            <a href="/Home/Historial" class="text-white-50 text-decoration-none small">
                 <i class="bi bi-clock-history me-1"></i> Historial
             </a>
         </div>
@@ -84,22 +84,22 @@
             </h3>
             <p class="text-muted small mb-0">Panel de control de parámetros textiles y métricas de producción</p>
         </div>
-        <a asp-action="Historial" class="btn btn-outline-secondary btn-sm rounded-3">
+        <a href="/Home/Historial" class="btn btn-outline-secondary btn-sm rounded-3">
             <i class="bi bi-clock-history me-1"></i> Ver Historial
         </a>
     </div>
 
-    <!-- Banner Ficha Técnica Limpio (Sin diagonales) -->
+    <!-- Banner Ficha Técnica Limpio -->
     <div class="card bg-dark text-warning border-0 shadow-sm mb-4" style="background-color: #111827 !important;">
         <div class="card-body p-3">
             <span class="badge bg-secondary text-warning mb-2" style="font-size: 0.7rem;">FICHA TÉCNICA GENERADA</span>
             <h4 class="font-monospace fw-bold mb-0 text-warning d-flex flex-wrap gap-3 align-items-center" style="letter-spacing: 0.5px;">
-                <span id="lblFichaAnchoLado">@(Model.Ancho)x@(Model.Lado)</span>
-                <span id="lblFichaTejido">@(Model.UrdimbreTejido)x@(Model.TramaTejido)</span>
-                <span id="lblFichaGm2">@(Model.PesoTejidoBase)gm2</span>
-                <span id="lblFichaGmp">@(Model.PesoConRefuerzo)gmp</span>
-                <span id="lblFichaGml">@(Model.PesoMetroLineal)gml</span>
-                <span id="lblFichaGrBol">@(Model.PesoPorBolsa)gr/Bol</span>
+                <span id="lblFichaAnchoLado">@(Model.Ancho.ToString("0.0"))x@(Model.Lado.ToString("0.0"))</span>
+                <span id="lblFichaTejido">@(Model.UrdimbreTejido.ToString("0.0"))x@(Model.TramaTejido.ToString("0.0"))</span>
+                <span id="lblFichaGm2">@(Model.PesoTejidoBase.ToString("0.0"))gm2</span>
+                <span id="lblFichaGmp">@(Model.PesoConRefuerzo.ToString("0.0"))gmp</span>
+                <span id="lblFichaGml">@(Model.PesoMetroLineal.ToString("0.0"))gml</span>
+                <span id="lblFichaGrBol">@(Model.PesoPorBolsa.ToString("0.0"))gr/Bol</span>
             </h4>
         </div>
     </div>
@@ -207,15 +207,15 @@
                             <tbody>
                                 <tr>
                                     <td class="fw-bold">Urdimbre</td>
-                                    <td class="text-end" id="resUrdimbre">@Model.ResistenciaUrdimbre</td>
-                                    <td class="text-end" id="pesoUrdimbre">@Model.PesoUrdimbre</td>
-                                    <td class="text-end"><span class="badge bg-light text-dark border" id="porcUrdimbre">@Model.PorcentajeUrdimbre%</span></td>
+                                    <td class="text-end" id="resUrdimbre">@Model.ResistenciaUrdimbre.ToString("0.0")</td>
+                                    <td class="text-end" id="pesoUrdimbre">@Model.PesoUrdimbre.ToString("0.0")</td>
+                                    <td class="text-end"><span class="badge bg-light text-dark border" id="porcUrdimbre">@Model.PorcentajeUrdimbre.ToString("0.0")%</span></td>
                                 </tr>
                                 <tr>
                                     <td class="fw-bold">Trama</td>
-                                    <td class="text-end" id="resTrama">@Model.ResistenciaTrama</td>
-                                    <td class="text-end" id="pesoTrama">@Model.PesoTrama</td>
-                                    <td class="text-end"><span class="badge bg-light text-dark border" id="porcTrama">@Model.PorcentajeTrama%</span></td>
+                                    <td class="text-end" id="resTrama">@Model.ResistenciaTrama.ToString("0.0")</td>
+                                    <td class="text-end" id="pesoTrama">@Model.PesoTrama.ToString("0.0")</td>
+                                    <td class="text-end"><span class="badge bg-light text-dark border" id="porcTrama">@Model.PorcentajeTrama.ToString("0.0")%</span></td>
                                 </tr>
                                 <tr class="border-top">
                                     <td class="fw-bold text-primary">Urdimbre Ref.</td>
@@ -235,23 +235,23 @@
                         
                         <div class="metro-item">
                             <span class="metro-label">Peso Tejido Base</span>
-                            <span class="metro-value"><span id="lblPesoBase">@Model.PesoTejidoBase</span> <small class="fw-normal text-muted">gm2</small></span>
+                            <span class="metro-value"><span id="lblPesoBase">@Model.PesoTejidoBase.ToString("0.0")</span> <small class="fw-normal text-muted">gm2</small></span>
                         </div>
                         <div class="metro-item">
                             <span class="metro-label">Peso con Laminado</span>
-                            <span class="metro-value"><span id="lblPesoLaminado">@Model.PesoConLaminado</span> <small class="fw-normal text-muted">gm2</small></span>
+                            <span class="metro-value"><span id="lblPesoLaminado">@Model.PesoConLaminado.ToString("0.0")</span> <small class="fw-normal text-muted">gm2</small></span>
                         </div>
                         <div class="metro-item">
                             <span class="metro-label">Peso con Refuerzo</span>
-                            <span class="metro-value"><span id="lblPesoRefuerzo">@Model.PesoConRefuerzo</span> <small class="fw-normal text-muted">gmp</small></span>
+                            <span class="metro-value"><span id="lblPesoRefuerzo">@Model.PesoConRefuerzo.ToString("0.0")</span> <small class="fw-normal text-muted">gmp</small></span>
                         </div>
                         <div class="metro-item">
                             <span class="metro-label">Peso Metro Lineal</span>
-                            <span class="metro-value"><span id="lblPesoGml">@Model.PesoMetroLineal</span> <small class="fw-normal text-muted">gml</small></span>
+                            <span class="metro-value"><span id="lblPesoGml">@Model.PesoMetroLineal.ToString("0.0")</span> <small class="fw-normal text-muted">gml</small></span>
                         </div>
                         <div class="metro-item">
                             <span class="metro-label">Peso por Bolsa</span>
-                            <span class="metro-value"><span id="lblPesoBolsa">@Model.PesoPorBolsa</span> <small class="fw-normal text-muted">gr/Bol</small></span>
+                            <span class="metro-value"><span id="lblPesoBolsa">@Model.PesoPorBolsa.ToString("0.0")</span> <small class="fw-normal text-muted">gr/Bol</small></span>
                         </div>
                     </div>
                 </div>
@@ -261,7 +261,7 @@
                     <div class="card-body p-3 d-flex justify-content-between align-items-center">
                         <div>
                             <div class="small text-uppercase opacity-75 fw-bold">Producción Estimada</div>
-                            <div class="display-6 fw-bold" id="lblProduccion">@Model.ProduccionEstimada</div>
+                            <div class="display-6 fw-bold" id="lblProduccion">@Model.ProduccionEstimada.ToString("0.0")</div>
                         </div>
                         <i class="bi bi-speedometer2 display-4 opacity-50"></i>
                     </div>
@@ -278,6 +278,12 @@
 
 @section Scripts {
     <script>
+        // Función auxiliar para formatear los números a un decimal de forma segura
+        function f1(val) {
+            if (val === null || val === undefined || isNaN(val)) return '--';
+            return Number(val).toFixed(1);
+        }
+
         // Recalcular automáticamente al modificar cualquier input
         document.querySelectorAll('.calc-trigger').forEach(input => {
             input.addEventListener('input', calcular);
@@ -294,32 +300,32 @@
             })
             .then(res => res.json())
             .then(res => {
-                // Actualizar Banner Ficha Técnica
-                document.getElementById('lblFichaAnchoLado').innerText = `${res.ancho}x${res.lado}`;
-                document.getElementById('lblFichaTejido').innerText = `${res.urdimbreTejido}x${res.tramaTejido}`;
-                document.getElementById('lblFichaGm2').innerText = `${res.pesoTejidoBase}gm2`;
-                document.getElementById('lblFichaGmp').innerText = `${res.pesoConRefuerzo}gmp`;
-                document.getElementById('lblFichaGml').innerText = `${res.pesoMetroLineal}gml`;
-                document.getElementById('lblFichaGrBol').innerText = `${res.pesoPorBolsa}gr/Bol`;
+                // Actualizar Banner Ficha Técnica con 1 decimal
+                document.getElementById('lblFichaAnchoLado').innerText = `${f1(res.ancho)}x${f1(res.lado)}`;
+                document.getElementById('lblFichaTejido').innerText = `${f1(res.urdimbreTejido)}x${f1(res.tramaTejido)}`;
+                document.getElementById('lblFichaGm2').innerText = `${f1(res.pesoTejidoBase)}gm2`;
+                document.getElementById('lblFichaGmp').innerText = `${f1(res.pesoConRefuerzo)}gmp`;
+                document.getElementById('lblFichaGml').innerText = `${f1(res.pesoMetroLineal)}gml`;
+                document.getElementById('lblFichaGrBol').innerText = `${f1(res.pesoPorBolsa)}gr/Bol`;
 
-                // Actualizar Tabla Resistencia y Peso
-                document.getElementById('resUrdimbre').innerText = res.resistenciaUrdimbre;
-                document.getElementById('pesoUrdimbre').innerText = res.pesoUrdimbre;
-                document.getElementById('porcUrdimbre').innerText = res.porcentajeUrdimbre + '%';
+                // Actualizar Tabla Resistencia y Peso con 1 decimal
+                document.getElementById('resUrdimbre').innerText = f1(res.resistenciaUrdimbre);
+                document.getElementById('pesoUrdimbre').innerText = f1(res.pesoUrdimbre);
+                document.getElementById('porcUrdimbre').innerText = f1(res.porcentajeUrdimbre) + '%';
 
-                document.getElementById('resTrama').innerText = res.resistenciaTrama;
-                document.getElementById('pesoTrama').innerText = res.pesoTrama;
-                document.getElementById('porcTrama').innerText = res.porcentajeTrama + '%';
+                document.getElementById('resTrama').innerText = f1(res.resistenciaTrama);
+                document.getElementById('pesoTrama').innerText = f1(res.pesoTrama);
+                document.getElementById('porcTrama').innerText = f1(res.porcentajeTrama) + '%';
 
-                // Actualizar Resumen Metrológico
-                document.getElementById('lblPesoBase').innerText = res.pesoTejidoBase;
-                document.getElementById('lblPesoLaminado').innerText = res.pesoConLaminado;
-                document.getElementById('lblPesoRefuerzo').innerText = res.pesoConRefuerzo;
-                document.getElementById('lblPesoGml').innerText = res.pesoMetroLineal;
-                document.getElementById('lblPesoBolsa').innerText = res.pesoPorBolsa;
+                // Actualizar Resumen Metrológico con 1 decimal
+                document.getElementById('lblPesoBase').innerText = f1(res.pesoTejidoBase);
+                document.getElementById('lblPesoLaminado').innerText = f1(res.pesoConLaminado);
+                document.getElementById('lblPesoRefuerzo').innerText = f1(res.pesoConRefuerzo);
+                document.getElementById('lblPesoGml').innerText = f1(res.pesoMetroLineal);
+                document.getElementById('lblPesoBolsa').innerText = f1(res.pesoPorBolsa);
 
-                // Actualizar Producción
-                document.getElementById('lblProduccion').innerText = res.produccionEstimada;
+                // Actualizar Producción con 1 decimal
+                document.getElementById('lblProduccion').innerText = f1(res.produccionEstimada);
             })
             .catch(err => console.error('Error al calcular:', err));
         }
@@ -338,6 +344,7 @@
             .then(res => {
                 if (res.success) {
                     alert('¡Registro guardado exitosamente en el historial!');
+                    window.location.href = '/Home/Historial';
                 } else {
                     alert('Ocurrió un error al guardar el registro.');
                 }
