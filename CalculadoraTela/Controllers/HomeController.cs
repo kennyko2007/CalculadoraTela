@@ -26,11 +26,9 @@ public class HomeController : Controller
         return View(model);
     }
 
-    // ⬇️ ACCIÓN AGREGADA PARA CARGAR LA VISTA DEL HISTORIAL
     [HttpGet]
     public async Task<IActionResult> Historial()
     {
-        // Consulta todos los cálculos guardados ordenados por fecha descendente
         var listaHistorial = await _context.Calculos
             .OrderByDescending(c => c.FechaCreacion)
             .ToListAsync();
@@ -52,7 +50,6 @@ public class HomeController : Controller
 
         var entidad = new Calculo
         {
-            // Se usa UtcNow para evitar incompatibilidades de timestamp en PostgreSQL
             FechaCreacion = DateTime.UtcNow,
             UrdimbreTejido = calculado.UrdimbreTejido,
             UrdimbreDenier = calculado.UrdimbreDenier,
