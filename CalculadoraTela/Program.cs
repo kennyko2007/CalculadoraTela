@@ -1,15 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using CalculadoraTela.Data;
+using CalculadoraTela.Services; // 👈 1. Agregado para acceder al servicio
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Configurar el puerto para Render (0.0.0.0 en el $PORT dinámico)
+// Configurar el puerto para Render
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 // Registrar servicios MVC
 builder.Services.AddControllersWithViews();
+
+// 👈 2. REGISTRAR TU SERVICIO PARA INYECCIÓN DE DEPENDENCIAS
+builder.Services.AddScoped<CalculadoraService>();
 
 // --- CONFIGURACIÓN DE CADENA DE CONEXIÓN (RENDER vs LOCAL) ---
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
@@ -17,7 +21,6 @@ string connectionString;
 
 if (!string.IsNullOrEmpty(databaseUrl))
 {
-    // Si la cadena viene en formato URL (postgresql://user:pass@host:port/db)
     if (databaseUrl.StartsWith("postgresql://") || databaseUrl.StartsWith("postgres://"))
     {
         var databaseUri = new Uri(databaseUrl);
@@ -42,7 +45,6 @@ if (!string.IsNullOrEmpty(databaseUrl))
 }
 else
 {
-    // Entorno local en Visual Studio
     connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
                       ?? throw new InvalidOperationException("No se encontró 'DefaultConnection'.");
 }
@@ -69,7 +71,6 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// ⚠️ Muestra la página detallada con el error exacto (Línea, variable o tabla)
 app.UseDeveloperExceptionPage();
 
 app.UseStaticFiles();
