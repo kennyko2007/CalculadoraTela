@@ -1,20 +1,23 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using CalculadoraTela.Data; // Tu namespace de AppDbContext
+using CalculadoraTela.Data;
 
+// Inicializamos el WebApplicationBuilder deshabilitando los observadores de archivos predeterminados
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
     Args = args
 });
 
-// Evita el error de inotify limit (file watchers) en Linux/Render
-builder.Configuration.Sources.Clear();
-builder.Configuration
-    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: false)
-    .AddEnvironmentVariables();
+// Desactiva reloadOnChange para evitar el error de límite de inotify en Render/Linux
+builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
+{
+    config.Sources.Clear();
+    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+          .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: false)
+          .AddEnvironmentVariables();
+});
 
-// Add services to the container.
+// Registrar servicios MVC
 builder.Services.AddControllersWithViews();
 
 // --- CONFIGURACIÓN DE CADENA DE CONEXIÓN (RENDER vs LOCAL) ---
@@ -23,14 +26,14 @@ string connectionString;
 
 if (!string.IsNullOrEmpty(databaseUrl))
 {
-    // Parsea la Internal Database URL de Render (postgresql://...) sin romper la contraseña
+    // Parsea la URL nativa de Render (postgresql://...) de forma segura sin dañar contraseñas
     var connBuilder = new NpgsqlConnectionStringBuilder(databaseUrl)
     {
         SslMode = SslMode.Prefer,
         TrustServerCertificate = true
     };
 
-    // Si la URL de Render no traía el puerto explícito, aseguramos el 5432
+    // Asegura el puerto 5432 si la URL no lo especifica explícitamente
     if (connBuilder.Port <= 0)
     {
         connBuilder.Port = 5432;
@@ -40,12 +43,12 @@ if (!string.IsNullOrEmpty(databaseUrl))
 }
 else
 {
-    // Si estás ejecutando localmente en tu PC, lee appsettings.json
+    // Entorno local (PC)
     connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
                       ?? throw new InvalidOperationException("No se encontró 'DefaultConnection'.");
 }
 
-// Configuración de Entity Framework Core con Npgsql
+// Configurar DbContext con PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
@@ -58,7 +61,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<AppDbContext>();
-        context.Database.EnsureCreated(); // Crea las tablas en PostgreSQL si no existen
+        context.Database.EnsureCreated();
     }
     catch (Exception ex)
     {
@@ -67,7 +70,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configuración del pipeline de peticiones HTTP
+// Configuración del pipeline HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
