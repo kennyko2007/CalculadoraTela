@@ -29,11 +29,19 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> Historial()
     {
-        var listaHistorial = await _context.Calculos
-            .OrderByDescending(c => c.FechaCreacion)
-            .ToListAsync();
+        try
+        {
+            var listaHistorial = await _context.Calculos
+                .OrderByDescending(c => c.FechaCreacion)
+                .ToListAsync();
 
-        return View(listaHistorial);
+            return View(listaHistorial);
+        }
+        catch (Exception ex)
+        {
+            // Si ocurre un error al cargar el historial, te mostrará el detalle exacto en pantalla
+            return Content($"Error crítico al cargar el historial: {ex.Message} --- Detalle: {ex.InnerException?.Message}");
+        }
     }
 
     [HttpPost]
@@ -88,7 +96,6 @@ public class HomeController : Controller
         }
         catch (Exception ex)
         {
-            // Devuelve el error detallado al navegador en lugar de un genérico Error 500
             return BadRequest(new { 
                 success = false, 
                 message = ex.Message, 
