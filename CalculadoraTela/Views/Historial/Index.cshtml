@@ -79,19 +79,19 @@
                                         @item.FechaCreacion.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
                                     </td>
                                     <td class="text-center">
-                                        <span class="badge bg-light text-dark border">M-@item.MaquinaNumero</span>
+                                        <span class="badge bg-light text-dark border">M-@(item.MaquinaNumero)</span>
                                     </td>
                                     <td>
-                                        <span class="fw-bold">@item.UrdimbreTejido x @item.TramaTejido</span>
+                                        <span class="fw-bold">@item.UrdimbreTejido.ToString("0.0") x @item.TramaTejido.ToString("0.0")</span>
                                     </td>
                                     <td>
                                         <span class="font-monospace text-warning bg-dark px-2 py-1 rounded small">
-                                            @item.ResumenFicha
+                                            @(item.ResumenFicha ?? "--")
                                         </span>
                                     </td>
-                                    <td class="text-end fw-bold">@item.PesoMetroLineal</td>
-                                    <td class="text-end fw-bold">@item.PesoPorBolsa</td>
-                                    <td class="text-end pe-3 text-success fw-bold">@item.ProduccionEstimada</td>
+                                    <td class="text-end fw-bold">@item.PesoMetroLineal.ToString("0.0")</td>
+                                    <td class="text-end fw-bold">@item.PesoPorBolsa.ToString("0.0")</td>
+                                    <td class="text-end pe-3 text-success fw-bold">@item.ProduccionEstimada.ToString("0.0")</td>
                                 </tr>
                             }
                         </tbody>
