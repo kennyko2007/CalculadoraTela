@@ -4,57 +4,174 @@
     ViewData["Title"] = "Historial de Cálculos";
 }
 
-<div class="container-fluid px-4 py-4">
+<style>
+    body { background-color: #f8fafc; }
+    .bg-dark-blue { background-color: #0f172a !important; }
+    .badge-net { background-color: #1e40af; color: #ffffff; }
+</style>
+
+<!-- Navbar -->
+<nav class="navbar navbar-dark bg-dark-blue shadow-sm mb-4">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="/Home/Index">
+            <i class="bi bi-cpu me-2"></i> Calculadora Tela
+        </a>
+        <div class="d-flex text-white-50 align-items-center gap-3">
+            <a href="/Home/Index" class="text-white-50 text-decoration-none small">
+                <i class="bi bi-house-door me-1"></i> Calculadora
+            </a>
+            <a href="/Home/Historial" class="text-white text-decoration-none small">
+                <i class="bi bi-clock-history me-1"></i> Historial
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid px-4 pb-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h3 class="fw-bold text-dark mb-0">Historial de Cálculos Guardados</h3>
-            <p class="text-muted small mb-0">Registros almacenados en la base de datos</p>
+            <h3 class="fw-bold text-dark mb-0">
+                Historial de Cálculos <span class="badge badge-net fs-6 align-middle">Base de Datos</span>
+            </h3>
+            <p class="text-muted small mb-0">Listado de registros almacenados en PostgreSQL</p>
         </div>
-        <a href="/Home/Index" class="btn btn-primary btn-sm rounded-3">
-            <i class="bi bi-calculator me-1"></i> Nueva Calculadora
-        </a>
+        <div class="d-flex gap-2">
+            <button id="btnEliminarSeleccionados" class="btn btn-danger btn-sm rounded-3 d-none" onclick="eliminarSeleccionados()">
+                <i class="bi bi-trash me-1"></i> Eliminar seleccionados
+            </button>
+            <a href="/Home/Index" class="btn btn-outline-secondary btn-sm rounded-3">
+                <i class="bi bi-arrow-left me-1"></i> Volver a Calculadora
+            </a>
+        </div>
     </div>
 
-    <div class="card border-0 shadow-sm rounded-3">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Fecha (UTC)</th>
-                            <th>Resumen Ficha</th>
-                            <th class="text-end">Ancho x Lado</th>
-                            <th class="text-end">Tejido (U x T)</th>
-                            <th class="text-end">Peso Base</th>
-                            <th class="text-end">Peso Bolsa</th>
-                            <th class="text-end">Producción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model != null && Model.Any())
-                        {
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info text-center shadow-sm border-0 rounded-3 py-4">
+            <i class="bi bi-info-circle fs-4 d-block mb-2"></i>
+            No hay registros guardados en el historial todavía.
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-secondary small">
+                            <tr>
+                                <th class="ps-3" style="width: 40px;">
+                                    <input type="checkbox" id="selectAll" class="form-check-input" onchange="toggleSelectAll(this)">
+                                </th>
+                                <th>Fecha</th>
+                                <th class="text-center">Máquina</th>
+                                <th>Tejido (Urd x Trama)</th>
+                                <th>Ficha Técnica</th>
+                                <th class="text-end">Peso Metro (gml)</th>
+                                <th class="text-end">Peso Bolsa (gr/Bol)</th>
+                                <th class="text-end">Producción</th>
+                                <th class="text-center pe-3" style="width: 80px;">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             @foreach (var item in Model)
                             {
-                                <tr>
-                                    <td>@item.FechaCreacion.ToString("yyyy-MM-dd HH:mm")</td>
-                                    <td><span class="badge bg-secondary font-monospace">@item.ResumenFicha</span></td>
-                                    <td class="text-end">@item.Ancho.ToString("0.0") x @item.Lado.ToString("0.0")</td>
-                                    <td class="text-end">@item.UrdimbreTejido.ToString("0.0") x @item.TramaTejido.ToString("0.0")</td>
-                                    <td class="text-end">@item.PesoTejidoBase.ToString("0.0") gm2</td>
-                                    <td class="text-end fw-bold text-success">@item.PesoPorBolsa.ToString("0.0") gr</td>
-                                    <td class="text-end">@item.ProduccionEstimada.ToString("0.0")</td>
+                                <tr id="fila-@item.Id">
+                                    <td class="ps-3">
+                                        <input type="checkbox" class="form-check-input chk-item" value="@item.Id" onchange="actualizarBotonEliminar()">
+                                    </td>
+                                    <td class="text-muted small">
+                                        @item.FechaCreacion.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-light text-dark border">M-@(item.MaquinaNumero)</span>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold">@item.UrdimbreTejido.ToString("0.0") x @item.TramaTejido.ToString("0.0")</span>
+                                    </td>
+                                    <td>
+                                        <span class="font-monospace text-warning bg-dark px-2 py-1 rounded small">
+                                            @(item.ResumenFicha ?? "--")
+                                        </span>
+                                    </td>
+                                    <td class="text-end fw-bold">@item.PesoMetroLineal.ToString("0.0")</td>
+                                    <td class="text-end fw-bold">@item.PesoPorBolsa.ToString("0.0")</td>
+                                    <td class="text-end text-success fw-bold">@item.ProduccionEstimada.ToString("0.0")</td>
+                                    <td class="text-center pe-3">
+                                        <button class="btn btn-outline-danger btn-sm border-0" onclick="eliminarRegistro(@item.Id)" title="Eliminar">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
                                 </tr>
                             }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="7" class="text-center py-4 text-muted">No hay registros guardados todavía.</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
+    }
 </div>
+
+@section Scripts {
+    <script>
+        function toggleSelectAll(master) {
+            document.querySelectorAll('.chk-item').forEach(chk => chk.checked = master.checked);
+            actualizarBotonEliminar();
+        }
+
+        function actualizarBotonEliminar() {
+            const seleccionados = document.querySelectorAll('.chk-item:checked').length;
+            const btn = document.getElementById('btnEliminarSeleccionados');
+            if (seleccionados > 0) {
+                btn.classList.remove('d-none');
+                btn.innerHTML = `<i class="bi bi-trash me-1"></i> Eliminar (${seleccionados})`;
+            } else {
+                btn.classList.add('d-none');
+            }
+        }
+
+        function eliminarRegistro(id) {
+            if (!confirm('¿Estás seguro de eliminar este registro?')) return;
+
+            fetch(`/Home/Eliminar?id=${id}`, { method: 'POST' })
+            .then(res => res.json())
+            .then(res => {
+                if (res.success) {
+                    const fila = document.getElementById(`fila-${id}`);
+                    if (fila) fila.remove();
+                    actualizarBotonEliminar();
+                } else {
+                    alert('Error al eliminar: ' + res.message);
+                }
+            })
+            .catch(err => console.error('Error:', err));
+        }
+
+        function eliminarSeleccionados() {
+            const seleccionados = Array.from(document.querySelectorAll('.chk-item:checked')).map(cb => parseInt(cb.value));
+            if (seleccionados.length === 0) return;
+
+            if (!confirm(`¿Estás seguro de eliminar ${seleccionados.length} registros seleccionados?`)) return;
+
+            fetch('/Home/EliminarSeleccionados', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(seleccionados)
+            })
+            .then(res => res.json())
+            .then(res => {
+                if (res.success) {
+                    seleccionados.forEach(id => {
+                        const fila = document.getElementById(`fila-${id}`);
+                        if (fila) fila.remove();
+                    });
+                    document.getElementById('selectAll').checked = false;
+                    actualizarBotonEliminar();
+                } else {
+                    alert('Error al eliminar: ' + res.message);
+                }
+            })
+            .catch(err => console.error('Error:', err));
+        }
+    </script>
+}
