@@ -6,11 +6,11 @@
 
 <div class="container-fluid py-4 px-4" style="background-color: #f8fafc; min-height: 100vh;">
     <!-- Encabezado -->
-    <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom">
-        <h2 class="fw-bold text-slate-800 mb-0" style="color: #1e293b;">
+    <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom border-2">
+        <h2 class="fw-bold mb-0" style="color: #0f172a;">
             <i class="bi bi-file-earmark-spreadsheet text-primary me-2"></i>TELA - Hoja de Cálculo
         </h2>
-        <a asp-controller="Home" asp-action="Historial" class="btn btn-outline-dark shadow-sm px-4">
+        <a asp-controller="Home" asp-action="Historial" class="btn btn-outline-primary shadow-sm px-4 fw-semibold">
             <i class="bi bi-clock-history me-1"></i> Ver Historial
         </a>
     </div>
@@ -18,7 +18,7 @@
     <form id="calcForm">
         <!-- MATRIZ DE CONFIGURACIÓN Y TEJIDO -->
         <div class="card shadow-sm mb-4 border-0 rounded-3 overflow-hidden">
-            <div class="card-header text-white fw-bold d-flex justify-content-between align-items-center py-3 px-4" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%);">
+            <div class="card-header text-white fw-bold d-flex justify-content-between align-items-center py-3 px-4" style="background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);">
                 <span><i class="bi bi-table me-2"></i> MATRIZ DE CONFIGURACIÓN Y TEJIDO</span>
                 <div class="d-flex align-items-center gap-2">
                     <label asp-for="TipoProducto" class="text-white-50 small mb-0 fw-semibold">Tipo Producto:</label>
@@ -72,8 +72,8 @@
                             <td><span id="resTramaPorc" class="badge rounded-pill bg-light text-dark border px-2 py-1">@Model.PorcentajeTrama.ToString("F1") %</span></td>
                         </tr>
                         <!-- Fila 3: URDIMBRE REFUERZO -->
-                        <tr style="background-color: #fffbeb;">
-                            <td class="fw-bold text-warning-emphasis">URDIMBRE REF.</td>
+                        <tr style="background-color: #f8fafc;">
+                            <td class="fw-bold text-primary">URDIMBRE REF.</td>
                             <td><input asp-for="UrdimbreRefuerzoTejido" class="form-control form-control-sm text-center calc-input fw-bold shadow-none" type="number" step="0.1" /></td>
                             <td>
                                 <div class="input-group input-group-sm">
@@ -104,13 +104,20 @@
                                 </div>
                             </td>
                         </tr>
-                        <!-- Fila 5: ANCHO Y GML -->
+                        <!-- Fila 5: ANCHO, CORTE Y GML -->
                         <tr>
-                            <td class="fw-bold text-secondary bg-light">ANCHO</td>
+                            <td class="fw-bold text-secondary bg-light">MEDIDAS (Ancho x Corte)</td>
                             <td colspan="4">
-                                <div class="input-group input-group-sm justify-content-center">
-                                    <input asp-for="Ancho" class="form-control text-center calc-input fw-bold shadow-none" type="number" step="0.1" style="max-width: 150px;" />
-                                    <span class="input-group-text bg-light text-muted small">cm</span>
+                                <div class="d-flex justify-content-center align-items-center gap-2">
+                                    <div class="input-group input-group-sm" style="max-width: 130px;">
+                                        <input asp-for="Ancho" id="Ancho" class="form-control text-center calc-input fw-bold shadow-none" type="number" step="0.1" />
+                                        <span class="input-group-text bg-light text-muted small">cm</span>
+                                    </div>
+                                    <span class="fw-bold text-muted">x</span>
+                                    <div class="input-group input-group-sm" style="max-width: 130px;">
+                                        <input asp-for="Corte" id="Corte" class="form-control text-center calc-input fw-bold shadow-none" type="number" step="0.1" />
+                                        <span class="input-group-text bg-light text-muted small">cm</span>
+                                    </div>
                                 </div>
                             </td>
                             <td colspan="2" class="fw-bold text-success bg-light fs-6" id="resPesoMetro">
@@ -124,8 +131,8 @@
 
         <!-- BLOQUE DE RESULTADOS -->
         <div class="card shadow-sm mb-4 border-0 rounded-3 overflow-hidden">
-            <div class="card-header fw-bold text-center fs-5 text-dark py-3" style="background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); border-bottom: 2px solid #cbd5e1;">
-                <i class="bi bi-bar-chart-fill text-primary me-2"></i> RESULTADOS
+            <div class="card-header fw-bold text-center fs-5 text-white py-3" style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);">
+                <i class="bi bi-bar-chart-fill me-2"></i> RESULTADOS
             </div>
             <div class="card-body p-0 bg-white">
                 <table class="table table-bordered align-middle mb-0 border-light">
@@ -133,11 +140,11 @@
                         <tr>
                             <td class="fw-bold text-secondary bg-light" style="width: 15%;">PRODUCTO</td>
                             <td style="width: 20%;"><span class="fw-semibold text-dark" id="lblTipoProductoRes">@Model.TipoProducto</span></td>
-                            <td rowspan="4" class="fw-bold text-white text-center align-middle" style="width: 12%; background-color: #475569;">RESISTENCIA</td>
+                            <td rowspan="4" class="fw-bold text-white text-center align-middle" style="width: 12%; background-color: #1e3a8a;">RESISTENCIA</td>
                             <td class="bg-light fw-bold text-secondary" style="width: 15%;">URDIMBRE</td>
                             <td><span id="resUrdimbreRes2">@Model.ResistenciaUrdimbre.ToString("F2")</span> KgF</td>
                             <td><span id="resUrdimbrePorc2">@Model.PorcentajeUrdimbre.ToString("F0")</span> %</td>
-                            <td rowspan="4" class="fw-bold text-white text-center align-middle" style="width: 12%; background-color: #475569;">PESO</td>
+                            <td rowspan="4" class="fw-bold text-white text-center align-middle" style="width: 12%; background-color: #1e3a8a;">PESO</td>
                             <td class="bg-light fw-bold text-secondary" style="width: 15%;">GM2</td>
                             <td class="fw-bold text-dark text-end bg-light" id="resPesoBase">@Model.PesoTejidoBase.ToString("F1")</td>
                         </tr>
@@ -153,7 +160,6 @@
                         <tr>
                             <td class="fw-bold text-secondary bg-light">TEJIDO</td>
                             <td><span class="fw-semibold text-dark" id="resTejidoConcatenado">@Model.UrdimbreTejido x @Model.TramaTejido</span></td>
-                            <!-- Refuerzo adaptado exactamente al Excel y a la petición anterior -->
                             <td rowspan="2" class="fw-bold text-secondary bg-light align-middle">REFUERZO</td>
                             <td rowspan="2" class="align-middle text-center">
                                 <div class="fw-bold text-primary" id="resUrdRefRes2">@Model.UrdimbreRefuerzoResistencia.ToString("F2") KgF</div>
@@ -161,7 +167,8 @@
                             </td>
                             <td rowspan="2" class="align-middle text-center fw-bold text-dark"><span id="resPorcRefuerzo">100</span> %</td>
                             <td class="bg-light fw-bold text-secondary">GMP</td>
-                            <td class="fw-bold text-dark text-end bg-light" id="resPesoRefuerzo">@Model.PesoConRefuerzo.ToString("F1")</td>
+                            <!-- ID añadido para capturar el valor de GMP exactamente -->
+                            <td class="fw-bold text-success text-end bg-light" id="resPesoRefuerzo">@Model.PesoConRefuerzo.ToString("F1")</td>
                         </tr>
                         <tr>
                             <td class="fw-bold text-secondary bg-light">DENIER</td>
@@ -174,10 +181,10 @@
             </div>
         </div>
 
-        <!-- Botón de Guardar -->
+        <!-- Botón de Guardar con Estilo Azul Ejecutivo -->
         <div class="row">
             <div class="col-12">
-                <button type="button" id="btnGuardar" class="btn btn-dark w-100 py-3 fw-bold shadow-sm text-uppercase tracking-wide" style="background-color: #1e293b; border: none; transition: background-color 0.2s;">
+                <button type="button" id="btnGuardar" class="btn w-100 py-3 fw-bold shadow text-uppercase tracking-wide text-white" style="background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); border: none; transition: opacity 0.2s;">
                     <i class="bi bi-bookmark-check me-2"></i> Guardar Registro en Historial
                 </button>
             </div>
