@@ -36,7 +36,7 @@ namespace CalculadoraTela.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp");
 
                     b.Property<string>("Observacion")
                         .HasMaxLength(500)
