@@ -77,7 +77,7 @@ public class HomeController : Controller
 
             var entidad = new Calculo
             {
-                FechaCreacion = DateTime.UtcNow,
+                FechaCreacion = DateTime.Now, // Cambiado únicamente para que coincida con la hora real local
                 TipoProducto = calculado.TipoProducto,
                 UrdimbreTejido = calculado.UrdimbreTejido,
                 UrdimbreDenier = calculado.UrdimbreDenier,
