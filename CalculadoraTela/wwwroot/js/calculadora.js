@@ -9,8 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function calcularEnTiempoReal() {
         const formData = new FormData(form);
-        
-        // Convertir FormData a un objeto plano JSON para enviarlo por fetch
         const data = {};
         formData.forEach((value, key) => {
             data[key] = value;
@@ -29,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (res.success) {
                 const model = res.data;
 
-                // Actualizar valores en la Matriz
+                // Matriz superior
                 document.getElementById("resUrdimbreRes").innerText = model.resistenciaUrdimbre.toFixed(2) + " KgF";
                 document.getElementById("resUrdimbrePeso").innerText = model.pesoUrdimbre.toFixed(2) + " gr";
                 document.getElementById("resUrdimbrePorc").innerText = model.porcentajeUrdimbre.toFixed(1) + " %";
@@ -39,11 +37,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("resTramaPorc").innerText = model.porcentajeTrama.toFixed(1) + " %";
 
                 document.getElementById("resUrdRefRes").innerText = model.urdimbreRefuerzoResistencia.toFixed(2) + " KgF";
+                document.getElementById("resCantidadConos").innerText = model.maquinaNumero;
                 document.getElementById("resPesoMetro").innerText = model.pesoMetroLineal.toFixed(1) + " gml";
 
-                // Actualizar Bloque de Resultados
+                // Bloque de Resultados Inferior
                 document.getElementById("lblTipoProductoRes").innerText = model.tipoProducto;
                 document.getElementById("resMedida").innerText = `${model.ancho} x ${model.corte}`;
+                document.getElementById("resTejidoConcatenado").innerText = `${model.urdimbreTejido}x${model.tramaTejido}`;
+                document.getElementById("resDenierConcatenado").innerText = `${model.urdimbreDenier}x${model.tramaDenier}`;
+
                 document.getElementById("resUrdimbreRes2").innerText = model.resistenciaUrdimbre.toFixed(2);
                 document.getElementById("resUrdimbrePorc2").innerText = model.porcentajeUrdimbre.toFixed(0);
                 
@@ -51,25 +53,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("resTramaPorc2").innerText = model.porcentajeTrama.toFixed(0);
 
                 document.getElementById("resUrdRefRes2").innerText = model.urdimbreRefuerzoResistencia.toFixed(2);
+                document.getElementById("resAnchoRefuerzoLabel").innerText = model.anchoRefuerzoFactor;
                 
                 document.getElementById("resPesoBase").innerText = model.pesoTejidoBase.toFixed(1);
                 document.getElementById("resPesoLaminado").innerText = model.pesoConLaminado.toFixed(1);
-                document.getElementById("resPesoRefuerzo").innerText = model.pesoConRefuerzo.toFixed(1);
-                document.getElementById("resPesoMetro2").innerText = model.pesoMetroLineal.toFixed(1);
+                document.getElementById("resPesoRefuerzo").innerText = model.pesoConRefuerzo.toFixed(1); // GMP
+                document.getElementById("resPesoMetro2").innerText = model.pesoMetroLineal.toFixed(1); // GML
             }
         })
         .catch(error => console.error("Error en el cálculo AJAX:", error));
     }
 
-    // Botón Guardar en Historial por AJAX (Sincronizado con el Controlador)
+    // Botón Guardar en Historial por AJAX
     const btnGuardar = document.getElementById("btnGuardar");
     if (btnGuardar) {
         btnGuardar.addEventListener("click", function () {
             const formData = new FormData(form);
             const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
+            formData.forEach((value, key) => { data[key] = value; });
 
             fetch('/Home/GuardarHistorial', {
                 method: 'POST',
@@ -88,10 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     alert("Error al guardar: " + (res.message || "Desconocido"));
                 }
             })
-            .catch(error => {
-                console.error("Error al guardar en historial:", error);
-                alert("Ocurrió un error al intentar guardar el registro.");
-            });
+            .catch(error => console.error("Error al guardar:", error));
         });
     }
 });
