@@ -4,7 +4,7 @@ namespace CalculadoraTela.Services;
 
 public class CalculadoraService
 {
-    // Tabla de factores de Refuerzo (Columnas M y N del Excel)
+    // Tabla de factores de Refuerzo según el ancho de refuerzo (cm)
     private readonly Dictionary<int, double> _tablaFactoresRefuerzo = new()
     {
         { 0, 1.00 },
@@ -22,7 +22,7 @@ public class CalculadoraService
         { 12, 1.12 }
     };
 
-    // Tabla de factores por Tipo de Producto (Plana / Tubular -> Columnas K y L del Excel)
+    // Tabla de factores por Tipo de Producto (Plana = 1.0, Tubular = 2.0)
     private readonly Dictionary<string, double> _tablaTipoProducto = new(StringComparer.OrdinalIgnoreCase)
     {
         { "Plana", 1.0 },
@@ -39,7 +39,7 @@ public class CalculadoraService
         model.ResistenciaTrama = (model.TramaTejido * 2.0) * (model.TramaDenier / 1000.0) * 4.7;
         model.PesoTrama = (model.TramaTejido * model.TramaDenier) / 228.6;
 
-        // 3. Porcentajes
+        // 3. Porcentajes de Peso
         double pesoTotalBaseSinPorcentaje = model.PesoUrdimbre + model.PesoTrama;
         if (pesoTotalBaseSinPorcentaje > 0)
         {
@@ -47,29 +47,22 @@ public class CalculadoraService
             model.PorcentajeTrama = (model.PesoTrama * 100.0) / pesoTotalBaseSinPorcentaje;
         }
 
-        // 4. Peso Tejido Base con 5% Adicional
+        // 4. Peso Tejido Base con factor 1.05 (GM2)
         model.PesoTejidoBase = pesoTotalBaseSinPorcentaje * 1.05;
 
-        // 5. Refuerzo / Urdimbre Extra
+        // 5. Refuerzo / Urdimbre Extra (Fila 3 de la tabla: Tejido x2, misma cinta y denier)
         double urdimbreRefuerzoTejido = model.UrdimbreTejido * 2.0;
         model.UrdimbreRefuerzoResistencia = (urdimbreRefuerzoTejido * 2.0) * (model.UrdimbreDenier / 1000.0) * 4.7;
 
-        // 6. Obtener Factor de Refuerzo según selección estricta del 0 al 12
+        // 6. Obtener Factor de Refuerzo según los centímetros de ancho de refuerzo seleccionados
         int codigoRefuerzoInt = (int)model.AnchoRefuerzoFactor; 
-        if (_tablaFactoresRefuerzo.TryGetValue(codigoRefuerzoInt, out double factorRef))
-        {
-            model.AnchoRefuerzoFactor = factorRef;
-        }
-        else
-        {
-            model.AnchoRefuerzoFactor = 1.00;
-        }
+        double factorRef = _tablaFactoresRefuerzo.TryGetValue(codigoRefuerzoInt, out double fRef) ? fRef : 1.00;
 
-        // 7. Peso con Laminado
+        // 7. Peso con Laminado (GM2 PP+LAM) = Peso Tejido Base + Laminado
         model.PesoConLaminado = model.PesoTejidoBase + model.Laminado;
 
-        // 8. Peso con Refuerzo
-        model.PesoConRefuerzo = model.PesoTejidoBase * model.AnchoRefuerzoFactor;
+        // 8. Peso con Refuerzo (GMP) = Peso Tejido Base * Factor de Refuerzo
+        model.PesoConRefuerzo = model.PesoTejidoBase * factorRef;
 
         // 9. Factor del Tipo de Producto (Plana / Tubular)
         double factorTipo = 2.0; // Por defecto Tubular
@@ -78,10 +71,10 @@ public class CalculadoraService
             factorTipo = valTipo;
         }
 
-        // 10. Peso Metro Lineal
+        // 10. Peso Metro Lineal (GML) = FactorTipo * PesoConRefuerzo * (Ancho / 100.0)
         model.PesoMetroLineal = factorTipo * model.PesoConRefuerzo * (model.Ancho / 100.0);
 
-        // 11. Peso por Bolsa
+        // 11. Peso por Bolsa (gr/Bol)
         double proporcionBolsa = (model.Corte > 0) ? (model.Corte / 100.0) : (model.Ancho / 100.0);
         model.PesoPorBolsa = model.PesoMetroLineal * proporcionBolsa;
 
