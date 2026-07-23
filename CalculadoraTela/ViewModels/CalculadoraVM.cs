@@ -8,11 +8,17 @@ public class CalculadoraTelaVM
     [Display(Name = "Urdimbre Tejido")]
     public double UrdimbreTejido { get; set; } = 13.0;
 
+    [Display(Name = "Cinta Urdimbre")]
+    public double CintaUrdimbre { get; set; } = 2.5;
+
     [Display(Name = "Urdimbre Denier")]
     public double UrdimbreDenier { get; set; } = 1750.0;
 
     [Display(Name = "Trama Tejido")]
     public double TramaTejido { get; set; } = 11.5;
+
+    [Display(Name = "Cinta Trama")]
+    public double CintaTrama { get; set; } = 2.5;
 
     [Display(Name = "Trama Denier")]
     public double TramaDenier { get; set; } = 1500.0;
@@ -25,7 +31,7 @@ public class CalculadoraTelaVM
     public double Laminado { get; set; } = 0.0;
 
     [Display(Name = "Factor Ancho Refuerzo")]
-    public double AnchoRefuerzoFactor { get; set; } = 1.07;
+    public double AnchoRefuerzoFactor { get; set; } = 0; // Del 0 al 12
 
     [Display(Name = "Ancho (cm)")]
     public double Ancho { get; set; } = 184.0;
@@ -42,12 +48,6 @@ public class CalculadoraTelaVM
     // --- Entradas Producción ---
     [Display(Name = "Número de Máquina")]
     public int MaquinaNumero { get; set; } = 18;
-
-    [Display(Name = "Engranaje")]
-    public double Engranaje { get; set; } = 10.5;
-
-    [Display(Name = "Horas de Trabajo")]
-    public double Horas { get; set; } = 10.0;
 
     // --- Salidas / Resultados ---
     public double ResistenciaUrdimbre { get; set; }
