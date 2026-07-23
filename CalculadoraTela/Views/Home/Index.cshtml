@@ -6,7 +6,7 @@
 
 <div class="container-fluid py-4 px-4">
     <!-- Encabezado superior -->
-    <div class="d-flex align-items-center justify-content-between mb-3">
+    <div class="d-flex align-items-center justify-content-between mb-4">
         <div>
             <h2 class="fw-bold text-dark mb-0">
                 <i class="bi bi-file-earmark-spreadsheet text-success me-2"></i>TELA - Hoja de Cálculo
@@ -17,12 +17,6 @@
                 <i class="bi bi-clock-history me-1"></i> Ver Historial
             </a>
         </div>
-    </div>
-
-    <!-- Ficha Técnica Resumen (Celda A11) -->
-    <div class="alert alert-warning border-2 fw-bold text-dark shadow-sm mb-4" role="alert">
-        <i class="bi bi-file-text-fill me-2"></i> FICHA TÉCNICA GENERADA (CELDA A11): 
-        <span id="txtResumenFicha" class="text-danger">@Model.ResumenFicha</span>
     </div>
 
     <form id="calcForm">
@@ -44,10 +38,10 @@
                         <tr>
                             <th style="width: 14%;">ITEM</th>
                             <th style="width: 14%;">TEJIDO</th>
-                            <th style="width: 12%;">CINTA</th>
+                            <th style="width: 14%;">CINTA</th>
                             <th style="width: 14%;">DENIER</th>
                             <th style="width: 16%;">RESISTENCIA</th>
-                            <th colspan="2" style="width: 30%;">PESO</th>
+                            <th colspan="2" style="width: 28%;">PESO</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,7 +51,12 @@
                             <td>
                                 <input asp-for="UrdimbreTejido" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="0.1" />
                             </td>
-                            <td><span class="text-muted small">mm</span></td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input asp-for="CintaUrdimbre" class="form-control text-center calc-input fw-bold" type="number" step="0.1" placeholder="mm" />
+                                    <span class="input-group-text bg-light">mm</span>
+                                </div>
+                            </td>
                             <td>
                                 <input asp-for="UrdimbreDenier" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="1" />
                             </td>
@@ -71,7 +70,12 @@
                             <td>
                                 <input asp-for="TramaTejido" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="0.1" />
                             </td>
-                            <td><span class="text-muted small">mm</span></td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input asp-for="CintaTrama" class="form-control text-center calc-input fw-bold" type="number" step="0.1" placeholder="mm" />
+                                    <span class="input-group-text bg-light">mm</span>
+                                </div>
+                            </td>
                             <td>
                                 <input asp-for="TramaDenier" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="1" />
                             </td>
@@ -137,18 +141,6 @@
             </div>
         </div>
 
-        <!-- Parámetros adicionales de producción (Engranaje / Horas) -->
-        <div class="row g-3 mb-4">
-            <div class="col-md-6">
-                <label asp-for="Engranaje" class="form-label small fw-semibold">Engranaje</label>
-                <input asp-for="Engranaje" class="form-control form-control-sm calc-input" type="number" step="0.1" />
-            </div>
-            <div class="col-md-6">
-                <label asp-for="Horas" class="form-label small fw-semibold">Horas de Trabajo</label>
-                <input asp-for="Horas" class="form-control form-control-sm calc-input" type="number" step="0.5" />
-            </div>
-        </div>
-
         <!-- BLOQUE INFERIOR: RESULTADOS (Estilo Excel Resultados) -->
         <div class="card shadow-sm mb-4 border-warning">
             <div class="card-header bg-warning text-dark fw-bold text-center fs-5">
@@ -209,20 +201,9 @@
             </div>
         </div>
 
-        <!-- Producción estimada y Botón Guardar -->
-        <div class="row g-3 align-items-center">
-            <div class="col-md-6">
-                <div class="card bg-success text-white p-3 shadow-sm">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <span class="small text-uppercase fw-semibold">Producción Estimada (D13)</span>
-                            <h3 class="mb-0 fw-bold" id="resProduccion">@Model.ProduccionEstimada.ToString("F2")</h3>
-                        </div>
-                        <i class="bi bi-speedometer2 fs-1 text-white-50"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
+        <!-- Botón Guardar en Historial -->
+        <div class="row">
+            <div class="col-12">
                 <button type="button" id="btnGuardar" class="btn btn-primary w-100 py-3 fw-bold shadow">
                     <i class="bi bi-bookmark-check me-2"></i> Guardar Registro en Historial
                 </button>
