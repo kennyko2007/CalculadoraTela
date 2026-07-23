@@ -1,35 +1,189 @@
-namespace CalculadoraTela.Models;
+document.addEventListener("DOMContentLoaded", function () {
 
-public class Calculo
-{
-    public int Id { get; set; }
-    public DateTime FechaCreacion { get; set; }
-    public string TipoProducto { get; set; } = string.Empty;
+    const form = document.getElementById("calcForm");
 
-    public decimal UrdimbreTejido { get; set; }
-    public decimal UrdimbreDenier { get; set; }
-    public decimal TramaTejido { get; set; }
-    public decimal TramaDenier { get; set; }
-    public decimal Laminado { get; set; }
-    public decimal AnchoRefuerzoFactor { get; set; }
-    public decimal Ancho { get; set; }
-    public decimal Corte { get; set; }
-    public int MaquinaNumero { get; set; }
+    const inputs = form.querySelectorAll(".calc-input, #TipoProducto");
 
-    public decimal ResistenciaUrdimbre { get; set; }
-    public decimal PesoUrdimbre { get; set; }
-    public decimal PorcentajeUrdimbre { get; set; }
 
-    public decimal ResistenciaTrama { get; set; }
-    public decimal PesoTrama { get; set; }
-    public decimal PorcentajeTrama { get; set; }
-    public decimal UrdimbreRefuerzoResistencia { get; set; }
 
-    public decimal PesoTejidoBase { get; set; }
-    public decimal PesoConLaminado { get; set; }
-    public decimal PesoConRefuerzo { get; set; }
-    public decimal PesoMetroLineal { get; set; }
-    public decimal PesoPorBolsa { get; set; }
+    inputs.forEach(input => {
 
-    public string ResumenFicha { get; set; } = string.Empty;
-}
+        input.addEventListener("input", calcularEnTiempoReal);
+
+        input.addEventListener("change", calcularEnTiempoReal);
+
+    });
+
+
+
+    function calcularEnTiempoReal() {
+
+        const formData = new FormData(form);
+
+        const data = {};
+
+        formData.forEach((value, key) => {
+
+            data[key] = value;
+
+        });
+
+
+
+        fetch('/Home/CalcularAjax', {
+
+            method: 'POST',
+
+            headers: {
+
+                'Content-Type': 'application/json',
+
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+
+            },
+
+            body: JSON.stringify(data)
+
+        })
+
+        .then(response => response.json())
+
+        .then(res => {
+
+            if (res.success) {
+
+                const model = res.data;
+
+
+
+                // Matriz superior
+
+                document.getElementById("resUrdimbreRes").innerText = model.resistenciaUrdimbre.toFixed(2) + " KgF";
+
+                document.getElementById("resUrdimbrePeso").innerText = model.pesoUrdimbre.toFixed(2) + " gr";
+
+                document.getElementById("resUrdimbrePorc").innerText = model.porcentajeUrdimbre.toFixed(1) + " %";
+
+
+
+                document.getElementById("resTramaRes").innerText = model.resistenciaTrama.toFixed(2) + " KgF";
+
+                document.getElementById("resTramaPeso").innerText = model.pesoTrama.toFixed(2) + " gr";
+
+                document.getElementById("resTramaPorc").innerText = model.porcentajeTrama.toFixed(1) + " %";
+
+
+
+                document.getElementById("resUrdRefRes").innerText = model.urdimbreRefuerzoResistencia.toFixed(2) + " KgF";
+
+                document.getElementById("resCantidadConos").innerText = model.maquinaNumero;
+
+                document.getElementById("resPesoMetro").innerText = model.pesoMetroLineal.toFixed(1) + " gml";
+
+
+
+                // Bloque de Resultados Inferior
+
+                document.getElementById("lblTipoProductoRes").innerText = model.tipoProducto;
+
+                document.getElementById("resMedida").innerText = `${model.ancho} x ${model.corte}`;
+
+                document.getElementById("resTejidoConcatenado").innerText = `${model.urdimbreTejido}x${model.tramaTejido}`;
+
+                document.getElementById("resDenierConcatenado").innerText = `${model.urdimbreDenier}x${model.tramaDenier}`;
+
+
+
+                document.getElementById("resUrdimbreRes2").innerText = model.resistenciaUrdimbre.toFixed(2);
+
+                document.getElementById("resUrdimbrePorc2").innerText = model.porcentajeUrdimbre.toFixed(0);
+
+                
+
+                document.getElementById("resTramaRes2").innerText = model.resistenciaTrama.toFixed(2);
+
+                document.getElementById("resTramaPorc2").innerText = model.porcentajeTrama.toFixed(0);
+
+
+
+                document.getElementById("resUrdRefRes2").innerText = model.urdimbreRefuerzoResistencia.toFixed(2);
+
+                document.getElementById("resAnchoRefuerzoLabel").innerText = model.anchoRefuerzoFactor;
+
+                
+
+                document.getElementById("resPesoBase").innerText = model.pesoTejidoBase.toFixed(1);
+
+                document.getElementById("resPesoLaminado").innerText = model.pesoConLaminado.toFixed(1);
+
+                document.getElementById("resPesoRefuerzo").innerText = model.pesoConRefuerzo.toFixed(1); // GMP
+
+                document.getElementById("resPesoMetro2").innerText = model.pesoMetroLineal.toFixed(1); // GML
+
+            }
+
+        })
+
+        .catch(error => console.error("Error en el cálculo AJAX:", error));
+
+    }
+
+
+
+    // Botón Guardar en Historial por AJAX
+
+    const btnGuardar = document.getElementById("btnGuardar");
+
+    if (btnGuardar) {
+
+        btnGuardar.addEventListener("click", function () {
+
+            const formData = new FormData(form);
+
+            const data = {};
+
+            formData.forEach((value, key) => { data[key] = value; });
+
+
+
+            fetch('/Home/GuardarHistorial', {
+
+                method: 'POST',
+
+                headers: {
+
+                    'Content-Type': 'application/json',
+
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+
+                },
+
+                body: JSON.stringify(data)
+
+            })
+
+            .then(response => response.json())
+
+            .then(res => {
+
+                if (res.success) {
+
+                    alert("¡Registro guardado correctamente en la base de datos!");
+
+                    window.location.href = '/Home/Historial';
+
+                } else {
+
+                    alert("Error al guardar: " + (res.message || "Desconocido"));
+
+                }
+
+            })
+
+            .catch(error => console.error("Error al guardar:", error));
+
+        });
+
+    }
+
+});
