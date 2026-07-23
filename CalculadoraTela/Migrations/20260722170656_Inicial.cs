@@ -17,7 +17,7 @@ namespace CalculadoraTela.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Fecha = table.Column<DateTime>(type: "timestamp", nullable: false),
                     DatosEntrada = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: false),
                     Resultado = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Observacion = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
