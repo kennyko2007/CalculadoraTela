@@ -66,6 +66,18 @@ public class HomeController : Controller
         }
     }
 
+    [HttpGet]
+    public async Task<IActionResult> CargarCalculo(int id)
+    {
+        var calculo = await _context.Calculos.FindAsync(id);
+        if (calculo == null)
+        {
+            return NotFound();
+        }
+
+        return Json(new { success = true, data = calculo });
+    }
+
     [HttpPost]
     public async Task<IActionResult> GuardarHistorial([FromBody] CalculadoraTelaVM model)
     {
@@ -94,11 +106,12 @@ public class HomeController : Controller
                 ResistenciaTrama = calculado.ResistenciaTrama,
                 PesoTrama = calculado.PesoTrama,
                 PorcentajeTrama = calculado.PorcentajeTrama,
+                UrdimbreRefuerzoResistencia = calculado.UrdimbreRefuerzoResistencia, // Incluye Refuerzo
                 PesoTejidoBase = calculado.PesoTejidoBase,
                 PesoConLaminado = calculado.PesoConLaminado,
                 PesoConRefuerzo = calculado.PesoConRefuerzo,
                 PesoMetroLineal = calculado.PesoMetroLineal,
-                PesoPorBolsa = calculado.PesoPorBolsa,
+                PesoPorBolsa = calculado.PesoPorBolsa, // Incluye GMP
                 ResumenFicha = calculado.ResumenFicha
             };
 
