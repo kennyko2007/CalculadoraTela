@@ -61,13 +61,37 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => console.error("Error en el cálculo AJAX:", error));
     }
 
-    // Botón Guardar en Historial
+    // Botón Guardar en Historial por AJAX (Sincronizado con el Controlador)
     const btnGuardar = document.getElementById("btnGuardar");
     if (btnGuardar) {
         btnGuardar.addEventListener("click", function () {
-            form.action = '/Home/GuardarHistorial';
-            form.method = 'POST';
-            form.submit();
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            fetch('/Home/GuardarHistorial', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(res => {
+                if (res.success) {
+                    alert("¡Registro guardado correctamente en la base de datos!");
+                    window.location.href = '/Home/Historial';
+                } else {
+                    alert("Error al guardar: " + (res.message || "Desconocido"));
+                }
+            })
+            .catch(error => {
+                console.error("Error al guardar en historial:", error);
+                alert("Ocurrió un error al intentar guardar el registro.");
+            });
         });
     }
 });
