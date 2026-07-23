@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace CalculadoraTela.Models;
 
@@ -8,6 +8,11 @@ public class Calculo
     public int Id { get; set; }
 
     public DateTime FechaCreacion { get; set; } = DateTime.Now;
+
+    // Nuevo campo agregado
+    [Required]
+    [StringLength(50)]
+    public string TipoProducto { get; set; } = "Tubular";
 
     // Entradas Urdimbre y Trama
     public double UrdimbreTejido { get; set; }
