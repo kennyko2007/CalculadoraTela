@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     Args = args
 });
 
-// Desactivar watchers en la configuración
+// Desactivar watchers en la lectura de archivos de configuración
 builder.Configuration.Sources.Clear();
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
@@ -19,7 +19,7 @@ builder.Configuration
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<CalculadoraService>();
 
-// Cadena de conexión
+// Cadena de conexión (Render / Local)
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 string connectionString;
 
@@ -58,7 +58,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
-// Inicializar BD
+// Inicializar base de datos
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -74,26 +74,13 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+// Activa los detalles de excepciones
 app.UseDeveloperExceptionPage();
 
 app.UseHttpsRedirection();
 
-// --- CORRECCIÓN CLAVE DE ARCHIVOS ESTÁTICOS SIN INOTIFY ---
-if (app.Environment.WebRootPath != null)
-{
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
-            app.Environment.WebRootPath)
-        {
-            UseActiveFileProvider = false
-        }
-    });
-}
-else
-{
-    app.UseStaticFiles();
-}
+// Servir archivos estáticos de forma estándar (sin watchers adicionales)
+app.UseStaticFiles();
 
 app.UseRouting();
 app.UseAuthorization();
