@@ -108,7 +108,7 @@ public class HomeController : Controller
 
             return Json(new { success = true, id = entidad.Id });
         }
-        call catch (Exception ex)
+        catch (Exception ex)
         {
             _logger.LogError(ex, "Error al guardar registro en la base de datos.");
             return Json(new { success = false, message = ex.Message });
