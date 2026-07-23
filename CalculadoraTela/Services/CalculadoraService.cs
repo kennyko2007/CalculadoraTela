@@ -6,6 +6,8 @@ public class CalculadoraService
 {
     public CalculadoraTelaVM Calcular(CalculadoraTelaVM vm)
     {
+        if (vm == null) return new CalculadoraTelaVM();
+
         // 1. Validación del Ancho de Refuerzo (Rango estricto de 0 a 12)
         if (vm.AnchoRefuerzoFactor < 0) vm.AnchoRefuerzoFactor = 0;
         if (vm.AnchoRefuerzoFactor > 12) vm.AnchoRefuerzoFactor = 12;
@@ -20,6 +22,10 @@ public class CalculadoraService
             int parInferior = (int)Math.Ceiling(valorConos);
             if (parInferior % 2 != 0) parInferior++;
             vm.MaquinaNumero = parInferior; // Cantidad de conos resultante
+        }
+        else
+        {
+            vm.MaquinaNumero = 18; // Valor por defecto de seguridad si es 0
         }
 
         // 3. Resistencias (Celdas E3, E4, E5 de Hoja 2)
