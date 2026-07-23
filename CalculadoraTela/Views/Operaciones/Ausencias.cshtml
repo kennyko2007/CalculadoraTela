@@ -1,4 +1,251 @@
-﻿@page
-@model CalculadoraTela.Operaciones.AusenciasModel
+@model IEnumerable<CalculadoraTela.ViewModels.AusenciaVM>
+
 @{
+    ViewData["Title"] = "Control de Ausencias e Incidencias";
+    
+    // Obtener el tipo de filtro desde la QueryString (por defecto Asistencia)
+    string tipoFiltro = Context.Request.Query["tipo"].ToString();
+    if (string.IsNullOrEmpty(tipoFiltro))
+    {
+        tipoFiltro = "Asistencia";
+    }
+}
+
+<style>
+    body { background-color: #f8fafc; }
+    .bg-dark-blue { background-color: #0f172a !important; }
+    .kpi-card { transition: transform 0.2s; }
+    .kpi-card:hover { transform: translateY(-3px); }
+</style>
+
+<!-- Navbar Superior (Plan C - Módulo Operaciones) -->
+<nav class="navbar navbar-dark bg-dark-blue shadow-sm mb-4">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="/Home/Index">
+            <i class="bi bi-cpu me-2"></i> Calculadora Tela
+        </a>
+        <div class="d-flex text-white-50 align-items-center gap-3">
+            <a href="/Home/Index" class="text-white-50 text-decoration-none small">
+                <i class="bi bi-calculator me-1"></i> Ficha Técnica
+            </a>
+            <a href="/Home/Historial" class="text-white-50 text-decoration-none small">
+                <i class="bi bi-clock-history me-1"></i> Historial BD
+            </a>
+
+            <span class="text-white-50">|</span>
+
+            <!-- Menú Operaciones -->
+            <div class="dropdown d-inline">
+                <a class="text-warning text-decoration-none small dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-people me-1"></i> Personal / Incidencias
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark shadow">
+                    <li><a class="dropdown-item small" href="/Operaciones/Rendimiento"><i class="bi bi-graph-up me-2"></i>Rendimiento (%)</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item small @(tipoFiltro == "Asistencia" ? "active bg-warning text-dark" : "")" href="/Operaciones/Ausencias?tipo=Asistencia"><i class="bi bi-person-check me-2"></i>Asistencia</a></li>
+                    <li><a class="dropdown-item small @(tipoFiltro == "Falta" ? "active bg-warning text-dark" : "")" href="/Operaciones/Ausencias?tipo=Falta"><i class="bi bi-person-x me-2"></i>Faltas</a></li>
+                    <li><a class="dropdown-item small @(tipoFiltro == "Vacaciones" ? "active bg-warning text-dark" : "")" href="/Operaciones/Ausencias?tipo=Vacaciones"><i class="bi bi-calendar-event me-2"></i>Vacaciones / Bajas</a></li>
+                    <li><a class="dropdown-item small @(tipoFiltro == "NoEnMaquina" ? "active bg-warning text-dark" : "")" href="/Operaciones/Ausencias?tipo=NoEnMaquina"><i class="bi bi-slash-circle me-2"></i>No en Máquina</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid px-4 pb-5">
+
+    <!-- Encabezado de Sección -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-dark mb-0">
+                <i class="bi bi-person-lines-fill text-warning me-2"></i>Control de Personal y Novedades
+            </h3>
+            <p class="text-muted small mb-0">
+                Filtro activo: <span class="badge bg-primary text-uppercase px-2 py-1">@tipoFiltro</span>
+            </p>
+        </div>
+        <div>
+            <button class="btn btn-primary btn-sm rounded-3 shadow-sm fw-bold px-3" data-bs-toggle="modal" data-bs-target="#modalRegistroIncidencia">
+                <i class="bi bi-plus-lg me-1"></i> Registrar Incidencia
+            </button>
+        </div>
+    </div>
+
+    <!-- Tarjetas KPI Resumen -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-3 bg-white p-3 kpi-card border-start border-4 border-success">
+                <small class="text-muted text-uppercase fw-semibold d-block mb-1" style="font-size: 0.75rem;">Presentes en Máquina</small>
+                <div class="d-flex align-items-baseline justify-content-between">
+                    <span class="fs-2 fw-bold text-success" id="kpiPresentes">15</span>
+                    <span class="badge bg-success-subtle text-success rounded-pill px-2 py-1">83.3%</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-3 bg-white p-3 kpi-card border-start border-4 border-danger">
+                <small class="text-muted text-uppercase fw-semibold d-block mb-1" style="font-size: 0.75rem;">Faltas Injustificadas</small>
+                <div class="d-flex align-items-baseline justify-content-between">
+                    <span class="fs-2 fw-bold text-danger" id="kpiFaltas">1</span>
+                    <span class="badge bg-danger-subtle text-danger rounded-pill px-2 py-1">Alerta</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-3 bg-white p-3 kpi-card border-start border-4 border-info">
+                <small class="text-muted text-uppercase fw-semibold d-block mb-1" style="font-size: 0.75rem;">Vacaciones / Licencias</small>
+                <div class="d-flex align-items-baseline justify-content-between">
+                    <span class="fs-2 fw-bold text-info" id="kpiVacaciones">1</span>
+                    <span class="badge bg-info-subtle text-info rounded-pill px-2 py-1">Programadas</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-3 bg-white p-3 kpi-card border-start border-4 border-warning">
+                <small class="text-muted text-uppercase fw-semibold d-block mb-1" style="font-size: 0.75rem;">No en Máquina (Otras Tareas)</small>
+                <div class="d-flex align-items-baseline justify-content-between">
+                    <span class="fs-2 fw-bold text-warning" id="kpiNoEnMaquina">1</span>
+                    <span class="badge bg-warning-subtle text-warning rounded-pill px-2 py-1">Asignado</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Estado e Incidencias del Personal -->
+    <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light text-secondary small text-uppercase">
+                        <tr>
+                            <th class="ps-4">Operario</th>
+                            <th>Máquina Asignada</th>
+                            <th class="text-center">Estado Actual</th>
+                            <th>Motivo / Observación</th>
+                            <th class="text-center">Turno</th>
+                            <th class="text-center pe-4">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaCuerpoAusencias">
+                        <!-- Ejemplo de filas estáticas dinámicas -->
+                        <tr>
+                            <td class="ps-4 font-monospace fw-bold">Juan Pérez</td>
+                            <td><span class="badge bg-dark px-2 py-1">M-1</span></td>
+                            <td class="text-center"><span class="badge bg-success">Presente</span></td>
+                            <td class="text-muted small">Operando normalmente</td>
+                            <td class="text-center"><span class="badge bg-secondary">Mañana</span></td>
+                            <td class="text-center pe-4">
+                                <button class="btn btn-outline-primary btn-sm rounded-2" onclick="editarEstado('Juan Pérez')">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4 font-monospace fw-bold">Carlos Gómez</td>
+                            <td><span class="badge bg-dark px-2 py-1">M-5</span></td>
+                            <td class="text-center"><span class="badge bg-danger">Falta Injustificada</span></td>
+                            <td class="text-muted small">No se presentó al turno de mañana</td>
+                            <td class="text-center"><span class="badge bg-secondary">Mañana</span></td>
+                            <td class="text-center pe-4">
+                                <button class="btn btn-outline-primary btn-sm rounded-2" onclick="editarEstado('Carlos Gómez')">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4 font-monospace fw-bold">María López</td>
+                            <td><span class="badge bg-dark px-2 py-1">M-8</span></td>
+                            <td class="text-center"><span class="badge bg-info text-dark">Vacaciones</span></td>
+                            <td class="text-muted small">Periodo del 10 al 24 del mes</td>
+                            <td class="text-center"><span class="badge bg-secondary">Mañana</span></td>
+                            <td class="text-center pe-4">
+                                <button class="btn btn-outline-primary btn-sm rounded-2" onclick="editarEstado('María López')">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4 font-monospace fw-bold">Roberto Silva</td>
+                            <td><span class="badge bg-dark px-2 py-1">M-12</span></td>
+                            <td class="text-center"><span class="badge bg-warning text-dark">No en Máquina</span></td>
+                            <td class="text-muted small">Apoyando en área de mantenimiento general</td>
+                            <td class="text-center"><span class="badge bg-secondary">Mañana</span></td>
+                            <td class="text-center pe-4">
+                                <button class="btn btn-outline-primary btn-sm rounded-2" onclick="editarEstado('Roberto Silva')">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Registrar Incidencias -->
+<div class="modal fade" id="modalRegistroIncidencia" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-dark-blue text-white">
+                <h5 class="modal-title fw-bold"><i class="bi bi-person-plus me-2"></i>Registrar Novedad de Personal</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold small">Nombre del Operario</label>
+                    <input type="text" id="modalNombre" class="form-control" placeholder="Ej. Pedro Ramírez">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold small">Máquina Asignada</label>
+                    <select id="modalMaquina" class="form-select">
+                        @for (int i = 1; i <= 18; i++)
+                        {
+                            <option value="M-@i">Máquina M-@i</option>
+                        }
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold small">Tipo de Estado / Novedad</label>
+                    <select id="modalTipoEstado" class="form-select">
+                        <option value="Presente">Presente (Asistencia)</option>
+                        <option value="Falta Injustificada">Falta Injustificada</option>
+                        <option value="Vacaciones">Vacaciones / Licencia</option>
+                        <option value="No en Máquina">No en Máquina (Reasignado)</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold small">Observación o Detalle</label>
+                    <textarea id="modalObservacion" class="form-control" rows="3" placeholder="Escriba aquí los detalles relevantes..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary btn-sm fw-bold px-3" onclick="guardarIncidenciaModal()">Guardar Novedad</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function editarEstado(nombre) {
+            alert(`Editar novedades para el operario: ${nombre}`);
+        }
+
+        function guardarIncidenciaModal() {
+            const nombre = document.getElementById('modalNombre').value;
+            if (!nombre) {
+                alert('Por favor ingrese el nombre del operario.');
+                return;
+            }
+
+            alert('Novedad guardada e integrada correctamente en la bitácora.');
+            
+            // Cerrar modal
+            const modalElement = document.getElementById('modalRegistroIncidencia');
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            modal.hide();
+        }
+    </script>
 }
