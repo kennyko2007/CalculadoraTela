@@ -1,0 +1,135 @@
+/* =========================================================
+   CALCULADORA TELA · Tema visual
+   Paleta industrial (azul noche / acero) + resaltado ámbar
+   para replicar el resaltado amarillo (FFFF00) que usa
+   Excel en las celdas de resultado de la Hoja 2
+   ========================================================= */
+
+:root {
+    --tela-navy: #101a2e;
+    --tela-navy-2: #1b2946;
+    --tela-steel: #64748b;
+    --tela-border: #223052;
+
+    /* Ámbar = mismo tono que el relleno amarillo de Excel en I3, I5, I6, I7 */
+    --tela-amber: #ffcc00;
+    --tela-amber-dark: #b88a00;
+    --tela-amber-bg: #fff6d8;
+
+    /* Color distintivo exclusivo de la fila/columna REFUERZO */
+    --tela-refuerzo: #ff8a00;
+    --tela-refuerzo-bg: #fff1e0;
+    --tela-refuerzo-border: #ffb866;
+}
+
+body {
+    background: #eef1f7;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* ---------- Encabezados de tarjeta ---------- */
+.card {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.header-matriz {
+    background: linear-gradient(135deg, var(--tela-navy) 0%, var(--tela-navy-2) 100%) !important;
+    color: #fff !important;
+    border: none !important;
+}
+
+.header-resultados {
+    background: linear-gradient(135deg, #ffb703 0%, #fb8500 100%) !important;
+    color: #1a1206 !important;
+    border: none !important;
+    text-shadow: 0 1px 0 rgba(255,255,255,.25);
+}
+
+/* ---------- Filas base (Urdimbre / Trama) ---------- */
+.fila-base td {
+    background-color: #fff;
+}
+
+/* ---------- Fila y columna de REFUERZO ---------- */
+/* Se usa el mismo acento en el input de la matriz y en los
+   resultados, para que se identifique de un vistazo que
+   pertenece al bloque de refuerzo, igual que en el Excel
+   (fila 5 y columna M:N de la Hoja 2). */
+.fila-refuerzo td {
+    background-color: var(--tela-refuerzo-bg);
+    border-top: 2px solid var(--tela-refuerzo-border);
+    border-bottom: 2px solid var(--tela-refuerzo-border);
+}
+
+.etiqueta-refuerzo {
+    background-color: var(--tela-refuerzo) !important;
+    color: #fff !important;
+    font-weight: 700;
+    letter-spacing: .3px;
+}
+
+.celda-refuerzo {
+    background-color: var(--tela-refuerzo-bg) !important;
+    border: 1px solid var(--tela-refuerzo-border) !important;
+    font-weight: 700;
+    color: #7a3c00;
+}
+
+/* ---------- Resultados clave (celdas amarillas del Excel) ---------- */
+/* GM2 (I3), GM2+LAM (I6), GMP (I5) y GML (I12/I7) */
+.celda-resultado-excel {
+    background: linear-gradient(180deg, var(--tela-amber) 0%, #ffe066 100%) !important;
+    color: #3a2c00 !important;
+    font-weight: 800 !important;
+    border: 1px solid var(--tela-amber-dark) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+}
+
+.celda-resultado-excel.destacado {
+    font-size: 1.15rem;
+}
+
+/* GMP (peso con refuerzo) combina ambos acentos: fondo
+   amarillo de "resultado Excel" + borde naranja de "refuerzo" */
+.celda-gmp {
+    background: linear-gradient(180deg, var(--tela-amber) 0%, #ffe066 100%) !important;
+    border: 2px solid var(--tela-refuerzo) !important;
+    color: #3a2c00 !important;
+    font-weight: 800 !important;
+}
+
+/* ---------- Inputs ---------- */
+.calc-input {
+    border: 1.5px solid #cbd5e1;
+    transition: box-shadow .15s ease, border-color .15s ease;
+}
+
+.calc-input:focus {
+    border-color: var(--tela-refuerzo);
+    box-shadow: 0 0 0 3px rgba(255, 138, 0, .18);
+}
+
+/* Resaltar levemente el input del ancho de refuerzo, ya que
+   define el factor de la tabla interna (0 a 12 => 1.00-1.12) */
+#AnchoRefuerzoFactor {
+    border-color: var(--tela-refuerzo-border);
+    font-weight: 700;
+}
+
+/* ---------- Badges de porcentaje ---------- */
+.badge-porcentaje {
+    background-color: var(--tela-navy-2);
+    color: #fff;
+    font-weight: 600;
+}
+
+/* ---------- Botón guardar ---------- */
+#btnGuardar {
+    background: linear-gradient(135deg, var(--tela-navy) 0%, var(--tela-navy-2) 100%);
+    border: none;
+}
+
+#btnGuardar:hover {
+    filter: brightness(1.1);
+}
