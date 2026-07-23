@@ -1,4 +1,4 @@
-@model IEnumerable<CalculadoraTela.Models.CalculadoraRegistro> // Ajusta el namespace según tu modelo de datos
+@model IEnumerable<CalculadoraTela.Models.Calculo>
 
 @{
     ViewData["Title"] = "Historial de Registros";
@@ -32,16 +32,12 @@
                 </thead>
                 <tbody>
                     @if (Model != null && Model.Any())
-                    @* 
-                        // Nota: Si tu modelo de historial usa otra propiedad para la lista, 
-                        // asegúrate de iterarla correctamente. 
-                    *@
                     {
                         foreach (var item in Model)
                         {
                             <tr>
                                 <td class="fw-bold text-secondary">@item.Id</td>
-                                <td>@item.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@item.FechaCreacion.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
                                 <td><span class="badge bg-light text-dark border px-2 py-1">@item.TipoProducto</span></td>
                                 <td class="fw-semibold">@item.Ancho x @item.Corte</td>
                                 <td>@item.PesoTejidoBase.ToString("F1")</td>
