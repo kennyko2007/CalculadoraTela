@@ -5,22 +5,17 @@
 }
 
 <div class="container-fluid py-4 px-4">
-    <!-- Encabezado superior -->
     <div class="d-flex align-items-center justify-content-between mb-4">
-        <div>
-            <h2 class="fw-bold text-dark mb-0">
-                <i class="bi bi-file-earmark-spreadsheet text-success me-2"></i>TELA - Hoja de Cálculo
-            </h2>
-        </div>
-        <div>
-            <a asp-controller="Home" asp-action="Historial" class="btn btn-outline-secondary shadow-sm">
-                <i class="bi bi-clock-history me-1"></i> Ver Historial
-            </a>
-        </div>
+        <h2 class="fw-bold text-dark mb-0">
+            <i class="bi bi-file-earmark-spreadsheet text-success me-2"></i>TELA - Hoja de Cálculo
+        </h2>
+        <a asp-controller="Home" asp-action="Historial" class="btn btn-outline-secondary shadow-sm">
+            <i class="bi bi-clock-history me-1"></i> Ver Historial
+        </a>
     </div>
 
     <form id="calcForm">
-        <!-- MATRIZ DE CONFIGURACIÓN Y TEJIDO (Bloque Superior Estilo Excel) -->
+        <!-- MATRIZ DE CONFIGURACIÓN Y TEJIDO -->
         <div class="card shadow-sm mb-4 border-dark">
             <div class="card-header bg-dark text-white fw-bold d-flex justify-content-between align-items-center">
                 <span><i class="bi bi-table me-2"></i> MATRIZ DE CONFIGURACIÓN Y TEJIDO</span>
@@ -48,88 +43,73 @@
                         <!-- Fila 1: URDIMBRE -->
                         <tr>
                             <td class="fw-bold bg-light">URDIMBRE</td>
-                            <td>
-                                <input asp-for="UrdimbreTejido" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="0.1" />
-                            </td>
+                            <td><input asp-for="UrdimbreTejido" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="0.1" /></td>
                             <td>
                                 <div class="input-group input-group-sm">
-                                    <input asp-for="CintaUrdimbre" class="form-control text-center calc-input fw-bold" type="number" step="0.1" placeholder="mm" />
+                                    <input asp-for="CintaUrdimbre" class="form-control text-center calc-input fw-bold" type="number" step="0.1" />
                                     <span class="input-group-text bg-light">mm</span>
                                 </div>
                             </td>
-                            <td>
-                                <input asp-for="UrdimbreDenier" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="1" />
-                            </td>
-                            <td><span id="resUrdimbreRes" class="fw-bold text-primary">@Model.ResistenciaUrdimbre.ToString("F1") KgF</span></td>
-                            <td><span id="resUrdimbrePeso">@Model.PesoUrdimbre.ToString("F1") gr</span></td>
+                            <td><input asp-for="UrdimbreDenier" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="1" /></td>
+                            <td><span id="resUrdimbreRes" class="fw-bold text-primary">@Model.ResistenciaUrdimbre.ToString("F2") KgF</span></td>
+                            <td><span id="resUrdimbrePeso">@Model.PesoUrdimbre.ToString("F2") gr</span></td>
                             <td><span id="resUrdimbrePorc" class="badge bg-secondary">@Model.PorcentajeUrdimbre.ToString("F1") %</span></td>
                         </tr>
                         <!-- Fila 2: TRAMA -->
                         <tr>
                             <td class="fw-bold bg-light">TRAMA</td>
-                            <td>
-                                <input asp-for="TramaTejido" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="0.1" />
-                            </td>
+                            <td><input asp-for="TramaTejido" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="0.1" /></td>
                             <td>
                                 <div class="input-group input-group-sm">
-                                    <input asp-for="CintaTrama" class="form-control text-center calc-input fw-bold" type="number" step="0.1" placeholder="mm" />
+                                    <input asp-for="CintaTrama" class="form-control text-center calc-input fw-bold" type="number" step="0.1" />
                                     <span class="input-group-text bg-light">mm</span>
                                 </div>
                             </td>
-                            <td>
-                                <input asp-for="TramaDenier" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="1" />
-                            </td>
-                            <td><span id="resTramaRes" class="fw-bold text-primary">@Model.ResistenciaTrama.ToString("F1") KgF</span></td>
-                            <td><span id="resTramaPeso">@Model.PesoTrama.ToString("F1") gr</span></td>
+                            <td><input asp-for="TramaDenier" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="1" /></td>
+                            <td><span id="resTramaRes" class="fw-bold text-primary">@Model.ResistenciaTrama.ToString("F2") KgF</span></td>
+                            <td><span id="resTramaPeso">@Model.PesoTrama.ToString("F2") gr</span></td>
                             <td><span id="resTramaPorc" class="badge bg-secondary">@Model.PorcentajeTrama.ToString("F1") %</span></td>
                         </tr>
                         <!-- Fila 3: URDIMBRE REFUERZO -->
                         <tr>
                             <td class="fw-bold bg-light">URDIMBRE</td>
-                            <td colspan="3" class="text-muted small">Refuerzo / Adicional</td>
-                            <td><span id="resUrdRefRes" class="fw-bold text-primary">@Model.UrdimbreRefuerzoResistencia.ToString("F1") KgF</span></td>
+                            <td><input asp-for="UrdimbreRefuerzoTejido" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="0.1" /></td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input asp-for="CintaRefuerzo" class="form-control text-center calc-input fw-bold" type="number" step="0.1" />
+                                    <span class="input-group-text bg-light">mm</span>
+                                </div>
+                            </td>
+                            <td><input asp-for="DenierRefuerzo" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="1" /></td>
+                            <td><span id="resUrdRefRes" class="fw-bold text-primary">@Model.UrdimbreRefuerzoResistencia.ToString("F2") KgF</span></td>
                             <td class="bg-light fw-bold text-start ps-2">ANCHO REFUERZO</td>
                             <td>
-                                <select asp-for="AnchoRefuerzoFactor" class="form-select form-select-sm text-center calc-input fw-bold" id="AnchoRefuerzoFactor">
-                                    @for (int i = 0; i <= 12; i++)
-                                    {
-                                        <option value="@i">@i cm</option>
-                                    }
-                                </select>
+                                <div class="input-group input-group-sm">
+                                    <input asp-for="AnchoRefuerzoFactor" class="form-control text-center calc-input fw-bold" type="number" step="1" />
+                                    <span class="input-group-text bg-light">cm</span>
+                                </div>
                             </td>
                         </tr>
-                        <!-- Fila 4: CANTIDAD / LAMINADO -->
+                        <!-- Fila 4: LAMINADO -->
                         <tr>
-                            <td class="fw-bold bg-light">CANTIDAD</td>
-                            <td>
-                                <input asp-for="MaquinaNumero" class="form-control form-control-sm text-center calc-input" type="number" />
-                            </td>
-                            <td colspan="2" class="text-start ps-2 small text-muted">conos</td>
+                            <td class="fw-bold bg-light">CANTIDAD / MÁQ</td>
+                            <td><input asp-for="MaquinaNumero" class="form-control form-control-sm text-center calc-input" type="number" /></td>
+                            <td colspan="2" class="text-start ps-2 small text-muted">máquina nº</td>
                             <td class="fw-bold bg-light">LAMINADO</td>
                             <td colspan="2">
-                                <input asp-for="Laminado" class="form-control form-control-sm text-center calc-input" type="number" step="0.1" />
+                                <div class="input-group input-group-sm">
+                                    <input asp-for="Laminado" class="form-control text-center calc-input fw-bold" type="number" step="0.1" />
+                                    <span class="input-group-text bg-light">gm2</span>
+                                </div>
                             </td>
                         </tr>
                         <!-- Fila 5: ANCHO -->
                         <tr>
                             <td class="fw-bold bg-light">ANCHO</td>
                             <td colspan="4">
-                                <div class="row g-1 align-items-center justify-content-center">
-                                    <div class="col-auto">
-                                        <input asp-for="Ancho" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="1" placeholder="Ancho" style="width: 70px;" />
-                                    </div>
-                                    <div class="col-auto"><span class="text-muted small">cm | Lado:</span></div>
-                                    <div class="col-auto">
-                                        <input asp-for="Lado" class="form-control form-control-sm text-center calc-input" type="number" style="width: 55px;" />
-                                    </div>
-                                    <div class="col-auto"><span class="text-muted small">Corte:</span></div>
-                                    <div class="col-auto">
-                                        <input asp-for="Corte" class="form-control form-control-sm text-center calc-input" type="number" step="0.1" style="width: 55px;" />
-                                    </div>
-                                    <div class="col-auto"><span class="text-muted small">Costura:</span></div>
-                                    <div class="col-auto">
-                                        <input asp-for="Costura" class="form-control form-control-sm text-center calc-input" type="number" step="0.1" style="width: 55px;" />
-                                    </div>
+                                <div class="input-group input-group-sm justify-content-center">
+                                    <input asp-for="Ancho" class="form-control text-center calc-input fw-bold" type="number" step="0.1" style="max-width: 150px;" />
+                                    <span class="input-group-text bg-light">cm</span>
                                 </div>
                             </td>
                             <td colspan="2" class="table-warning fw-bold fs-5 text-dark" id="resPesoMetro">
@@ -141,7 +121,7 @@
             </div>
         </div>
 
-        <!-- BLOQUE INFERIOR: RESULTADOS (Estilo Excel Resultados) -->
+        <!-- BLOQUE DE RESULTADOS -->
         <div class="card shadow-sm mb-4 border-warning">
             <div class="card-header bg-warning text-dark fw-bold text-center fs-5">
                 <i class="bi bi-bar-chart-fill me-2"></i> RESULTADOS
@@ -151,48 +131,36 @@
                     <tbody>
                         <tr>
                             <td class="fw-bold bg-light" style="width: 15%;">PRODUCTO</td>
-                            <td style="width: 20%;">
-                                <span class="fw-semibold" id="lblTipoProductoRes">@Model.TipoProducto</span>
-                            </td>
-                            <td rowspan="4" class="fw-bold bg-secondary text-white text-center align-middle" style="width: 12%;">
-                                RESISTENCIA
-                            </td>
+                            <td style="width: 20%;"><span class="fw-semibold" id="lblTipoProductoRes">@Model.TipoProducto</span></td>
+                            <td rowspan="4" class="fw-bold bg-secondary text-white text-center align-middle" style="width: 12%;">RESISTENCIA</td>
                             <td class="bg-light fw-bold" style="width: 15%;">URDIMBRE</td>
-                            <td><span id="resUrdimbreRes2">@Model.ResistenciaUrdimbre.ToString("F1")</span> KgF</td>
+                            <td><span id="resUrdimbreRes2">@Model.ResistenciaUrdimbre.ToString("F2")</span> KgF</td>
                             <td><span id="resUrdimbrePorc2">@Model.PorcentajeUrdimbre.ToString("F0")</span> %</td>
-                            <td rowspan="4" class="fw-bold bg-secondary text-white text-center align-middle" style="width: 12%;">
-                                PESO
-                            </td>
+                            <td rowspan="4" class="fw-bold bg-secondary text-white text-center align-middle" style="width: 12%;">PESO</td>
                             <td class="bg-light fw-bold" style="width: 15%;">GM2</td>
                             <td class="table-warning fw-bold text-end" id="resPesoBase">@Model.PesoTejidoBase.ToString("F1")</td>
                         </tr>
                         <tr>
                             <td class="fw-bold bg-light">MEDIDA</td>
-                            <td>
-                                <span class="fw-semibold" id="resMedida">@Model.Ancho x @Model.Corte</span>
-                            </td>
+                            <td><span class="fw-semibold" id="resMedida">@Model.Ancho x @Model.Corte</span></td>
                             <td class="bg-light fw-bold">TRAMA</td>
-                            <td><span id="resTramaRes2">@Model.ResistenciaTrama.ToString("F1")</span> KgF</td>
+                            <td><span id="resTramaRes2">@Model.ResistenciaTrama.ToString("F2")</span> KgF</td>
                             <td><span id="resTramaPorc2">@Model.PorcentajeTrama.ToString("F0")</span> %</td>
                             <td class="bg-light fw-bold">GM2 (PP+LAM)</td>
                             <td class="table-warning fw-bold text-end" id="resPesoLaminado">@Model.PesoConLaminado.ToString("F1")</td>
                         </tr>
                         <tr>
                             <td class="fw-bold bg-light">TEJIDO</td>
-                            <td>
-                                <span class="fw-semibold">@Model.UrdimbreTejido x @Model.TramaTejido</span>
-                            </td>
+                            <td><span class="fw-semibold">@Model.UrdimbreTejido x @Model.TramaTejido</span></td>
                             <td rowspan="2" class="fw-bold bg-light align-middle">REFUERZO</td>
-                            <td rowspan="2" class="align-middle"><span id="resUrdRefRes2">@Model.UrdimbreRefuerzoResistencia.ToString("F1")</span> KgF</td>
-                            <td rowspan="2" class="align-middle">100 %</td>
+                            <td rowspan="2" class="align-middle"><span id="resUrdRefRes2">@Model.UrdimbreRefuerzoResistencia.ToString("F2")</span> KgF</td>
+                            <td rowspan="2" class="align-middle">@Model.AnchoRefuerzoFactor cm</td>
                             <td class="bg-light fw-bold">GMP</td>
                             <td class="table-warning fw-bold text-end" id="resPesoRefuerzo">@Model.PesoConRefuerzo.ToString("F1")</td>
                         </tr>
                         <tr>
                             <td class="fw-bold bg-light">DENIER</td>
-                            <td>
-                                <span class="fw-semibold">@Model.UrdimbreDenier x @Model.TramaDenier</span>
-                            </td>
+                            <td><span class="fw-semibold">@Model.UrdimbreDenier x @Model.TramaDenier</span></td>
                             <td class="bg-light fw-bold">GML</td>
                             <td class="table-warning fw-bold text-end" id="resPesoMetro2">@Model.PesoMetroLineal.ToString("F1")</td>
                         </tr>
@@ -201,7 +169,6 @@
             </div>
         </div>
 
-        <!-- Botón Guardar en Historial -->
         <div class="row">
             <div class="col-12">
                 <button type="button" id="btnGuardar" class="btn btn-primary w-100 py-3 fw-bold shadow">
