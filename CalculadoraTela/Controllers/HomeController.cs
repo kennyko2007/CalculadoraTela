@@ -39,7 +39,6 @@ public class HomeController : Controller
         return View(model);
     }
 
-    // CAMBIO AQUÍ: Usamos [FromForm] para procesar los datos de FormData enviado por JS
     [HttpPost]
     public IActionResult Calcular([FromForm] CalculadoraTelaVM model)
     {
@@ -67,7 +66,6 @@ public class HomeController : Controller
         }
     }
 
-    // Mantenemos [FromBody] aquí porque guardarCalculo() sí envía JSON.stringify(object) con Content-Type: application/json
     [HttpPost]
     public async Task<IActionResult> GuardarHistorial([FromBody] CalculadoraTelaVM model)
     {
@@ -80,7 +78,7 @@ public class HomeController : Controller
             var entidad = new Calculo
             {
                 FechaCreacion = DateTime.UtcNow,
-                TipoProducto = calculado.TipoProducto, // <-- Incluido aquí
+                TipoProducto = calculado.TipoProducto,
                 UrdimbreTejido = calculado.UrdimbreTejido,
                 UrdimbreDenier = calculado.UrdimbreDenier,
                 TramaTejido = calculado.TramaTejido,
@@ -92,8 +90,6 @@ public class HomeController : Controller
                 Corte = calculado.Corte,
                 Costura = calculado.Costura,
                 MaquinaNumero = calculado.MaquinaNumero,
-                Engranaje = calculado.Engranaje,
-                Horas = calculado.Horas,
                 ResistenciaUrdimbre = calculado.ResistenciaUrdimbre,
                 PesoUrdimbre = calculado.PesoUrdimbre,
                 PorcentajeUrdimbre = calculado.PorcentajeUrdimbre,
@@ -105,7 +101,6 @@ public class HomeController : Controller
                 PesoConRefuerzo = calculado.PesoConRefuerzo,
                 PesoMetroLineal = calculado.PesoMetroLineal,
                 PesoPorBolsa = calculado.PesoPorBolsa,
-                ProduccionEstimada = calculado.ProduccionEstimada,
                 ResumenFicha = calculado.ResumenFicha
             };
 
