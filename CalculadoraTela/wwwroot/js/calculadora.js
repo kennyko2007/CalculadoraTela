@@ -12,61 +12,69 @@ document.addEventListener("DOMContentLoaded", function () {
     function calcularEnTiempoReal() {
         const formData = new FormData(form);
         const data = {};
+        
         formData.forEach((value, key) => {
-            data[key] = value;
+            // Normaliza las comas por puntos en los valores numéricos por si acaso
+            data[key] = typeof value === 'string' ? value.replace(',', '.') : value;
         });
 
         fetch('/Home/CalcularAjax', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
             },
             body: JSON.stringify(data)
         })
         .then(response => response.json())
         .then(res => {
-            if (res.success) {
+            if (res.success && res.data) {
                 const model = res.data;
 
                 // Matriz superior
-                document.getElementById("resUrdimbreRes").innerText = (model.resistenciaUrdimbre || 0).toFixed(2) + " KgF";
-                document.getElementById("resUrdimbrePeso").innerText = (model.pesoUrdimbre || 0).toFixed(2) + " gr";
-                document.getElementById("resUrdimbrePorc").innerText = (model.porcentajeUrdimbre || 0).toFixed(1) + " %";
+                safeSetText("resUrdimbreRes", (model.resistenciaUrdimbre || 0).toFixed(2) + " KgF");
+                safeSetText("resUrdimbrePeso", (model.pesoUrdimbre || 0).toFixed(2) + " gr");
+                safeSetText("resUrdimbrePorc", (model.porcentajeUrdimbre || 0).toFixed(1) + " %");
 
-                document.getElementById("resTramaRes").innerText = (model.resistenciaTrama || 0).toFixed(2) + " KgF";
-                document.getElementById("resTramaPeso").innerText = (model.pesoTrama || 0).toFixed(2) + " gr";
-                document.getElementById("resTramaPorc").innerText = (model.porcentajeTrama || 0).toFixed(1) + " %";
+                safeSetText("resTramaRes", (model.resistenciaTrama || 0).toFixed(2) + " KgF");
+                safeSetText("resTramaPeso", (model.pesoTrama || 0).toFixed(2) + " gr");
+                safeSetText("resTramaPorc", (model.porcentajeTrama || 0).toFixed(1) + " %");
 
-                document.getElementById("resUrdRefRes").innerText = (model.urdimbreRefuerzoResistencia || 0).toFixed(2) + " KgF";
+                safeSetText("resUrdRefRes", (model.urdimbreRefuerzoResistencia || 0).toFixed(2) + " KgF");
                 
                 // Cantidad de Conos (REDONDEA.PAR)
-                document.getElementById("resCantidadConos").innerText = model.maquinaNumero || 0;
+                safeSetText("resCantidadConos", model.maquinaNumero || 0);
                 
-                document.getElementById("resPesoMetro").innerText = (model.pesoMetroLineal || 0).toFixed(1) + " gml";
+                safeSetText("resPesoMetro", (model.pesoMetroLineal || 0).toFixed(1) + " gml");
 
                 // Bloque de Resultados Inferior
-                document.getElementById("lblTipoProductoRes").innerText = model.tipoProducto || "";
-                document.getElementById("resMedida").innerText = `${model.ancho || 0} x ${model.corte || 0}`;
-                document.getElementById("resTejidoConcatenado").innerText = `${model.urdimbreTejido || 0}x${model.tramaTejido || 0}`;
-                document.getElementById("resDenierConcatenado").innerText = `${model.urdimbreDenier || 0}x${model.tramaDenier || 0}`;
+                safeSetText("lblTipoProductoRes", model.tipoProducto || "");
+                safeSetText("resMedida", `${model.ancho || 0} x ${model.corte || 0}`);
+                safeSetText("resTejidoConcatenado", `${model.urdimbreTejido || 0}x${model.tramaTejido || 0}`);
+                safeSetText("resDenierConcatenado", `${model.urdimbreDenier || 0}x${model.tramaDenier || 0}`);
 
-                document.getElementById("resUrdimbreRes2").innerText = (model.resistenciaUrdimbre || 0).toFixed(2);
-                document.getElementById("resUrdimbrePorc2").innerText = (model.porcentajeUrdimbre || 0).toFixed(0);
+                safeSetText("resUrdimbreRes2", (model.resistenciaUrdimbre || 0).toFixed(2));
+                safeSetText("resUrdimbrePorc2", (model.porcentajeUrdimbre || 0).toFixed(0));
                 
-                document.getElementById("resTramaRes2").innerText = (model.resistenciaTrama || 0).toFixed(2);
-                document.getElementById("resTramaPorc2").innerText = (model.porcentajeTrama || 0).toFixed(0);
+                safeSetText("resTramaRes2", (model.resistenciaTrama || 0).toFixed(2));
+                safeSetText("resTramaPorc2", (model.porcentajeTrama || 0).toFixed(0));
 
-                document.getElementById("resUrdRefRes2").innerText = (model.urdimbreRefuerzoResistencia || 0).toFixed(2);
-                document.getElementById("resAnchoRefuerzoLabel").innerText = model.anchoRefuerzoFactor || 0;
+                safeSetText("resUrdRefRes2", (model.urdimbreRefuerzoResistencia || 0).toFixed(2));
+                safeSetText("resAnchoRefuerzoLabel", model.anchoRefuerzoFactor || 0);
                 
-                document.getElementById("resPesoBase").innerText = (model.pesoTejidoBase || 0).toFixed(1);
-                document.getElementById("resPesoLaminado").innerText = (model.pesoConLaminado || 0).toFixed(1);
-                document.getElementById("resPesoRefuerzo").innerText = (model.pesoConRefuerzo || 0).toFixed(1); // GMP
-                document.getElementById("resPesoMetro2").innerText = (model.pesoMetroLineal || 0).toFixed(1); // GML
+                safeSetText("resPesoBase", (model.pesoTejidoBase || 0).toFixed(1));
+                safeSetText("resPesoLaminado", (model.pesoConLaminado || 0).toFixed(1));
+                safeSetText("resPesoRefuerzo", (model.pesoConRefuerzo || 0).toFixed(1)); // GMP
+                safeSetText("resPesoMetro2", (model.pesoMetroLineal || 0).toFixed(1)); // GML
             }
         })
         .catch(error => console.error("Error en el cálculo AJAX:", error));
+    }
+
+    // Función auxiliar para evitar errores si falta algún elemento DOM
+    function safeSetText(elementId, text) {
+        const el = document.getElementById(elementId);
+        if (el) el.innerText = text;
     }
 
     // Botón Guardar en Historial por AJAX
@@ -75,13 +83,15 @@ document.addEventListener("DOMContentLoaded", function () {
         btnGuardar.addEventListener("click", function () {
             const formData = new FormData(form);
             const data = {};
-            formData.forEach((value, key) => { data[key] = value; });
+            formData.forEach((value, key) => { 
+                data[key] = typeof value === 'string' ? value.replace(',', '.') : value; 
+            });
 
             fetch('/Home/GuardarHistorial', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
                 },
                 body: JSON.stringify(data)
             })
