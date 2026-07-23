@@ -7,7 +7,7 @@
 <div class="container mt-4">
     <h2 class="text-center mb-4 text-primary fw-bold">Calculadora de Tela y Bolsas</h2>
 
-    <form id="calcForm">
+    <form id="calcForm" asp-action="Calcular" method="post">
         @Html.AntiForgeryToken()
 
         <!-- SECCIÓN DE ENTRADAS (PARÁMETROS) -->
@@ -85,62 +85,62 @@
                 </div>
             </div>
         </div>
+
+        <!-- BLOQUE DE RESULTADOS -->
+        <div class="card shadow-sm mb-4 border-warning">
+            <div class="card-header bg-warning text-dark fw-bold text-center fs-5">
+                <i class="bi bi-bar-chart-fill me-2"></i> RESULTADOS
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-bordered align-middle mb-0 border-dark">
+                    <tbody>
+                        <tr>
+                            <td class="fw-bold bg-light" style="width: 15%;">PRODUCTO</td>
+                            <td style="width: 20%;"><span class="fw-semibold" id="lblTipoProductoRes">@Model.TipoProducto</span></td>
+                            <td rowspan="4" class="fw-bold bg-secondary text-white text-center align-middle" style="width: 12%;">RESISTENCIA</td>
+                            <td class="bg-light fw-bold" style="width: 15%;">URDIMBRE</td>
+                            <td><span id="resUrdimbreRes2">@Model.ResistenciaUrdimbre.ToString("F2")</span> KgF</td>
+                            <td><span id="resUrdimbrePorc2">@Model.PorcentajeUrdimbre.ToString("F0")</span> %</td>
+                            <td rowspan="4" class="fw-bold bg-secondary text-white text-center align-middle" style="width: 12%;">PESO</td>
+                            <td class="bg-light fw-bold" style="width: 15%;">GM2</td>
+                            <td class="table-warning fw-bold text-end" id="resPesoBase">@Model.PesoTejidoBase.ToString("F1")</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold bg-light">MEDIDA</td>
+                            <td><span class="fw-semibold" id="resMedida">@Model.Ancho x @Model.Corte</span></td>
+                            <td class="bg-light fw-bold">TRAMA</td>
+                            <td><span id="resTramaRes2">@Model.ResistenciaTrama.ToString("F2")</span> KgF</td>
+                            <td><span id="resTramaPorc2">@Model.PorcentajeTrama.ToString("F0")</span> %</td>
+                            <td class="bg-light fw-bold">GM2 (PP+LAM)</td>
+                            <td class="table-warning fw-bold text-end" id="resPesoLaminado">@Model.PesoConLaminado.ToString("F1")</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold bg-light">TEJIDO</td>
+                            <td><span class="fw-semibold" id="resTejidoConcatenado">@Model.UrdimbreTejido x @Model.TramaTejido</span></td>
+                            <td rowspan="2" class="fw-bold bg-light align-middle">REFUERZO</td>
+                            <td rowspan="2" class="align-middle"><span id="resUrdRefRes2">@Model.UrdimbreRefuerzoResistencia.ToString("F2")</span> KgF</td>
+                            <td rowspan="2" class="align-middle text-center">100 %</td>
+                            <td class="bg-light fw-bold">GMP</td>
+                            <td class="table-warning fw-bold text-end" id="resPesoRefuerzo">@Model.PesoConRefuerzo.ToString("F1")</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold bg-light">DENIER</td>
+                            <td><span class="fw-semibold" id="resDenierConcatenado">@Model.UrdimbreDenier x @Model.TramaDenier</span></td>
+                            <td class="bg-light fw-bold">GML</td>
+                            <td class="table-warning fw-bold text-end" id="resPesoMetro2">@Model.PesoMetroLineal.ToString("F1")</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- BOTÓN DE GUARDAR EN HISTORIAL -->
+        <div class="text-center mb-5">
+            <button type="submit" id="btnGuardar" class="btn btn-success btn-lg px-5 fw-bold shadow">
+                <i class="bi bi-save me-2"></i> Guardar en Historial
+            </button>
+        </div>
     </form>
-
-    <!-- BLOQUE DE RESULTADOS -->
-    <div class="card shadow-sm mb-4 border-warning">
-        <div class="card-header bg-warning text-dark fw-bold text-center fs-5">
-            <i class="bi bi-bar-chart-fill me-2"></i> RESULTADOS
-        </div>
-        <div class="card-body p-0">
-            <table class="table table-bordered align-middle mb-0 border-dark">
-                <tbody>
-                    <tr>
-                        <td class="fw-bold bg-light" style="width: 15%;">PRODUCTO</td>
-                        <td style="width: 20%;"><span class="fw-semibold" id="lblTipoProductoRes">@Model.TipoProducto</span></td>
-                        <td rowspan="4" class="fw-bold bg-secondary text-white text-center align-middle" style="width: 12%;">RESISTENCIA</td>
-                        <td class="bg-light fw-bold" style="width: 15%;">URDIMBRE</td>
-                        <td><span id="resUrdimbreRes2">@Model.ResistenciaUrdimbre.ToString("F2")</span> KgF</td>
-                        <td><span id="resUrdimbrePorc2">@Model.PorcentajeUrdimbre.ToString("F0")</span> %</td>
-                        <td rowspan="4" class="fw-bold bg-secondary text-white text-center align-middle" style="width: 12%;">PESO</td>
-                        <td class="bg-light fw-bold" style="width: 15%;">GM2</td>
-                        <td class="table-warning fw-bold text-end" id="resPesoBase">@Model.PesoTejidoBase.ToString("F1")</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold bg-light">MEDIDA</td>
-                        <td><span class="fw-semibold" id="resMedida">@Model.Ancho x @Model.Corte</span></td>
-                        <td class="bg-light fw-bold">TRAMA</td>
-                        <td><span id="resTramaRes2">@Model.ResistenciaTrama.ToString("F2")</span> KgF</td>
-                        <td><span id="resTramaPorc2">@Model.PorcentajeTrama.ToString("F0")</span> %</td>
-                        <td class="bg-light fw-bold">GM2 (PP+LAM)</td>
-                        <td class="table-warning fw-bold text-end" id="resPesoLaminado">@Model.PesoConLaminado.ToString("F1")</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold bg-light">TEJIDO</td>
-                        <td><span class="fw-semibold" id="resTejidoConcatenado">@Model.UrdimbreTejido x @Model.TramaTejido</span></td>
-                        <td rowspan="2" class="fw-bold bg-light align-middle">REFUERZO</td>
-                        <td rowspan="2" class="align-middle"><span id="resUrdRefRes2">@Model.UrdimbreRefuerzoResistencia.ToString("F2")</span> KgF</td>
-                        <td rowspan="2" class="align-middle text-center">100 %</td>
-                        <td class="bg-light fw-bold">GMP</td>
-                        <td class="table-warning fw-bold text-end" id="resPesoRefuerzo">@Model.PesoConRefuerzo.ToString("F1")</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold bg-light">DENIER</td>
-                        <td><span class="fw-semibold" id="resDenierConcatenado">@Model.UrdimbreDenier x @Model.TramaDenier</span></td>
-                        <td class="bg-light fw-bold">GML</td>
-                        <td class="table-warning fw-bold text-end" id="resPesoMetro2">@Model.PesoMetroLineal.ToString("F1")</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- BOTÓN DE GUARDAR EN HISTORIAL -->
-    <div class="text-center mb-5">
-        <button type="button" id="btnGuardar" class="btn btn-success btn-lg px-5 fw-bold shadow">
-            <i class="bi bi-save me-2"></i> Guardar en Historial
-        </button>
-    </div>
 </div>
 
 @section Scripts {
