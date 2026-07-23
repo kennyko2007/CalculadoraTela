@@ -8,6 +8,10 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     Args = args
 });
 
+// --- CONFIGURACIÓN DE PUERTO PARA RENDER ---
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://*:{port}");
+
 // Desactivar watchers en la lectura de archivos de configuración
 builder.Configuration.Sources.Clear();
 builder.Configuration
@@ -50,7 +54,7 @@ if (!string.IsNullOrEmpty(databaseUrl))
 else
 {
     connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-                      ?? throw new InvalidOperationException("No se encontró 'DefaultConnection'.");
+                       ?? throw new InvalidOperationException("No se encontró 'DefaultConnection'.");
 }
 
 builder.Services.AddDbContext<AppDbContext>(options =>
