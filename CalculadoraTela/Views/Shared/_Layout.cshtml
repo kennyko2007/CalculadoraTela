@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -11,8 +11,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
     <!-- Bootstrap Icons -->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <!-- CSS ASP.NET (Sin asp-append-version) -->
     <link rel="stylesheet" href="~/css/site.css" />
@@ -24,10 +23,10 @@
     <link rel="stylesheet" href="~/CalculadoraTela.styles.css" />
 </head>
 
-<body>
+<body class="bg-light d-flex flex-column min-vh-100">
 
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
         <div class="container">
 
             <a class="navbar-brand fw-bold"
@@ -48,24 +47,24 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarMenu">
-                <ul class="navbar-nav ms-auto align-items-lg-center">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
 
                     <!-- Calculadora -->
                     <li class="nav-item">
-                        <a class="nav-link"
+                        <a class="nav-link px-3 rounded text-white"
                            asp-controller="Home"
                            asp-action="Index">
-                            <i class="bi bi-house-door-fill me-1"></i>
+                            <i class="bi bi-house-door-fill text-warning me-1"></i>
                             Calculadora
                         </a>
                     </li>
 
                     <!-- Historial -->
                     <li class="nav-item">
-                        <a class="nav-link"
+                        <a class="nav-link px-3 rounded text-white"
                            asp-controller="Home"
                            asp-action="Historial">
-                            <i class="bi bi-clock-history me-1"></i>
+                            <i class="bi bi-clock-history text-warning me-1"></i>
                             Historial
                         </a>
                     </li>
@@ -77,16 +76,16 @@
     </nav>
 
     <!-- CONTENIDO -->
-    <div class="container-fluid px-4 mt-4">
+    <div class="container-fluid px-4 my-4 flex-grow-1">
         <main role="main">
             @RenderBody()
         </main>
     </div>
 
     <!-- FOOTER -->
-    <footer class="footer mt-5 py-3 text-center text-muted border-top">
+    <footer class="footer mt-auto py-3 text-center text-muted bg-white border-top shadow-sm">
         <div class="container">
-            © @DateTime.Now.Year - Calculadora Tela | Control de Planta
+            <small>© @DateTime.Now.Year - Calculadora Tela | Control de Planta</small>
         </div>
     </footer>
 
