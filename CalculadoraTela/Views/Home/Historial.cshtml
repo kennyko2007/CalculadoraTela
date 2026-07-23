@@ -1,0 +1,66 @@
+@model IEnumerable<CalculadoraTela.Models.CalculadoraRegistro> // Ajusta el namespace según tu modelo de datos
+
+@{
+    ViewData["Title"] = "Historial de Registros";
+}
+
+<div class="container-fluid py-4 px-4" style="background-color: #f8fafc; min-height: 100vh;">
+    <!-- Encabezado -->
+    <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom">
+        <h2 class="fw-bold text-dark mb-0" style="color: #1e293b;">
+            <i class="bi bi-clock-history text-primary me-2"></i>Historial de Cálculos Guardados
+        </h2>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-dark shadow-sm px-4">
+            <i class="bi bi-arrow-left me-1"></i> Volver a la Calculadora
+        </a>
+    </div>
+
+    <!-- Tabla de Historial -->
+    <div class="card shadow-sm mb-4 border-0 rounded-3 overflow-hidden">
+        <div class="card-body p-0 table-responsive bg-white">
+            <table class="table table-hover table-bordered align-middle text-center mb-0 border-light">
+                <thead class="text-secondary uppercase fs-7" style="background-color: #f1f5f9;">
+                    <tr>
+                        <th class="py-3">ID</th>
+                        <th class="py-3">Fecha</th>
+                        <th class="py-3">Tipo Producto</th>
+                        <th class="py-3">Ancho x Corte</th>
+                        <th class="py-3">Peso Base (GM2)</th>
+                        <th class="py-3">Peso con Laminado</th>
+                        <th class="py-3">GML</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    @* 
+                        // Nota: Si tu modelo de historial usa otra propiedad para la lista, 
+                        // asegúrate de iterarla correctamente. 
+                    *@
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="fw-bold text-secondary">@item.Id</td>
+                                <td>@item.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td><span class="badge bg-light text-dark border px-2 py-1">@item.TipoProducto</span></td>
+                                <td class="fw-semibold">@item.Ancho x @item.Corte</td>
+                                <td>@item.PesoTejidoBase.ToString("F1")</td>
+                                <td>@item.PesoConLaminado.ToString("F1")</td>
+                                <td class="fw-bold text-success">@item.PesoMetroLineal.ToString("F1")</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-4 text-muted">
+                                <i class="bi bi-folder2-open display-6 d-block mb-2"></i>
+                                No hay registros guardados en el historial todavía.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
