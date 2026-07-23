@@ -47,7 +47,6 @@ public class HomeController : Controller
         return Json(resultado);
     }
 
-    // --- MUESTRA EL HISTORIAL DE LA BASE DE DATOS ---
     [HttpGet]
     public async Task<IActionResult> Historial()
     {
@@ -86,9 +85,7 @@ public class HomeController : Controller
                 Laminado = calculado.Laminado,
                 AnchoRefuerzoFactor = calculado.AnchoRefuerzoFactor,
                 Ancho = calculado.Ancho,
-                Lado = calculado.Lado,
                 Corte = calculado.Corte,
-                Costura = calculado.Costura,
                 MaquinaNumero = calculado.MaquinaNumero,
                 ResistenciaUrdimbre = calculado.ResistenciaUrdimbre,
                 PesoUrdimbre = calculado.PesoUrdimbre,
