@@ -49,7 +49,7 @@ public class CalculadoraService
         model.PesoConLaminado = model.PesoTejidoBase + model.Laminado;
         model.PesoConRefuerzo = model.PesoTejidoBase * factorRef;
 
-        // 8. Tipo de Producto y Peso Metro Lineal (GML)
+        // 8. Tipo de Producto y Peso Metro Lineal (GML) - Fórmula exacta del Excel: =+BUSCARV(B9;K;L;2) * I11 * (B7/100)
         double factorTipo = _tablaTipoProducto.TryGetValue(model.TipoProducto, out double valTipo) ? valTipo : 2.0;
         model.PesoMetroLineal = factorTipo * model.PesoConRefuerzo * (model.Ancho / 100.0);
 
@@ -57,13 +57,17 @@ public class CalculadoraService
         double proporcionBolsa = (model.Corte > 0) ? (model.Corte / 100.0) : (model.Ancho / 100.0);
         model.PesoPorBolsa = model.PesoMetroLineal * proporcionBolsa;
 
-        // 10. Resumen Ficha
+        // 10. Concatenaciones exactas del Excel (Medida, Tejido, Denier y Ficha Técnica)
+        string medidaStr = $"{model.Ancho}x{model.Corte}";
+        string tejidoStr = $"{model.UrdimbreTejido}x{model.TramaTejido}";
+        string denierStr = $"{model.UrdimbreDenier}x{model.TramaDenier}";
+
         int g4Int = (int)Math.Round(model.PesoConLaminado);
         int g5Int = (int)Math.Round(model.PesoConRefuerzo);
         int g7Int = (int)Math.Round(model.PesoMetroLineal);
         double g9Redondeado = Math.Round(model.PesoPorBolsa, 2);
 
-        model.ResumenFicha = $"{model.Ancho}x{model.Corte} \\ {model.UrdimbreTejido}x{model.TramaTejido} \\ {g4Int}gm2 \\ {g5Int}gmp \\ {g7Int}gml \\ {g9Redondeado}gr/Bol.";
+        model.ResumenFicha = $"{medidaStr} \\ {tejidoStr} \\ {g4Int}gm2 \\ {g5Int}gmp \\ {g7Int}gml \\ {g9Redondeado}gr/Bol.";
 
         return model;
     }
