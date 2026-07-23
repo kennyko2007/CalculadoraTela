@@ -15,39 +15,39 @@ public class Calculo
     public string TipoProducto { get; set; } = "Tubular";
 
     // Entradas Urdimbre y Trama
-    public double UrdimbreTejido { get; set; }
-    public double UrdimbreDenier { get; set; }
-    public double TramaTejido { get; set; }
-    public double TramaDenier { get; set; }
+    public decimal UrdimbreTejido { get; set; }
+    public decimal UrdimbreDenier { get; set; }
+    public decimal TramaTejido { get; set; }
+    public decimal TramaDenier { get; set; }
 
     // Especificaciones Adicionales
-    public double Laminado { get; set; }
-    public double AnchoRefuerzoFactor { get; set; }
-    public double Ancho { get; set; }
-    public double Lado { get; set; }
-    public double Corte { get; set; }
-    public double Costura { get; set; }
+    public decimal Laminado { get; set; }
+    public decimal AnchoRefuerzoFactor { get; set; }
+    public decimal Ancho { get; set; }
+    public decimal Lado { get; set; }
+    public decimal Corte { get; set; }
+    public decimal Costura { get; set; }
 
     // Datos Producción
     public int MaquinaNumero { get; set; }
-    public double Engranaje { get; set; }
-    public double Horas { get; set; }
+    public decimal Engranaje { get; set; }
+    public decimal Horas { get; set; }
 
     // Resultados Calculados
-    public double ResistenciaUrdimbre { get; set; }
-    public double PesoUrdimbre { get; set; }
-    public double PorcentajeUrdimbre { get; set; }
+    public decimal ResistenciaUrdimbre { get; set; }
+    public decimal PesoUrdimbre { get; set; }
+    public decimal PorcentajeUrdimbre { get; set; }
 
-    public double ResistenciaTrama { get; set; }
-    public double PesoTrama { get; set; }
-    public double PorcentajeTrama { get; set; }
+    public decimal ResistenciaTrama { get; set; }
+    public decimal PesoTrama { get; set; }
+    public decimal PorcentajeTrama { get; set; }
 
-    public double PesoTejidoBase { get; set; } // G2
-    public double PesoConLaminado { get; set; } // G4 (gm2)
-    public double PesoConRefuerzo { get; set; } // G5 (gmp)
-    public double PesoMetroLineal { get; set; } // G7 (gml)
-    public double PesoPorBolsa { get; set; }   // G9 (gr/Bol)
+    public decimal PesoTejidoBase { get; set; } // G2
+    public decimal PesoConLaminado { get; set; } // G4 (gm2)
+    public decimal PesoConRefuerzo { get; set; } // G5 (gmp)
+    public decimal PesoMetroLineal { get; set; } // G7 (gml)
+    public decimal PesoPorBolsa { get; set; }   // G9 (gr/Bol)
 
-    public double ProduccionEstimada { get; set; } // D13
+    public decimal ProduccionEstimada { get; set; } // D13
     public string ResumenFicha { get; set; } = string.Empty; // A11
 }
