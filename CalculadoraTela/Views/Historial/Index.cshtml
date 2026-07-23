@@ -6,48 +6,60 @@
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-primary"><i class="bi bi-clock-history"></i> Historial de Cálculos</h2>
-        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
-            <i class="bi bi-arrow-left"></i> Volver a Calculadora
+        <h2 class="text-primary fw-bold"><i class="bi bi-clock-history me-2"></i> Historial de Cálculos Guardados</h2>
+        <a asp-action="Index" class="btn btn-outline-primary fw-bold">
+            <i class="bi bi-calculator me-1"></i> Ir a la Calculadora
         </a>
     </div>
 
-    @if (!Model.Any())
-    {
-        <div class="alert alert-info text-center">
-            No hay registros guardados en el historial todavía.
-        </div>
-    }
-    else
-    {
-        <div class="table-responsive shadow-sm rounded">
-            <table class="table table-hover table-striped align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Máquina</th>
-                        <th>Tejido (Urd x Trama)</th>
-                        <th>Ficha Térmica (A11)</th>
-                        <th>Peso Metro (gml)</th>
-                        <th>Peso Bolsa (gr/Bol)</th>
-                        <th>Producción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead class="table-primary text-dark">
                         <tr>
-                            <td>@item.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</td>
-                            <td><span class="badge bg-secondary">M-@item.MaquinaNumero</span></td>
-                            <td>@item.UrdimbreTejido x @item.TramaTejido</td>
-                            <td><code>@item.ResumenFicha</code></td>
-                            <td>@item.PesoMetroLineal.ToString("F2")</td>
-                            <td>@item.PesoPorBolsa.ToString("F2")</td>
-                            <td class="fw-bold text-success">@item.ProduccionEstimada.ToString("F2")</td>
+                            <th>Fecha (UTC)</th>
+                            <th>Tipo</th>
+                            <th>Ancho x Corte</th>
+                            <th>Tejido (U x T)</th>
+                            <th>Denier</th>
+                            <th>Nº Conos</th>
+                            <th class="text-end">GM2 Base</th>
+                            <th class="text-end">GM2 (Con Lam)</th>
+                            <th class="text-end">GMP</th>
+                            <th class="text-end">GML</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.FechaCreacion.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td><span class="badge bg-secondary">@item.TipoProducto</span></td>
+                                    <td>@item.Ancho x @item.Corte</td>
+                                    <td>@item.UrdimbreTejido x @item.TramaTejido</td>
+                                    <td>@item.UrdimbreDenier x @item.TramaDenier</td>
+                                    <td><span class="fw-bold text-dark">@item.MaquinaNumero</span></td>
+                                    <td class="text-end">@item.PesoTejidoBase.ToString("F1")</td>
+                                    <td class="text-end">@item.PesoConLaminado.ToString("F1")</td>
+                                    <td class="text-end">@item.PesoConRefuerzo.ToString("F1")</td>
+                                    <td class="text-end fw-bold text-success">@item.PesoMetroLineal.ToString("F1")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="10" class="text-center py-4 text-muted">
+                                    No hay registros guardados en el historial todavía.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
-    }
+    </div>
 </div>
