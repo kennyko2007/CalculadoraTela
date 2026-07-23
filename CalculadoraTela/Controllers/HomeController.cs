@@ -40,11 +40,12 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public IActionResult Calcular([FromForm] CalculadoraTelaVM model)
+    public IActionResult CalcularAjax([FromBody] CalculadoraTelaVM model)
     {
         if (model == null) model = new CalculadoraTelaVM();
+        
         var resultado = _calculadoraService.CalcularValores(model);
-        return Json(resultado);
+        return Json(new { success = true, data = resultado });
     }
 
     [HttpGet]
