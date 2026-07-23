@@ -19,7 +19,6 @@ builder.Configuration
 builder.Services.AddControllersWithViews();
 
 // --- REGISTRO DE SERVICIOS PROPIOS DE LA APP ---
-// Esta línea soluciona el error de pantalla en blanco en HomeController:
 builder.Services.AddScoped<CalculadoraService>();
 
 // --- CONFIGURACIÓN DE CADENA DE CONEXIÓN (RENDER vs LOCAL) ---
@@ -81,12 +80,9 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configuración del pipeline de peticiones HTTP
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
+// --- CAMBIO PARA DETECTAR EL ERROR ---
+// Forzamos el uso de la página de errores para desarrollador para ver el fallo exacto en pantalla
+app.UseDeveloperExceptionPage();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
