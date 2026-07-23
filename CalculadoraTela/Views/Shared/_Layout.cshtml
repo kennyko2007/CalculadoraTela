@@ -60,7 +60,7 @@
                         </a>
                     </li>
 
-                    <!-- Historial (Apunta a Home/Historial) -->
+                    <!-- Historial -->
                     <li class="nav-item">
                         <a class="nav-link"
                            asp-controller="Home"
@@ -68,66 +68,6 @@
                             <i class="bi bi-clock-history me-1"></i>
                             Historial
                         </a>
-                    </li>
-
-                    <!-- Menú Desplegable: Operaciones -->
-                    <li class="nav-item dropdown ms-lg-2">
-                        <a class="nav-link dropdown-toggle text-warning fw-semibold"
-                           href="#"
-                           id="dropdownOperaciones"
-                           role="button"
-                           data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            <i class="bi bi-gear-wide-connected me-1"></i>
-                            Operaciones
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow" aria-labelledby="dropdownOperaciones">
-                            <li>
-                                <a class="dropdown-item"
-                                   asp-controller="Operaciones"
-                                   asp-action="Rendimiento">
-                                    <i class="bi bi-graph-up text-warning me-2"></i>
-                                    Rendimiento (%)
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item"
-                                   asp-controller="Operaciones"
-                                   asp-action="Ausencias"
-                                   asp-route-tipo="Asistencia">
-                                    <i class="bi bi-person-check text-success me-2"></i>
-                                    Asistencia
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item"
-                                   asp-controller="Operaciones"
-                                   asp-action="Ausencias"
-                                   asp-route-tipo="Falta">
-                                    <i class="bi bi-person-x text-danger me-2"></i>
-                                    Faltas
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item"
-                                   asp-controller="Operaciones"
-                                   asp-action="Ausencias"
-                                   asp-route-tipo="Vacaciones">
-                                    <i class="bi bi-calendar-event text-info me-2"></i>
-                                    Vacaciones / Bajas
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item"
-                                   asp-controller="Operaciones"
-                                   asp-action="Ausencias"
-                                   asp-route-tipo="NoEnMaquina">
-                                    <i class="bi bi-slash-circle text-warning me-2"></i>
-                                    No en Máquina
-                                </a>
-                            </li>
-                        </ul>
                     </li>
 
                 </ul>
