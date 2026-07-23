@@ -62,19 +62,19 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
-// Inicializar base de datos
+// Inicializar y actualizar base de datos mediante migraciones automáticamente
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     try
     {
         var context = services.GetRequiredService<AppDbContext>();
-        context.Database.EnsureCreated();
+        context.Database.Migrate(); // <--- CAMBIADO DE EnsureCreated() A Migrate()
     }
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Ocurrió un error al inicializar la base de datos.");
+        logger.LogError(ex, "Ocurrió un error al aplicar las migraciones de la base de datos.");
     }
 }
 
