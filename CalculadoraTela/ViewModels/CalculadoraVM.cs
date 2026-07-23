@@ -18,6 +18,9 @@ public class CalculadoraTelaVM
     public double TramaDenier { get; set; } = 1500.0;
 
     // --- Entradas de Configuración ---
+    [Display(Name = "Tipo de Producto")]
+    public string TipoProducto { get; set; } = "Tubular"; // Plana o Tubular
+
     [Display(Name = "Laminado")]
     public double Laminado { get; set; } = 0.0;
 
@@ -65,7 +68,7 @@ public class CalculadoraTelaVM
     public double PesoConLaminado { get; set; } // G4
     public double PesoConRefuerzo { get; set; } // G5
     public double PesoMetroLineal { get; set; } // G7
-    public double PesoPorBolsa { get; set; }   // G9
+    public double PesoPorBolsa { get; set; }    // G9
 
     // Producción
     public double FactorMaquina { get; set; }
