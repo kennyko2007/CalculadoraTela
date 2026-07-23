@@ -28,7 +28,6 @@ public class HomeController : Controller
         {
             if (_calculadoraService != null)
             {
-                // Se usa Calcular en lugar de CalcularValores para mantener concordancia con el servicio actualizado
                 model = _calculadoraService.Calcular(model);
             }
         }
