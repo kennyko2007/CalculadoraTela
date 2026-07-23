@@ -11,14 +11,14 @@ namespace CalculadoraTela.Services
             // 1. Factor según el Tipo de Producto (Plana = 1.0, Tubular = 2.0)
             decimal factorProducto = model.TipoProducto == "Tubular" ? 2.0m : 1.0m;
 
-            // 2. Cálculo de Resistencia y Peso de Urdimbre
+            // 2. Cálculo de Resistencia y Peso de Urdimbre con las fórmulas exactas
             model.ResistenciaUrdimbre = (model.UrdimbreTejido > 0m && model.UrdimbreDenier > 0m) 
                 ? (model.UrdimbreTejido * model.UrdimbreDenier * 0.0471m) : 0m;
             
             model.PesoUrdimbre = (model.UrdimbreTejido > 0m && model.UrdimbreDenier > 0m) 
                 ? (model.UrdimbreTejido * model.UrdimbreDenier) / 450.0m : 0m;
 
-            // 3. Cálculo de Resistencia y Peso de Trama
+            // 3. Cálculo de Resistencia y Peso de Trama con las fórmulas exactas
             model.ResistenciaTrama = (model.TramaTejido > 0m && model.TramaDenier > 0m) 
                 ? (model.TramaTejido * model.TramaDenier * 0.0471m) : 0m;
 
