@@ -21,9 +21,9 @@
                 <span><i class="bi bi-table me-2"></i> MATRIZ DE CONFIGURACIÓN Y TEJIDO</span>
                 <div class="d-flex align-items-center gap-2">
                     <label asp-for="TipoProducto" class="text-white small mb-0">Tipo Producto:</label>
-                    <select asp-for="TipoProducto" class="form-select form-select-sm text-dark fw-bold" id="TipoProducto" style="width: 140px;">
-                        <option value="Tubular">Tubular</option>
+                    <select asp-for="TipoProducto" class="form-select form-select-sm text-dark fw-bold calc-input" id="TipoProducto" style="width: 140px;">
                         <option value="Plana">Plana</option>
+                        <option value="Tubular">Tubular</option>
                     </select>
                 </div>
             </div>
@@ -90,11 +90,11 @@
                                 </div>
                             </td>
                         </tr>
-                        <!-- Fila 4: LAMINADO -->
+                        <!-- Fila 4: CANTIDAD CONOS Y LAMINADO -->
                         <tr>
-                            <td class="fw-bold bg-light">CANTIDAD / MÁQ</td>
-                            <td><input asp-for="MaquinaNumero" class="form-control form-control-sm text-center calc-input" type="number" /></td>
-                            <td colspan="2" class="text-start ps-2 small text-muted">máquina nº</td>
+                            <td class="fw-bold bg-light">CANTIDAD</td>
+                            <td><span id="resCantidadConos" class="fw-bold">@Model.MaquinaNumero</span></td>
+                            <td colspan="2" class="text-start ps-2 small text-muted">conos</td>
                             <td class="fw-bold bg-light">LAMINADO</td>
                             <td colspan="2">
                                 <div class="input-group input-group-sm">
@@ -103,7 +103,7 @@
                                 </div>
                             </td>
                         </tr>
-                        <!-- Fila 5: ANCHO -->
+                        <!-- Fila 5: ANCHO Y GML -->
                         <tr>
                             <td class="fw-bold bg-light">ANCHO</td>
                             <td colspan="4">
@@ -151,16 +151,16 @@
                         </tr>
                         <tr>
                             <td class="fw-bold bg-light">TEJIDO</td>
-                            <td><span class="fw-semibold">@Model.UrdimbreTejido x @Model.TramaTejido</span></td>
+                            <td><span class="fw-semibold" id="resTejidoConcatenado">@Model.UrdimbreTejido x @Model.TramaTejido</span></td>
                             <td rowspan="2" class="fw-bold bg-light align-middle">REFUERZO</td>
                             <td rowspan="2" class="align-middle"><span id="resUrdRefRes2">@Model.UrdimbreRefuerzoResistencia.ToString("F2")</span> KgF</td>
-                            <td rowspan="2" class="align-middle">@Model.AnchoRefuerzoFactor cm</td>
+                            <td rowspan="2" class="align-middle"><span id="resAnchoRefuerzoLabel">@Model.AnchoRefuerzoFactor</span> cm</td>
                             <td class="bg-light fw-bold">GMP</td>
                             <td class="table-warning fw-bold text-end" id="resPesoRefuerzo">@Model.PesoConRefuerzo.ToString("F1")</td>
                         </tr>
                         <tr>
                             <td class="fw-bold bg-light">DENIER</td>
-                            <td><span class="fw-semibold">@Model.UrdimbreDenier x @Model.TramaDenier</span></td>
+                            <td><span class="fw-semibold" id="resDenierConcatenado">@Model.UrdimbreDenier x @Model.TramaDenier</span></td>
                             <td class="bg-light fw-bold">GML</td>
                             <td class="table-warning fw-bold text-end" id="resPesoMetro2">@Model.PesoMetroLineal.ToString("F1")</td>
                         </tr>
