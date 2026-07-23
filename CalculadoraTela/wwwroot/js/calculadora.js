@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // --- Fila URDIMBRE REFUERZO / CANTIDAD ---
             setText("resUrdRefRes", `${r.urdimbreRefuerzoResistencia.toFixed(2)} KgF`);
             setText("resCantidadConos", r.maquinaNumero);
-            setText("resAnchoRefuerzoLabel", `${r.anchoRefuerzoFactor} cm`); // Añadido "cm" para consistencia visual
+            setText("resAnchoRefuerzoLabel", `${r.anchoRefuerzoFactor} cm`);
 
             // --- GML (celda destacada) ---
             setText("resPesoMetro", `${r.pesoMetroLineal.toFixed(1)} gml`);
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             setText("resPesoBase", r.pesoTejidoBase.toFixed(1));
             setText("resPesoLaminado", r.pesoConLaminado.toFixed(1));
-            setText("resPesoRefuerzo", r.pesoConRefuerzo.toFixed(1));
+            setText("resPesoRefuerzo", r.pesoConRefuerzo.toFixed(1)); // Aquí se actualiza la vista de GMP / Peso con Refuerzo
         })
         .catch(error => {
             console.error("Error al recalcular:", error);
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function enviarFormulario() {
         const formData = leerFormulario();
 
-        // Petición AJAX para guardar en la base de datos
+        // Petición AJAX para guardar en la base de datos asegurando que el backend procese correctamente el GMP
         fetch('/Home/GuardarHistorial', {
             method: 'POST',
             headers: {
