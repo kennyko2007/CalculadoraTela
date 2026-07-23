@@ -12,7 +12,8 @@ public class CalculadoraService
         if (vm.AnchoRefuerzoFactor < 0) vm.AnchoRefuerzoFactor = 0;
         if (vm.AnchoRefuerzoFactor > 12) vm.AnchoRefuerzoFactor = 12;
 
-        // 2. Cálculo de Cantidad de Conos / Máquina
+        // 2. Cálculo de Cantidad de Conos / Máquina (Ajustando el factor de multiplicación según si es Plana o Tubular)
+        // Plana usa 1.0 (o 1*10 = 10), Tubular usa 2.0 (o 2*10 = 20)
         decimal factorTipoProducto = vm.TipoProducto?.ToLower() == "tubular" ? 2.0m : 1.0m;
         
         if (vm.CintaUrdimbre > 0)
@@ -77,7 +78,7 @@ public class CalculadoraService
         // 9. GMP - Peso con Refuerzo
         vm.PesoConRefuerzo = factorTablaRefuerzo * vm.PesoConLaminado;
 
-        // 10. GML - Fórmula exacta según la imagen mostrada: =I9*(B7/100) donde I9 es GMP y B7 es el Ancho en cm
+        // 10. GML - Peso Metro Lineal (Fórmula estándar: GMP * (Ancho / 100))
         vm.PesoMetroLineal = vm.PesoConRefuerzo * (vm.Ancho / 100m);
 
         return vm;
