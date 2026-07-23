@@ -85,7 +85,8 @@
                             <td class="bg-light fw-bold text-start ps-2">ANCHO REFUERZO</td>
                             <td>
                                 <div class="input-group input-group-sm">
-                                    <input asp-for="AnchoRefuerzoFactor" class="form-control text-center calc-input fw-bold" type="number" step="1" />
+                                    <!-- Validación estricta min="0" max="12" según requerimiento de la Hoja 2 -->
+                                    <input asp-for="AnchoRefuerzoFactor" class="form-control text-center calc-input fw-bold" type="number" min="0" max="12" step="1" />
                                     <span class="input-group-text bg-light">cm</span>
                                 </div>
                             </td>
