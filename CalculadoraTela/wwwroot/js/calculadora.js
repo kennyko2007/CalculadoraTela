@@ -1,84 +1,73 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("calcForm");
-    if (!form) return;
-
-    // Escuchar cambios en cualquier input, select o elemento con clase calc-input
-    const inputs = form.querySelectorAll(".calc-input, input, select");
+    const inputs = form.querySelectorAll(".calc-input, #TipoProducto");
 
     inputs.forEach(input => {
-        input.addEventListener("input", ejecutarCalculo);
-        input.addEventListener("change", ejecutarCalculo);
+        input.addEventListener("input", calcularEnTiempoReal);
+        input.addEventListener("change", calcularEnTiempoReal);
     });
 
-    function ejecutarCalculo() {
+    function calcularEnTiempoReal() {
         const formData = new FormData(form);
+        
+        // Convertir FormData a un objeto plano JSON para enviarlo por fetch
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
 
-        fetch('/Home/Calcular', {
+        fetch('/Home/CalcularAjax', {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+            },
+            body: JSON.stringify(data)
         })
-        .then(response => {
-            if (!response.ok) throw new Error("Error en la respuesta del servidor");
-            return response.json();
+        .then(response => response.json())
+        .then(res => {
+            if (res.success) {
+                const model = res.data;
+
+                // Actualizar valores en la Matriz
+                document.getElementById("resUrdimbreRes").innerText = model.resistenciaUrdimbre.toFixed(2) + " KgF";
+                document.getElementById("resUrdimbrePeso").innerText = model.pesoUrdimbre.toFixed(2) + " gr";
+                document.getElementById("resUrdimbrePorc").innerText = model.porcentajeUrdimbre.toFixed(1) + " %";
+
+                document.getElementById("resTramaRes").innerText = model.resistenciaTrama.toFixed(2) + " KgF";
+                document.getElementById("resTramaPeso").innerText = model.pesoTrama.toFixed(2) + " gr";
+                document.getElementById("resTramaPorc").innerText = model.porcentajeTrama.toFixed(1) + " %";
+
+                document.getElementById("resUrdRefRes").innerText = model.urdimbreRefuerzoResistencia.toFixed(2) + " KgF";
+                document.getElementById("resPesoMetro").innerText = model.pesoMetroLineal.toFixed(1) + " gml";
+
+                // Actualizar Bloque de Resultados
+                document.getElementById("lblTipoProductoRes").innerText = model.tipoProducto;
+                document.getElementById("resMedida").innerText = `${model.ancho} x ${model.corte}`;
+                document.getElementById("resUrdimbreRes2").innerText = model.resistenciaUrdimbre.toFixed(2);
+                document.getElementById("resUrdimbrePorc2").innerText = model.porcentajeUrdimbre.toFixed(0);
+                
+                document.getElementById("resTramaRes2").innerText = model.resistenciaTrama.toFixed(2);
+                document.getElementById("resTramaPorc2").innerText = model.porcentajeTrama.toFixed(0);
+
+                document.getElementById("resUrdRefRes2").innerText = model.urdimbreRefuerzoResistencia.toFixed(2);
+                
+                document.getElementById("resPesoBase").innerText = model.pesoTejidoBase.toFixed(1);
+                document.getElementById("resPesoLaminado").innerText = model.pesoConLaminado.toFixed(1);
+                document.getElementById("resPesoRefuerzo").innerText = model.pesoConRefuerzo.toFixed(1);
+                document.getElementById("resPesoMetro2").innerText = model.pesoMetroLineal.toFixed(1);
+            }
         })
-        .then(data => {
-            // 1. Actualizar Resistencia y Pesos en la Matriz Superior
-            if (document.getElementById("resUrdimbreRes")) 
-                document.getElementById("resUrdimbreRes").innerText = data.resistenciaUrdimbre.toFixed(1) + " KgF";
-            if (document.getElementById("resUrdimbrePeso")) 
-                document.getElementById("resUrdimbrePeso").innerText = data.pesoUrdimbre.toFixed(1) + " gr";
-            if (document.getElementById("resUrdimbrePorc")) 
-                document.getElementById("resUrdimbrePorc").innerText = data.porcentajeUrdimbre.toFixed(1) + " %";
+        .catch(error => console.error("Error en el cálculo AJAX:", error));
+    }
 
-            if (document.getElementById("resTramaRes")) 
-                document.getElementById("resTramaRes").innerText = data.resistenciaTrama.toFixed(1) + " KgF";
-            if (document.getElementById("resTramaPeso")) 
-                document.getElementById("resTramaPeso").innerText = data.pesoTrama.toFixed(1) + " gr";
-            if (document.getElementById("resTramaPorc")) 
-                document.getElementById("resTramaPorc").innerText = data.porcentajeTrama.toFixed(1) + " %";
-
-            if (document.getElementById("resUrdRefRes")) 
-                document.getElementById("resUrdRefRes").innerText = data.urdimbreRefuerzoResistencia.toFixed(1) + " KgF";
-            
-            if (document.getElementById("resPesoMetro")) 
-                document.getElementById("resPesoMetro").innerText = data.pesoMetroLineal.toFixed(1) + " gml";
-
-            // 2. Actualizar Tabla Inferior de Resultados
-            if (document.getElementById("lblTipoProductoRes")) 
-                document.getElementById("lblTipoProductoRes").innerText = data.tipoProducto;
-            if (document.getElementById("resMedida")) 
-                document.getElementById("resMedida").innerText = data.ancho + " x " + data.corte;
-            
-            // Actualizar textos dinámicos de tejido y denier en resultados
-            const txtTejidoRes = document.getElementById("txtTejidoRes");
-            if (txtTejidoRes) txtTejidoRes.innerText = data.urdimbreTejido + " x " + data.tramaTejido;
-
-            const txtDenierRes = document.getElementById("txtDenierRes");
-            if (txtDenierRes) txtDenierRes.innerText = data.urdimbreDenier + " x " + data.tramaDenier;
-
-            if (document.getElementById("resUrdimbreRes2")) 
-                document.getElementById("resUrdimbreRes2").innerText = data.resistenciaUrdimbre.toFixed(1);
-            if (document.getElementById("resUrdimbrePorc2")) 
-                document.getElementById("resUrdimbrePorc2").innerText = data.porcentajeUrdimbre.toFixed(0);
-
-            if (document.getElementById("resTramaRes2")) 
-                document.getElementById("resTramaRes2").innerText = data.resistenciaTrama.toFixed(1);
-            if (document.getElementById("resTramaPorc2")) 
-                document.getElementById("resTramaPorc2").innerText = data.porcentajeTrama.toFixed(0);
-
-            if (document.getElementById("resUrdRefRes2")) 
-                document.getElementById("resUrdRefRes2").innerText = data.urdimbreRefuerzoResistencia.toFixed(1);
-
-            // Valores de Peso final (GM2, PP+LAM, GMP, GML)
-            if (document.getElementById("resPesoBase")) 
-                document.getElementById("resPesoBase").innerText = data.pesoTejidoBase.toFixed(1);
-            if (document.getElementById("resPesoLaminado")) 
-                document.getElementById("resPesoLaminado").innerText = data.pesoConLaminado.toFixed(1);
-            if (document.getElementById("resPesoRefuerzo")) 
-                document.getElementById("resPesoRefuerzo").innerText = data.pesoConRefuerzo.toFixed(1);
-            if (document.getElementById("resPesoMetro2")) 
-                document.getElementById("resPesoMetro2").innerText = data.pesoMetroLineal.toFixed(1);
-        })
-        .catch(error => console.error("Error en cálculo en tiempo real:", error));
+    // Botón Guardar en Historial
+    const btnGuardar = document.getElementById("btnGuardar");
+    if (btnGuardar) {
+        btnGuardar.addEventListener("click", function () {
+            form.action = '/Home/GuardarHistorial';
+            form.method = 'POST';
+            form.submit();
+        });
     }
 });
