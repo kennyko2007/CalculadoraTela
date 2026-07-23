@@ -4,85 +4,121 @@
     ViewData["Title"] = "Calculadora de Tela";
 }
 
-<div class="container mt-4">
-    <h2 class="text-center mb-4 text-primary fw-bold">Calculadora de Tela y Bolsas</h2>
+<div class="container-fluid py-4 px-4">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h2 class="fw-bold text-dark mb-0">
+            <i class="bi bi-file-earmark-spreadsheet text-success me-2"></i>TELA - Hoja de Cálculo
+        </h2>
+        <a asp-controller="Home" asp-action="Historial" class="btn btn-outline-secondary shadow-sm">
+            <i class="bi bi-clock-history me-1"></i> Ver Historial
+        </a>
+    </div>
 
-    <form id="calcForm" asp-action="Calcular" method="post">
-        @Html.AntiForgeryToken()
-
-        <!-- SECCIÓN DE ENTRADAS (PARÁMETROS) -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-header bg-primary text-white fw-bold">
-                <i class="bi bi-sliders me-2"></i> Parámetros de Entrada
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-md-3">
-                        <label asp-for="TipoProducto" class="form-label fw-semibold">Tipo de Producto</label>
-                        <select asp-for="TipoProducto" class="form-select calc-input" id="TipoProducto">
-                            <option value="Plana">Plana</option>
-                            <option value="Tubular">Tubular</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label asp-for="Ancho" class="form-label fw-semibold">Ancho (cm)</label>
-                        <input asp-for="Ancho" class="form-control calc-input" type="number" step="0.1" />
-                    </div>
-                    <div class="col-md-3">
-                        <label asp-for="Corte" class="form-label fw-semibold">Corte (cm)</label>
-                        <input asp-for="Corte" class="form-control calc-input" type="number" step="0.1" />
-                    </div>
-                    <div class="col-md-3">
-                        <label asp-for="Laminado" class="form-label fw-semibold">Laminado (gm2)</label>
-                        <input asp-for="Laminado" class="form-control calc-input" type="number" step="0.1" />
-                    </div>
-
-                    <!-- Urdimbre -->
-                    <div class="col-md-4">
-                        <label asp-for="UrdimbreTejido" class="form-label fw-semibold">Urdimbre Tejido</label>
-                        <input asp-for="UrdimbreTejido" class="form-control calc-input" type="number" step="1" />
-                    </div>
-                    <div class="col-md-4">
-                        <label asp-for="CintaUrdimbre" class="form-label fw-semibold">Cinta Urdimbre (mm)</label>
-                        <input asp-for="CintaUrdimbre" class="form-control calc-input" type="number" step="0.1" />
-                    </div>
-                    <div class="col-md-4">
-                        <label asp-for="UrdimbreDenier" class="form-label fw-semibold">Urdimbre Denier</label>
-                        <input asp-for="UrdimbreDenier" class="form-control calc-input" type="number" step="1" />
-                    </div>
-
-                    <!-- Trama -->
-                    <div class="col-md-4">
-                        <label asp-for="TramaTejido" class="form-label fw-semibold">Trama Tejido</label>
-                        <input asp-for="TramaTejido" class="form-control calc-input" type="number" step="1" />
-                    </div>
-                    <div class="col-md-4">
-                        <label asp-for="CintaTrama" class="form-label fw-semibold">Cinta Trama (mm)</label>
-                        <input asp-for="CintaTrama" class="form-control calc-input" type="number" step="0.1" />
-                    </div>
-                    <div class="col-md-4">
-                        <label asp-for="TramaDenier" class="form-label fw-semibold">Trama Denier</label>
-                        <input asp-for="TramaDenier" class="form-control calc-input" type="number" step="1" />
-                    </div>
-
-                    <!-- Refuerzo -->
-                    <div class="col-md-4">
-                        <label asp-for="UrdimbreRefuerzoTejido" class="form-label fw-semibold">Refuerzo Tejido</label>
-                        <input asp-for="UrdimbreRefuerzoTejido" class="form-control calc-input" type="number" step="1" />
-                    </div>
-                    <div class="col-md-4">
-                        <label asp-for="CintaRefuerzo" class="form-label fw-semibold">Cinta Refuerzo (mm)</label>
-                        <input asp-for="CintaRefuerzo" class="form-control calc-input" type="number" step="0.1" />
-                    </div>
-                    <div class="col-md-4">
-                        <label asp-for="DenierRefuerzo" class="form-label fw-semibold">Denier Refuerzo</label>
-                        <input asp-for="DenierRefuerzo" class="form-control calc-input" type="number" step="1" />
-                    </div>
-                    <div class="col-md-4">
-                        <label asp-for="AnchoRefuerzoFactor" class="form-label fw-semibold">Ancho Refuerzo Factor (0-12)</label>
-                        <input asp-for="AnchoRefuerzoFactor" class="form-control calc-input" type="number" min="0" max="12" step="1" />
-                    </div>
+    <form id="calcForm">
+        <!-- MATRIZ DE CONFIGURACIÓN Y TEJIDO -->
+        <div class="card shadow-sm mb-4 border-dark">
+            <div class="card-header bg-dark text-white fw-bold d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-table me-2"></i> MATRIZ DE CONFIGURACIÓN Y TEJIDO</span>
+                <div class="d-flex align-items-center gap-2">
+                    <label asp-for="TipoProducto" class="text-white small mb-0">Tipo Producto:</label>
+                    <select asp-for="TipoProducto" class="form-select form-select-sm text-dark fw-bold calc-input" id="TipoProducto" style="width: 140px;">
+                        <option value="Plana">Plana</option>
+                        <option value="Tubular">Tubular</option>
+                    </select>
                 </div>
+            </div>
+            <div class="card-body p-0 table-responsive">
+                <table class="table table-bordered align-middle text-center mb-0 border-dark">
+                    <thead class="table-secondary text-dark">
+                        <tr>
+                            <th style="width: 14%;">ITEM</th>
+                            <th style="width: 14%;">TEJIDO</th>
+                            <th style="width: 14%;">CINTA</th>
+                            <th style="width: 14%;">DENIER</th>
+                            <th style="width: 16%;">RESISTENCIA</th>
+                            <th colspan="2" style="width: 28%;">PESO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Fila 1: URDIMBRE -->
+                        <tr>
+                            <td class="fw-bold bg-light">URDIMBRE</td>
+                            <td><input asp-for="UrdimbreTejido" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="0.1" /></td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input asp-for="CintaUrdimbre" class="form-control text-center calc-input fw-bold" type="number" step="0.1" />
+                                    <span class="input-group-text bg-light">mm</span>
+                                </div>
+                            </td>
+                            <td><input asp-for="UrdimbreDenier" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="1" /></td>
+                            <td><span id="resUrdimbreRes" class="fw-bold text-primary">@Model.ResistenciaUrdimbre.ToString("F2") KgF</span></td>
+                            <td><span id="resUrdimbrePeso">@Model.PesoUrdimbre.ToString("F2") gr</span></td>
+                            <td><span id="resUrdimbrePorc" class="badge bg-secondary">@Model.PorcentajeUrdimbre.ToString("F1") %</span></td>
+                        </tr>
+                        <!-- Fila 2: TRAMA -->
+                        <tr>
+                            <td class="fw-bold bg-light">TRAMA</td>
+                            <td><input asp-for="TramaTejido" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="0.1" /></td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input asp-for="CintaTrama" class="form-control text-center calc-input fw-bold" type="number" step="0.1" />
+                                    <span class="input-group-text bg-light">mm</span>
+                                </div>
+                            </td>
+                            <td><input asp-for="TramaDenier" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="1" /></td>
+                            <td><span id="resTramaRes" class="fw-bold text-primary">@Model.ResistenciaTrama.ToString("F2") KgF</span></td>
+                            <td><span id="resTramaPeso">@Model.PesoTrama.ToString("F2") gr</span></td>
+                            <td><span id="resTramaPorc" class="badge bg-secondary">@Model.PorcentajeTrama.ToString("F1") %</span></td>
+                        </tr>
+                        <!-- Fila 3: URDIMBRE REFUERZO -->
+                        <tr>
+                            <td class="fw-bold bg-light">URDIMBRE REF.</td>
+                            <td><input asp-for="UrdimbreRefuerzoTejido" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="0.1" /></td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input asp-for="CintaRefuerzo" class="form-control text-center calc-input fw-bold" type="number" step="0.1" />
+                                    <span class="input-group-text bg-light">mm</span>
+                                </div>
+                            </td>
+                            <td><input asp-for="DenierRefuerzo" class="form-control form-control-sm text-center calc-input fw-bold" type="number" step="1" /></td>
+                            <td><span id="resUrdRefRes" class="fw-bold text-primary">@Model.UrdimbreRefuerzoResistencia.ToString("F2") KgF</span></td>
+                            <td class="bg-light fw-bold text-start ps-2">ANCHO REFUERZO</td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <!-- Validación estricta min="0" max="12" según requerimiento de la Hoja 2 -->
+                                    <input asp-for="AnchoRefuerzoFactor" class="form-control text-center calc-input fw-bold" type="number" min="0" max="12" step="1" />
+                                    <span class="input-group-text bg-light">cm</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Fila 4: CANTIDAD CONOS Y LAMINADO -->
+                        <tr>
+                            <td class="fw-bold bg-light">CANTIDAD</td>
+                            <td><span id="resCantidadConos" class="fw-bold">@Model.MaquinaNumero</span></td>
+                            <td colspan="2" class="text-start ps-2 small text-muted">conos</td>
+                            <td class="fw-bold bg-light">LAMINADO</td>
+                            <td colspan="2">
+                                <div class="input-group input-group-sm">
+                                    <input asp-for="Laminado" class="form-control text-center calc-input fw-bold" type="number" step="0.1" />
+                                    <span class="input-group-text bg-light">gm2</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Fila 5: ANCHO Y GML -->
+                        <tr>
+                            <td class="fw-bold bg-light">ANCHO</td>
+                            <td colspan="4">
+                                <div class="input-group input-group-sm justify-content-center">
+                                    <input asp-for="Ancho" class="form-control text-center calc-input fw-bold" type="number" step="0.1" style="max-width: 150px;" />
+                                    <span class="input-group-text bg-light">cm</span>
+                                </div>
+                            </td>
+                            <td colspan="2" class="table-warning fw-bold fs-5 text-dark" id="resPesoMetro">
+                                @Model.PesoMetroLineal.ToString("F1") gml
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -119,7 +155,7 @@
                             <td><span class="fw-semibold" id="resTejidoConcatenado">@Model.UrdimbreTejido x @Model.TramaTejido</span></td>
                             <td rowspan="2" class="fw-bold bg-light align-middle">REFUERZO</td>
                             <td rowspan="2" class="align-middle"><span id="resUrdRefRes2">@Model.UrdimbreRefuerzoResistencia.ToString("F2")</span> KgF</td>
-                            <td rowspan="2" class="align-middle text-center">100 %</td>
+                            <td rowspan="2" class="align-middle"><span id="resAnchoRefuerzoLabel">@Model.AnchoRefuerzoFactor</span> cm</td>
                             <td class="bg-light fw-bold">GMP</td>
                             <td class="table-warning fw-bold text-end" id="resPesoRefuerzo">@Model.PesoConRefuerzo.ToString("F1")</td>
                         </tr>
@@ -134,11 +170,12 @@
             </div>
         </div>
 
-        <!-- BOTÓN DE GUARDAR EN HISTORIAL -->
-        <div class="text-center mb-5">
-            <button type="submit" id="btnGuardar" class="btn btn-success btn-lg px-5 fw-bold shadow">
-                <i class="bi bi-save me-2"></i> Guardar en Historial
-            </button>
+        <div class="row">
+            <div class="col-12">
+                <button type="button" id="btnGuardar" class="btn btn-primary w-100 py-3 fw-bold shadow">
+                    <i class="bi bi-bookmark-check me-2"></i> Guardar Registro en Historial
+                </button>
+            </div>
         </div>
     </form>
 </div>
