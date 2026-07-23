@@ -28,7 +28,8 @@ public class HomeController : Controller
         {
             if (_calculadoraService != null)
             {
-                model = _calculadoraService.CalcularValores(model);
+                // Se usa Calcular en lugar de CalcularValores para mantener concordancia con el servicio actualizado
+                model = _calculadoraService.Calcular(model);
             }
         }
         catch (Exception ex)
@@ -44,7 +45,7 @@ public class HomeController : Controller
     {
         if (model == null) model = new CalculadoraTelaVM();
         
-        var resultado = _calculadoraService.CalcularValores(model);
+        var resultado = _calculadoraService.Calcular(model);
         return Json(new { success = true, data = resultado });
     }
 
@@ -73,7 +74,7 @@ public class HomeController : Controller
 
         try
         {
-            var calculado = _calculadoraService.CalcularValores(model);
+            var calculado = _calculadoraService.Calcular(model);
 
             var entidad = new Calculo
             {
@@ -107,7 +108,7 @@ public class HomeController : Controller
 
             return Json(new { success = true, id = entidad.Id });
         }
-        catch (Exception ex)
+        call catch (Exception ex)
         {
             _logger.LogError(ex, "Error al guardar registro en la base de datos.");
             return Json(new { success = false, message = ex.Message });
