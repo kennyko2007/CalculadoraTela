@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using CalculadoraTela.Data; // Tu namespace de AppDbContext
+using CalculadoraTela.Services; // Se agrega para registrar CalculadoraService
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -16,6 +17,10 @@ builder.Configuration
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// --- REGISTRO DE SERVICIOS PROPIOS DE LA APP ---
+// Esta línea soluciona el error de pantalla en blanco en HomeController:
+builder.Services.AddScoped<CalculadoraService>();
 
 // --- CONFIGURACIÓN DE CADENA DE CONEXIÓN (RENDER vs LOCAL) ---
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
