@@ -3,6 +3,7 @@ using CalculadoraTela.Models;
 using CalculadoraTela.Services;
 using CalculadoraTela.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CalculadoraTela.Controllers;
 
@@ -26,10 +27,22 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public IActionResult Calcular(CalculadoraTelaVM model)
+    public IActionResult Calcular([FromBody] CalculadoraTelaVM model)
     {
         var resultado = _calculadoraService.CalcularValores(model);
         return Json(resultado);
+    }
+
+    // --- ACCIÓN AGREGADA PARA LA PÁGINA HISTORIAL ---
+    [HttpGet]
+    public async Task<IActionResult> Historial()
+    {
+        // Obtiene el historial de cálculos guardados ordenados del más reciente al más antiguo
+        var historial = await _context.Calculos
+            .OrderByDescending(c => c.FechaCreacion)
+            .ToListAsync();
+
+        return View(historial);
     }
 
     [HttpPost]
@@ -72,5 +85,11 @@ public class HomeController : Controller
         await _context.SaveChangesAsync();
 
         return Json(new { success = true, id = entidad.Id });
+    }
+
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View();
     }
 }
