@@ -18,16 +18,21 @@
     <!-- Tabla de Historial -->
     <div class="card shadow-sm mb-4 border-0 rounded-3 overflow-hidden">
         <div class="card-body p-0 table-responsive bg-white">
-            <table class="table table-hover table-bordered align-middle text-center mb-0 border-light">
-                <thead class="text-secondary uppercase fs-7" style="background-color: #f1f5f9;">
+            <table class="table table-hover table-bordered align-middle text-center mb-0 border-light" style="font-size: 0.85rem;">
+                <thead class="text-secondary text-uppercase" style="background-color: #f1f5f9;">
                     <tr>
                         <th class="py-3">ID</th>
                         <th class="py-3">Fecha</th>
                         <th class="py-3">Tipo Producto</th>
-                        <th class="py-3">Ancho x Corte</th>
-                        <th class="py-3">Peso Base (GM2)</th>
-                        <th class="py-3">Peso con Laminado</th>
+                        <th class="py-3">Medida (Ancho x Corte)</th>
+                        <th class="py-3">Tejido (U x T)</th>
+                        <th class="py-3">Denier (U x T)</th>
+                        <th class="py-3">Urdimbre (Res / %)</th>
+                        <th class="py-3">Trama (Res / %)</th>
+                        <th class="py-3">Refuerzo</th>
                         <th class="py-3">GML</th>
+                        <th class="py-3">GM2</th>
+                        <th class="py-3">GMP</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,20 +42,24 @@
                         {
                             <tr>
                                 <td class="fw-bold text-secondary">@item.Id</td>
-                                <!-- Ajusta "FechaCreacion" al nombre exacto de la propiedad en tu clase C# -->
                                 <td>@item.FechaCreacion.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
                                 <td><span class="badge bg-light text-dark border px-2 py-1">@item.TipoProducto</span></td>
-                                <td class="fw-semibold">@item.Ancho x @item.Corte</td>
-                                <td>@item.PesoTejidoBase.ToString("F1")</td>
-                                <td>@item.PesoConLaminado.ToString("F1")</td>
+                                <td class="fw-semibold">@item.Ancho.ToString("F1") x @item.Corte.ToString("F1")</td>
+                                <td>@item.UrdimbreTejido.ToString("F1") x @item.TramaTejido.ToString("F1")</td>
+                                <td>@item.UrdimbreDenier x @item.TramaDenier</td>
+                                <td>@item.ResistenciaUrdimbre.ToString("F2") KgF (@item.PorcentajeUrdimbre.ToString("F0")%)</td>
+                                <td>@item.ResistenciaTrama.ToString("F2") KgF (@item.PorcentajeTrama.ToString("F0")%)</td>
+                                <td>@item.UrdimbreRefuerzoResistencia.ToString("F2") KgF</td>
                                 <td class="fw-bold text-success">@item.PesoMetroLineal.ToString("F1")</td>
+                                <td>@item.PesoTejidoBase.ToString("F1")</td>
+                                <td>@item.PesoPorBolsa.ToString("F1")</td>
                             </tr>
                         }
                     }
                     else
                     {
                         <tr>
-                            <td colspan="7" class="text-center py-4 text-muted">
+                            <td colspan="12" class="text-center py-4 text-muted">
                                 <i class="bi bi-folder2-open display-6 d-block mb-2"></i>
                                 No hay registros guardados en el historial todavía.
                             </td>
