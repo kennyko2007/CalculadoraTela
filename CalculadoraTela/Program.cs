@@ -1,33 +1,30 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using CalculadoraTela.Data; // Tu namespace de AppDbContext
-using CalculadoraTela.Services; // Se agrega para registrar CalculadoraService
+using CalculadoraTela.Data;
+using CalculadoraTela.Services;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
     Args = args
 });
 
-// Evita el error de inotify limit (file watchers) en Linux/Render
+// Desactivar watchers en la configuración
 builder.Configuration.Sources.Clear();
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: false)
     .AddEnvironmentVariables();
 
-// Add services to the container.
+// Registrar servicios
 builder.Services.AddControllersWithViews();
-
-// --- REGISTRO DE SERVICIOS PROPIOS DE LA APP ---
 builder.Services.AddScoped<CalculadoraService>();
 
-// --- CONFIGURACIÓN DE CADENA DE CONEXIÓN (RENDER vs LOCAL) ---
+// Cadena de conexión
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 string connectionString;
 
 if (!string.IsNullOrEmpty(databaseUrl))
 {
-    // Si Render entrega la URL en formato postgres:// o postgresql://, la parseamos con Uri
     if (databaseUrl.StartsWith("postgres://") || databaseUrl.StartsWith("postgresql://"))
     {
         var databaseUri = new Uri(databaseUrl);
@@ -47,31 +44,28 @@ if (!string.IsNullOrEmpty(databaseUrl))
     }
     else
     {
-        // Si la variable ya viene en formato clave=valor estándar
         connectionString = databaseUrl;
     }
 }
 else
 {
-    // Si estás ejecutando localmente en tu PC, lee appsettings.json
     connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
                       ?? throw new InvalidOperationException("No se encontró 'DefaultConnection'.");
 }
 
-// Configuración de Entity Framework Core con Npgsql
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 var app = builder.Build();
 
-// --- CREAR BASE DE DATOS Y TABLAS AL INICIAR ---
+// Inicializar BD
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     try
     {
         var context = services.GetRequiredService<AppDbContext>();
-        context.Database.EnsureCreated(); // Crea las tablas en PostgreSQL si no existen
+        context.Database.EnsureCreated();
     }
     catch (Exception ex)
     {
@@ -80,15 +74,28 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// --- CAMBIO PARA DETECTAR EL ERROR ---
-// Forzamos el uso de la página de errores para desarrollador para ver el fallo exacto en pantalla
 app.UseDeveloperExceptionPage();
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+
+// --- CORRECCIÓN CLAVE DE ARCHIVOS ESTÁTICOS SIN INOTIFY ---
+if (app.Environment.WebRootPath != null)
+{
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
+            app.Environment.WebRootPath)
+        {
+            UseActiveFileProvider = false
+        }
+    });
+}
+else
+{
+    app.UseStaticFiles();
+}
 
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(
