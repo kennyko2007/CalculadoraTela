@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // --- Fila URDIMBRE REFUERZO / CANTIDAD ---
             setText("resUrdRefRes", `${r.urdimbreRefuerzoResistencia.toFixed(2)} KgF`);
             setText("resCantidadConos", r.maquinaNumero);
-            setText("resAnchoRefuerzoLabel", r.anchoRefuerzoFactor);
+            setText("resAnchoRefuerzoLabel", `${r.anchoRefuerzoFactor} cm`); // Añadido "cm" para consistencia visual
 
             // --- GML (celda destacada) ---
             setText("resPesoMetro", `${r.pesoMetroLineal.toFixed(1)} gml`);
