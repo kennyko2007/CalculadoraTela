@@ -37,8 +37,8 @@
                         {
                             <tr>
                                 <td class="fw-bold text-secondary">@item.Id</td>
-                                <!-- CORREGIDO: Se cambió FechaCreacion por Fecha -->
-                                <td>@item.Fecha.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                                <!-- Ajusta "FechaCreacion" al nombre exacto de la propiedad en tu clase C# -->
+                                <td>@item.FechaCreacion.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
                                 <td><span class="badge bg-light text-dark border px-2 py-1">@item.TipoProducto</span></td>
                                 <td class="fw-semibold">@item.Ancho x @item.Corte</td>
                                 <td>@item.PesoTejidoBase.ToString("F1")</td>
