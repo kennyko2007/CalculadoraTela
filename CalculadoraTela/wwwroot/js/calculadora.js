@@ -109,16 +109,24 @@ function calcularEnTiempoReal() {
 function enviarFormulario() {
     const form = document.getElementById("calcForm");
     const formData = new FormData(form);
+    
+    // Mapear los campos del formulario a un objeto plano para enviarlo como JSON
+    const object = {};
+    formData.forEach((value, key) => object[key] = value);
 
-    fetch('/Home/Calcular', {
+    fetch('/Home/GuardarHistorial', {
         method: 'POST',
-        body: formData
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(object)
     })
-    .then(response => {
-        if (response.ok) {
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
             window.location.href = '/Home/Historial';
         } else {
-            alert("Error al guardar el registro.");
+            alert("Error al guardar el registro: " + (data.message || ''));
         }
     })
     .catch(error => console.error('Error:', error));
