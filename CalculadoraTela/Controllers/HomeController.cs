@@ -26,7 +26,6 @@ public class HomeController : Controller
         var model = new CalculadoraTelaVM();
         try
         {
-            // Intentamos calcular los valores por defecto
             if (_calculadoraService != null)
             {
                 model = _calculadoraService.CalcularValores(model);
@@ -35,14 +34,14 @@ public class HomeController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error al calcular valores iniciales en Index.");
-            // Si falla el servicio, retorna el modelo limpio sin tumbar la vista
         }
 
         return View(model);
     }
 
+    // CAMBIO AQUÍ: Usamos [FromForm] para procesar los datos de FormData enviado por JS
     [HttpPost]
-    public IActionResult Calcular([FromBody] CalculadoraTelaVM model)
+    public IActionResult Calcular([FromForm] CalculadoraTelaVM model)
     {
         if (model == null) model = new CalculadoraTelaVM();
         var resultado = _calculadoraService.CalcularValores(model);
@@ -64,11 +63,11 @@ public class HomeController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error al consultar el historial en PostgreSQL.");
-            // Si la tabla o la BD fallan, enviamos una lista vacía para no romper la vista
             return View(new List<Calculo>());
         }
     }
 
+    // Mantenemos [FromBody] aquí porque guardarCalculo() sí envía JSON.stringify(object) con Content-Type: application/json
     [HttpPost]
     public async Task<IActionResult> GuardarHistorial([FromBody] CalculadoraTelaVM model)
     {
@@ -80,7 +79,7 @@ public class HomeController : Controller
 
             var entidad = new Calculo
             {
-                FechaCreacion = DateTime.UtcNow, // Usamos UTC para evitar discrepancias de zona horaria en servidores
+                FechaCreacion = DateTime.UtcNow,
                 UrdimbreTejido = calculado.UrdimbreTejido,
                 UrdimbreDenier = calculado.UrdimbreDenier,
                 TramaTejido = calculado.TramaTejido,
