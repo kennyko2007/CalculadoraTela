@@ -68,7 +68,7 @@ public class CalculadoraTelaVM
     public decimal PesoConLaminado { get; set; }   // GM2 (PP+LAM)
     public decimal PesoConRefuerzo { get; set; }   // GMP
     public decimal PesoMetroLineal { get; set; }   // GML
-    public decimal PesoPorBolsa { get; set; }       // gr/Bol
+    public decimal PesoPorBolsa { get; set; }        // gr/Bol
 
     public string ResumenFicha { get; set; } = string.Empty;
 }
