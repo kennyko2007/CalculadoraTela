@@ -58,7 +58,8 @@ else
 }
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(connectionString)
+          .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
 
 var app = builder.Build();
 
@@ -69,7 +70,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<AppDbContext>();
-        context.Database.Migrate(); // <--- CAMBIADO DE EnsureCreated() A Migrate()
+        context.Database.Migrate();
     }
     catch (Exception ex)
     {
