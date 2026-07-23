@@ -9,7 +9,6 @@ public class Calculo
 
     public DateTime FechaCreacion { get; set; } = DateTime.Now;
 
-    // Nuevo campo agregado
     [Required]
     [StringLength(50)]
     public string TipoProducto { get; set; } = "Tubular";
@@ -41,13 +40,15 @@ public class Calculo
     public decimal ResistenciaTrama { get; set; }
     public decimal PesoTrama { get; set; }
     public decimal PorcentajeTrama { get; set; }
+    
+    public decimal UrdimbreRefuerzoResistencia { get; set; }
 
-    public decimal PesoTejidoBase { get; set; } // G2
-    public decimal PesoConLaminado { get; set; } // G4 (gm2)
-    public decimal PesoConRefuerzo { get; set; } // G5 (gmp)
-    public decimal PesoMetroLineal { get; set; } // G7 (gml)
-    public decimal PesoPorBolsa { get; set; }   // G9 (gr/Bol)
+    public decimal PesoTejidoBase { get; set; } 
+    public decimal PesoConLaminado { get; set; } 
+    public decimal PesoConRefuerzo { get; set; } 
+    public decimal PesoMetroLineal { get; set; } 
+    public decimal PesoPorBolsa { get; set; }   
 
-    public decimal ProduccionEstimada { get; set; } // D13
-    public string ResumenFicha { get; set; } = string.Empty; // A11
+    public decimal ProduccionEstimada { get; set; } 
+    public string ResumenFicha { get; set; } = string.Empty; 
 }
