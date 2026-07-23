@@ -80,6 +80,7 @@ public class HomeController : Controller
             var entidad = new Calculo
             {
                 FechaCreacion = DateTime.UtcNow,
+                TipoProducto = calculado.TipoProducto, // <-- Incluido aquí
                 UrdimbreTejido = calculado.UrdimbreTejido,
                 UrdimbreDenier = calculado.UrdimbreDenier,
                 TramaTejido = calculado.TramaTejido,
