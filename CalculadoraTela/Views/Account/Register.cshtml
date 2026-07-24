@@ -1,0 +1,78 @@
+@model CalculadoraTela.ViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Crear cuenta";
+    Layout = "_AuthLayout";
+}
+
+<h1>Crear cuenta</h1>
+<p class="auth-subtitle">Te enviaremos un correo de verificación para activar tu cuenta.</p>
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 px-3 small mb-3" style="display:@(ViewData.ModelState.IsValid ? "none" : "block")"></div>
+
+<form asp-controller="Account" asp-action="Register" method="post">
+
+    <div class="mb-3">
+        <label asp-for="NombreCompleto"></label>
+        <div class="input-group">
+            <span class="input-group-text bg-white"><i class="bi bi-person-vcard-fill text-secondary"></i></span>
+            <input asp-for="NombreCompleto" class="form-control" placeholder="Tu nombre completo" />
+        </div>
+        <span asp-validation-for="NombreCompleto" class="text-danger small"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="UserName"></label>
+        <div class="input-group">
+            <span class="input-group-text bg-white"><i class="bi bi-person-fill text-secondary"></i></span>
+            <input asp-for="UserName" class="form-control" autocomplete="username" placeholder="Nombre de usuario" />
+        </div>
+        <span asp-validation-for="UserName" class="text-danger small"></span>
+        <div class="form-text small">Con este usuario iniciarás sesión (no con el correo).</div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email"></label>
+        <div class="input-group">
+            <span class="input-group-text bg-white"><i class="bi bi-envelope-fill text-secondary"></i></span>
+            <input asp-for="Email" class="form-control" autocomplete="email" placeholder="tucorreo@gmail.com" />
+        </div>
+        <span asp-validation-for="Email" class="text-danger small"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Password"></label>
+        <div class="input-group">
+            <span class="input-group-text bg-white"><i class="bi bi-lock-fill text-secondary"></i></span>
+            <input asp-for="Password" id="Password" class="form-control" autocomplete="new-password" placeholder="Mínimo 6 caracteres" />
+            <button type="button" class="btn btn-outline-secondary toggle-password" data-target="Password" tabindex="-1" aria-label="Mostrar contraseña">
+                <i class="bi bi-eye-fill"></i>
+            </button>
+        </div>
+        <span asp-validation-for="Password" class="text-danger small"></span>
+    </div>
+
+    <div class="mb-4">
+        <label asp-for="ConfirmPassword"></label>
+        <div class="input-group">
+            <span class="input-group-text bg-white"><i class="bi bi-shield-lock-fill text-secondary"></i></span>
+            <input asp-for="ConfirmPassword" id="ConfirmPassword" class="form-control" autocomplete="new-password" placeholder="Repite la contraseña" />
+            <button type="button" class="btn btn-outline-secondary toggle-password" data-target="ConfirmPassword" tabindex="-1" aria-label="Mostrar contraseña">
+                <i class="bi bi-eye-fill"></i>
+            </button>
+        </div>
+        <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+    </div>
+
+    <button type="submit" class="btn btn-auth-primary w-100">
+        <i class="bi bi-person-plus-fill me-1"></i> Crear cuenta
+    </button>
+</form>
+
+<div class="auth-footer-link">
+    ¿Ya tienes cuenta? <a asp-controller="Account" asp-action="Login">Inicia sesión</a>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/toggle-password.js"></script>
+}
