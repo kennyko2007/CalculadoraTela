@@ -4,42 +4,42 @@
     ViewData["Title"] = "Calculadora de Tela";
 }
 
-<div class="container-fluid py-4 px-3 px-md-4" style="background-color: #0b1120; min-height: 100vh; color: #f8fafc;">
-    <!-- Encabezado Mejorado -->
-    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 pb-3 border-bottom border-secondary gap-3">
-        <div class="d-flex align-items-center gap-2">
-            <div class="bg-info bg-opacity-10 p-2 rounded-3 text-info">
-                <i class="bi bi-file-earmark-spreadsheet fs-4"></i>
+<div class="container-fluid py-4 px-3 px-md-4" style="background-color: #f8fafc; min-height: 100vh; color: #1e293b;">
+    <!-- Encabezado Estilo Claro -->
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 pb-3 border-bottom border-2 gap-3" style="border-color: #e2e8f0 !important;">
+        <div class="d-flex align-items-center gap-3">
+            <div class="bg-teal bg-opacity-10 p-2.5 rounded-3 text-teal" style="background-color: rgba(13, 148, 136, 0.1); color: #0f766e;">
+                <i class="bi bi-file-earmark-spreadsheet fs-3"></i>
             </div>
             <div>
-                <h2 class="fw-bold mb-0 text-white tracking-tight">TELA</h2>
-                <span class="text-muted small">Panel de control y cálculo técnico</span>
+                <h2 class="fw-bold mb-0 text-dark tracking-tight">TELA</h2>
+                <span class="text-muted small">Panel de control y cálculo de tejido</span>
             </div>
         </div>
-        <a asp-controller="Home" asp-action="Historial" class="btn btn-outline-light shadow-sm px-4 fw-semibold w-100 w-md-auto text-center rounded-pill border-secondary hover-lift">
-            <i class="bi bi-clock-history me-2 text-info"></i> Ver Historial
+        <a asp-controller="Home" asp-action="Historial" class="btn btn-outline-secondary shadow-sm px-4 fw-semibold w-100 w-md-auto text-center rounded-pill border-2">
+            <i class="bi bi-clock-history me-2 text-teal"></i> Ver Historial
         </a>
     </div>
 
     <form id="calcForm">
         <!-- MATRIZ DE CONFIGURACIÓN Y TEJIDO -->
-        <div class="card shadow-lg mb-4 border-0 rounded-4 overflow-hidden bg-dark text-white">
-            <div class="card-header fw-bold d-flex flex-column flex-md-row justify-content-between align-items-md-center py-3 px-4 gap-2" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-bottom: 1px solid rgba(255,255,255,0.05);">
-                <span class="d-flex align-items-center gap-2"><i class="bi bi-table text-info"></i> MATRIZ DE CONFIGURACIÓN Y TEJIDO</span>
-                <div class="d-flex align-items-center gap-2 bg-dark px-3 py-1.5 rounded-pill border border-secondary">
-                    <label asp-for="TipoProducto" class="text-white-50 small mb-0 fw-semibold">Tipo Producto:</label>
-                    <select asp-for="TipoProducto" class="form-select form-select-sm text-white fw-bold calc-input shadow-none border-0 bg-transparent py-0" id="TipoProducto" style="width: 110px;">
-                        <option value="Plana" class="bg-dark text-white">Plana</option>
-                        <option value="Tubular" class="bg-dark text-white">Tubular</option>
+        <div class="card shadow-sm mb-4 border rounded-4 overflow-hidden bg-white">
+            <div class="card-header fw-bold d-flex flex-column flex-md-row justify-content-between align-items-md-center py-3 px-4 gap-2 bg-light border-bottom">
+                <span class="d-flex align-items-center gap-2 text-dark"><i class="bi bi-table text-teal" style="color: #0f766e;"></i> MATRIZ DE CONFIGURACIÓN Y TEJIDO</span>
+                <div class="d-flex align-items-center gap-2 bg-white px-3 py-1 rounded-pill border shadow-sm">
+                    <label asp-for="TipoProducto" class="text-muted small mb-0 fw-semibold">Tipo Producto:</label>
+                    <select asp-for="TipoProducto" class="form-select form-select-sm text-dark fw-bold calc-input shadow-none border-0 bg-transparent py-0" id="TipoProducto" style="width: 110px;">
+                        <option value="Plana">Plana</option>
+                        <option value="Tubular">Tubular</option>
                     </select>
                 </div>
             </div>
-            <div class="d-md-none text-center text-light small py-1.5 bg-secondary bg-opacity-25 border-bottom border-secondary">
-                <i class="bi bi-arrow-left-right me-1 text-info"></i>Desliza horizontalmente para ver toda la tabla
+            <div class="d-md-none text-center text-muted small py-1.5 bg-light border-bottom">
+                <i class="bi bi-arrow-left-right me-1 text-teal"></i>Desliza horizontalmente para ver toda la tabla
             </div>
-            <div class="card-body p-0 table-responsive bg-dark">
-                <table class="table table-dark table-bordered align-middle text-center mb-0 border-secondary" style="min-width: 650px;">
-                    <thead class="text-uppercase fs-7 text-secondary" style="background-color: #111827; letter-spacing: 0.5px;">
+            <div class="card-body p-0 table-responsive bg-white">
+                <table class="table table-bordered align-middle text-center mb-0 border-light" style="min-width: 650px;">
+                    <thead class="text-uppercase fs-7 text-muted bg-light" style="letter-spacing: 0.5px;">
                         <tr>
                             <th style="width: 14%;" class="py-3">ITEM</th>
                             <th style="width: 16%;" class="py-3">TEJIDO</th>
@@ -51,60 +51,60 @@
                     <tbody>
                         <!-- Fila: Urdimbre -->
                         <tr class="fila-base">
-                            <td class="fw-bold text-white text-opacity-75" style="background-color: #111827;">Urdimbre</td>
-                            <td><input asp-for="UrdimbreTejido" class="form-control form-control-sm text-center calc-input fw-bold shadow-none text-dark bg-white border-0 rounded-2" type="number" inputmode="decimal" step="0.1" /></td>
+                            <td class="fw-bold text-dark bg-light">Urdimbre</td>
+                            <td><input asp-for="UrdimbreTejido" class="form-control form-control-sm text-center calc-input fw-bold shadow-none text-dark bg-white border rounded-2" type="number" inputmode="decimal" step="0.1" /></td>
                             <td>
                                 <div class="input-group input-group-sm">
-                                    <input asp-for="CintaUrdimbre" class="form-control text-center calc-input fw-bold shadow-none text-dark bg-white border-0 rounded-start-2" type="number" inputmode="decimal" step="0.1" />
-                                    <span class="input-group-text bg-light bg-opacity-10 text-white-50 border-0 small">mm</span>
+                                    <input asp-for="CintaUrdimbre" class="form-control text-center calc-input fw-bold shadow-none text-dark bg-white border rounded-start-2" type="number" inputmode="decimal" step="0.1" />
+                                    <span class="input-group-text bg-light text-muted border small">mm</span>
                                 </div>
                             </td>
-                            <td><input asp-for="UrdimbreDenier" class="form-control form-control-sm text-center calc-input fw-bold shadow-none text-dark bg-white border-0 rounded-2" type="number" inputmode="numeric" step="1" /></td>
-                            <td class="fw-semibold text-white text-opacity-75 text-end pe-2" style="width:1%; white-space:nowrap; background-color: #111827;">Ancho</td>
+                            <td><input asp-for="UrdimbreDenier" class="form-control form-control-sm text-center calc-input fw-bold shadow-none text-dark bg-white border rounded-2" type="number" inputmode="numeric" step="1" /></td>
+                            <td class="fw-semibold text-muted text-end pe-2 bg-light" style="width:1%; white-space:nowrap;">Ancho</td>
                             <td>
                                 <div class="input-group input-group-sm">
-                                    <input asp-for="Ancho" id="Ancho" class="form-control text-center calc-input fw-bold shadow-none text-dark bg-white border-0 rounded-start-2" type="number" inputmode="decimal" step="0.1" />
-                                    <span class="input-group-text bg-light bg-opacity-10 text-white-50 border-0 small">cm</span>
+                                    <input asp-for="Ancho" id="Ancho" class="form-control text-center calc-input fw-bold shadow-none text-dark bg-white border rounded-start-2" type="number" inputmode="decimal" step="0.1" />
+                                    <span class="input-group-text bg-light text-muted border small">cm</span>
                                 </div>
                             </td>
                         </tr>
                         <!-- Fila: Trama -->
                         <tr class="fila-base">
-                            <td class="fw-bold text-white text-opacity-75" style="background-color: #111827;">Trama</td>
-                            <td><input asp-for="TramaTejido" class="form-control form-control-sm text-center calc-input fw-bold shadow-none text-dark bg-white border-0 rounded-2" type="number" inputmode="decimal" step="0.1" /></td>
+                            <td class="fw-bold text-dark bg-light">Trama</td>
+                            <td><input asp-for="TramaTejido" class="form-control form-control-sm text-center calc-input fw-bold shadow-none text-dark bg-white border rounded-2" type="number" inputmode="decimal" step="0.1" /></td>
                             <td>
                                 <div class="input-group input-group-sm">
-                                    <input asp-for="CintaTrama" class="form-control text-center calc-input fw-bold shadow-none text-dark bg-white border-0 rounded-start-2" type="number" inputmode="decimal" step="0.1" />
-                                    <span class="input-group-text bg-light bg-opacity-10 text-white-50 border-0 small">mm</span>
+                                    <input asp-for="CintaTrama" class="form-control text-center calc-input fw-bold shadow-none text-dark bg-white border rounded-start-2" type="number" inputmode="decimal" step="0.1" />
+                                    <span class="input-group-text bg-light text-muted border small">mm</span>
                                 </div>
                             </td>
-                            <td><input asp-for="TramaDenier" class="form-control form-control-sm text-center calc-input fw-bold shadow-none text-dark bg-white border-0 rounded-2" type="number" inputmode="numeric" step="1" /></td>
-                            <td class="fw-semibold text-white text-opacity-75 text-end pe-2" style="white-space:nowrap; background-color: #111827;">Laminado</td>
+                            <td><input asp-for="TramaDenier" class="form-control form-control-sm text-center calc-input fw-bold shadow-none text-dark bg-white border rounded-2" type="number" inputmode="numeric" step="1" /></td>
+                            <td class="fw-semibold text-muted text-end pe-2 bg-light" style="white-space:nowrap;">Laminado</td>
                             <td>
                                 <div class="input-group input-group-sm">
-                                    <input asp-for="Laminado" class="form-control text-center calc-input fw-bold shadow-none text-dark bg-white border-0 rounded-start-2" type="number" inputmode="decimal" step="0.1" />
-                                    <span class="input-group-text bg-light bg-opacity-10 text-white-50 border-0 small">gm2</span>
+                                    <input asp-for="Laminado" class="form-control text-center calc-input fw-bold shadow-none text-dark bg-white border rounded-start-2" type="number" inputmode="decimal" step="0.1" />
+                                    <span class="input-group-text bg-light text-muted border small">gm2</span>
                                 </div>
                             </td>
                         </tr>
                         <!-- Fila: Refuerzo -->
                         <tr class="fila-refuerzo">
-                            <td class="fw-bold text-info" style="background-color: #111827;">Refuerzo</td>
+                            <td class="fw-bold text-teal bg-light" style="color: #0f766e;">Refuerzo</td>
                             <td>
-                                <input asp-for="UrdimbreRefuerzoTejido" id="UrdimbreRefuerzoTejido" class="form-control form-control-sm text-center fw-bold shadow-none text-dark bg-white border-0 rounded-2" type="number" step="0.1" readonly tabindex="-1" />
+                                <input asp-for="UrdimbreRefuerzoTejido" id="UrdimbreRefuerzoTejido" class="form-control form-control-sm text-center fw-bold shadow-none text-dark bg-white border rounded-2" type="number" step="0.1" readonly tabindex="-1" />
                             </td>
                             <td>
                                 <div class="input-group input-group-sm">
-                                    <input asp-for="CintaRefuerzo" class="form-control text-center calc-input fw-bold shadow-none text-dark bg-white border-0 rounded-start-2" type="number" inputmode="decimal" step="0.1" />
-                                    <span class="input-group-text bg-light bg-opacity-10 text-white-50 border-0 small">mm</span>
+                                    <input asp-for="CintaRefuerzo" class="form-control text-center calc-input fw-bold shadow-none text-dark bg-white border rounded-start-2" type="number" inputmode="decimal" step="0.1" />
+                                    <span class="input-group-text bg-light text-muted border small">mm</span>
                                 </div>
                             </td>
-                            <td><input asp-for="DenierRefuerzo" id="DenierRefuerzo" class="form-control form-control-sm text-center fw-bold shadow-none text-dark bg-white border-0 rounded-2" type="number" step="1" readonly tabindex="-1" /></td>
-                            <td class="fw-semibold text-end pe-2 text-info" style="white-space:nowrap; background-color: #111827;">Ancho Ref.</td>
+                            <td><input asp-for="DenierRefuerzo" id="DenierRefuerzo" class="form-control form-control-sm text-center fw-bold shadow-none text-dark bg-white border rounded-2" type="number" step="1" readonly tabindex="-1" /></td>
+                            <td class="fw-semibold text-end pe-2 text-teal bg-light" style="white-space:nowrap; color: #0f766e;">Ancho Ref.</td>
                             <td>
                                 <div class="input-group input-group-sm">
-                                    <input asp-for="AnchoRefuerzoFactor" class="form-control text-center calc-input fw-bold shadow-none text-dark bg-white border-0 rounded-start-2" type="number" inputmode="numeric" min="0" max="12" step="1" />
-                                    <span class="input-group-text bg-light bg-opacity-10 text-white-50 border-0 small">cm</span>
+                                    <input asp-for="AnchoRefuerzoFactor" class="form-control text-center calc-input fw-bold shadow-none text-dark bg-white border rounded-start-2" type="number" inputmode="numeric" min="0" max="12" step="1" />
+                                    <span class="input-group-text bg-light text-muted border small">cm</span>
                                 </div>
                             </td>
                         </tr>
@@ -114,17 +114,17 @@
         </div>
 
         <!-- BLOQUE DE RESULTADOS -->
-        <div class="card shadow-lg mb-4 border-0 rounded-4 overflow-hidden bg-dark text-white">
+        <div class="card shadow-sm mb-4 border rounded-4 overflow-hidden bg-white">
             <!-- Barra Estilizada con Texto de Resultados -->
-            <div class="fw-bold text-center text-dark py-2.5 border-bottom" style="background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%); font-size: 1rem; letter-spacing: 1px; text-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+            <div class="fw-bold text-center text-white py-2.5 border-bottom" style="background: linear-gradient(90deg, #0f766e 0%, #115e59 100%); font-size: 1rem; letter-spacing: 1px;">
                 <i class="bi bi-activity me-2"></i> RESULTADOS Y MÉTRICAS TÉCNICAS
             </div>
-            <div class="d-md-none text-center text-light small py-1.5 bg-secondary bg-opacity-25 border-bottom border-secondary">
-                <i class="bi bi-arrow-left-right me-1 text-warning"></i>Desliza horizontalmente para ver toda la tabla
+            <div class="d-md-none text-center text-muted small py-1.5 bg-light border-bottom">
+                <i class="bi bi-arrow-left-right me-1 text-teal"></i>Desliza horizontalmente para ver toda la tabla
             </div>
-            <div class="card-body p-0 table-responsive bg-dark">
-                <table class="table table-dark table-bordered align-middle text-center mb-0 border-secondary" style="min-width: 650px;">
-                    <thead class="text-uppercase fs-7 text-secondary" style="background-color: #111827; letter-spacing: 0.5px;">
+            <div class="card-body p-0 table-responsive bg-white">
+                <table class="table table-bordered align-middle text-center mb-0 border-light" style="min-width: 650px;">
+                    <thead class="text-uppercase fs-7 text-muted bg-light" style="letter-spacing: 0.5px;">
                         <tr>
                             <th colspan="2" class="py-2.5 text-center" style="width: 33%;">DATOS</th>
                             <th class="py-2.5 text-center" style="width: 3%;"></th>
@@ -135,76 +135,76 @@
                     <tbody>
                         <!-- Fila: Producto / Urdimbre -->
                         <tr>
-                            <td class="fw-bold text-white text-opacity-75 text-center" style="width: 15%; background-color: #111827;">Producto</td>
-                            <td style="width: 18%;" class="text-center"><span class="fw-bold text-white" id="lblTipoProductoRes">@Model.TipoProducto</span></td>
-                            <td class="fw-bold text-info text-center" style="width: 3%; background-color: #111827;">Urdimbre</td>
-                            <td style="width: 32%;" class="text-center"><span class="fw-bold text-white" id="resUrdimbreRes2">@Model.ResistenciaUrdimbre.ToString("F2")</span> <span class="text-muted small">KgF</span></td>
-                            <td style="width: 18%;" class="text-center"><span class="fw-bold text-white" id="resPesoUrdimbreTipo">@Model.PesoUrdimbre.ToString("F2")</span> <span class="text-muted small">gr</span></td>
-                            <td style="width: 14%;" class="text-center"><span id="resUrdimbrePorc2" class="badge rounded-pill text-info bg-info bg-opacity-10 border border-info border-opacity-25 px-2.5 py-1">@Model.PorcentajeUrdimbre.ToString("F1") %</span></td>
+                            <td class="fw-bold text-muted text-center bg-light" style="width: 15%;">Producto</td>
+                            <td style="width: 18%;" class="text-center bg-white"><span class="fw-bold text-dark" id="lblTipoProductoRes">@Model.TipoProducto</span></td>
+                            <td class="fw-bold text-teal text-center bg-light" style="width: 3%; color: #0f766e;">Urdimbre</td>
+                            <td style="width: 32%;" class="text-center bg-white"><span class="fw-bold text-dark" id="resUrdimbreRes2">@Model.ResistenciaUrdimbre.ToString("F2")</span> <span class="text-muted small">KgF</span></td>
+                            <td style="width: 18%;" class="text-center bg-white"><span class="fw-bold text-dark" id="resPesoUrdimbreTipo">@Model.PesoUrdimbre.ToString("F2")</span> <span class="text-muted small">gr</span></td>
+                            <td style="width: 14%;" class="text-center bg-white"><span id="resUrdimbrePorc2" class="badge rounded-pill text-teal bg-teal bg-opacity-10 border border-teal px-2.5 py-1" style="background-color: rgba(13, 148, 136, 0.1); color: #0f766e; border-color: rgba(13, 148, 136, 0.3);">@Model.PorcentajeUrdimbre.ToString("F1") %</span></td>
                         </tr>
                         <!-- Fila: Medida -->
                         <tr>
-                            <td class="fw-bold text-white text-opacity-75 text-center" style="background-color: #111827;">Medida</td>
-                            <td class="text-center"><span class="fw-bold text-white" id="resMedida">@Model.Ancho x @Model.Corte</span></td>
-                            <td class="text-muted text-center" style="background-color: #111827;">—</td>
-                            <td class="text-muted text-center">—</td>
-                            <td class="text-muted text-center">—</td>
-                            <td class="text-muted text-center">—</td>
+                            <td class="fw-bold text-muted text-center bg-light">Medida</td>
+                            <td class="text-center bg-white"><span class="fw-bold text-dark" id="resMedida">@Model.Ancho x @Model.Corte</span></td>
+                            <td class="text-muted text-center bg-light">—</td>
+                            <td class="text-muted text-center bg-white">—</td>
+                            <td class="text-muted text-center bg-white">—</td>
+                            <td class="text-muted text-center bg-white">—</td>
                         </tr>
                         <!-- Fila: Tejido / Trama -->
                         <tr>
-                            <td class="fw-bold text-white text-opacity-75 text-center" style="background-color: #111827;">Tejido</td>
-                            <td class="text-center"><span class="fw-bold text-white" id="resTejidoConcatenado">@Model.UrdimbreTejido x @Model.TramaTejido</span></td>
-                            <td class="fw-bold text-info text-center" style="background-color: #111827;">Trama</td>
-                            <td class="text-center"><span class="fw-bold text-white" id="resTramaRes2">@Model.ResistenciaTrama.ToString("F2")</span> <span class="text-muted small">KgF</span></td>
-                            <td class="text-center"><span class="fw-bold text-white" id="resPesoTramaTipo">@Model.PesoTrama.ToString("F2")</span> <span class="text-muted small">gr</span></td>
-                            <td class="text-center"><span id="resTramaPorc2" class="badge rounded-pill text-info bg-info bg-opacity-10 border border-info border-opacity-25 px-2.5 py-1">@Model.PorcentajeTrama.ToString("F1") %</span></td>
+                            <td class="fw-bold text-muted text-center bg-light">Tejido</td>
+                            <td class="text-center bg-white"><span class="fw-bold text-dark" id="resTejidoConcatenado">@Model.UrdimbreTejido x @Model.TramaTejido</span></td>
+                            <td class="fw-bold text-teal text-center bg-light" style="color: #0f766e;">Trama</td>
+                            <td class="text-center bg-white"><span class="fw-bold text-dark" id="resTramaRes2">@Model.ResistenciaTrama.ToString("F2")</span> <span class="text-muted small">KgF</span></td>
+                            <td class="text-center bg-white"><span class="fw-bold text-dark" id="resPesoTramaTipo">@Model.PesoTrama.ToString("F2")</span> <span class="text-muted small">gr</span></td>
+                            <td class="text-center bg-white"><span id="resTramaPorc2" class="badge rounded-pill text-teal bg-teal bg-opacity-10 border border-teal px-2.5 py-1" style="background-color: rgba(13, 148, 136, 0.1); color: #0f766e; border-color: rgba(13, 148, 136, 0.3);">@Model.PorcentajeTrama.ToString("F1") %</span></td>
                         </tr>
                         <!-- Fila: Denier -->
                         <tr>
-                            <td class="fw-bold text-white text-opacity-75 text-center" style="background-color: #111827;">Denier</td>
-                            <td class="text-center"><span class="fw-bold text-white" id="resDenierConcatenado">@Model.UrdimbreDenier x @Model.TramaDenier</span></td>
-                            <td class="text-muted text-center" style="background-color: #111827;">—</td>
-                            <td class="text-muted text-center">—</td>
-                            <td class="text-muted text-center">—</td>
-                            <td class="text-muted text-center">—</td>
+                            <td class="fw-bold text-muted text-center bg-light">Denier</td>
+                            <td class="text-center bg-white"><span class="fw-bold text-dark" id="resDenierConcatenado">@Model.UrdimbreDenier x @Model.TramaDenier</span></td>
+                            <td class="text-muted text-center bg-light">—</td>
+                            <td class="text-muted text-center bg-white">—</td>
+                            <td class="text-muted text-center bg-white">—</td>
+                            <td class="text-muted text-center bg-white">—</td>
                         </tr>
                         <!-- Fila: Conos / Refuerzo -->
                         <tr>
-                            <td class="fw-bold text-white text-opacity-75 text-center" style="background-color: #111827;">Conos</td>
-                            <td class="text-center"><span class="fw-bold text-white" id="resCantidadConos">@Model.MaquinaNumero</span> <span class="text-muted small">conos</span></td>
-                            <td class="fw-bold text-info text-center" style="background-color: #111827;">Refuerzo</td>
-                            <td class="text-center">
-                                <div class="fw-bold text-info"><span id="resUrdRefRes2">@Model.UrdimbreRefuerzoResistencia.ToString("F2")</span> <span class="small">KgF</span></div>
-                                <div class="text-white-50 small" id="resAnchoRefuerzoLabel">Ancho: @Model.AnchoRefuerzoFactor cm</div>
+                            <td class="fw-bold text-muted text-center bg-light">Conos</td>
+                            <td class="text-center bg-white"><span class="fw-bold text-dark" id="resCantidadConos">@Model.MaquinaNumero</span> <span class="text-muted small">conos</span></td>
+                            <td class="fw-bold text-teal text-center bg-light" style="color: #0f766e;">Refuerzo</td>
+                            <td class="text-center bg-white">
+                                <div class="fw-bold text-teal" style="color: #0f766e;"><span id="resUrdRefRes2">@Model.UrdimbreRefuerzoResistencia.ToString("F2")</span> <span class="small">KgF</span></div>
+                                <div class="text-muted small" id="resAnchoRefuerzoLabel">Ancho: @Model.AnchoRefuerzoFactor cm</div>
                             </td>
-                            <td class="text-center"><span class="fw-bold text-white" id="resPesoRefuerzoTipo">@Model.PesoRefuerzo.ToString("F2")</span> <span class="text-muted small">gr</span></td>
-                            <td class="text-center"><span id="resPorcRefuerzo" class="badge rounded-pill text-success bg-success bg-opacity-10 border border-success border-opacity-25 px-2.5 py-1">100 %</span></td>
+                            <td class="text-center bg-white"><span class="fw-bold text-dark" id="resPesoRefuerzoTipo">@Model.PesoRefuerzo.ToString("F2")</span> <span class="text-muted small">gr</span></td>
+                            <td class="text-center bg-white"><span id="resPorcRefuerzo" class="badge rounded-pill text-success bg-success bg-opacity-10 border border-success px-2.5 py-1">100 %</span></td>
                         </tr>
                     </tbody>
                 </table>
 
-                <!-- Sub-bloque de Pesos Finales -->
-                <table class="table table-dark table-bordered align-middle text-center mb-0 border-secondary" style="min-width: 650px;">
+                <!-- Sub-bloque de Pesos Finales (Sin espacios en blanco entre filas) -->
+                <table class="table table-bordered align-middle text-center mb-0 border-light" style="min-width: 650px;">
                     <tbody>
                         <tr>
-                            <td rowspan="4" class="fw-bold text-white text-center align-middle" style="width: 33%; background-color: #111827;">
-                                <div class="fs-5 text-uppercase tracking-wide text-warning">PESO TOTAL</div>
+                            <td rowspan="4" class="fw-bold text-dark text-center align-middle bg-light" style="width: 33%;">
+                                <div class="fs-5 text-uppercase tracking-wide" style="color: #0f766e;">PESO TOTAL</div>
                             </td>
-                            <td class="fw-bold text-white text-opacity-75 text-center" style="width: 33%; background-color: #111827;">gm2</td>
-                            <td class="fw-bold text-center text-white" style="width: 34%; background-color: #1e293b;" id="resPesoBase">@Model.PesoTejidoBase.ToString("F1")</td>
+                            <td class="fw-bold text-muted text-center bg-light" style="width: 33%;">gm2</td>
+                            <td class="fw-bold text-center text-dark bg-white" style="width: 34%;" id="resPesoBase">@Model.PesoTejidoBase.ToString("F1")</td>
                         </tr>
                         <tr>
-                            <td class="fw-bold text-white text-opacity-75 text-center" style="background-color: #111827;">gm2 (pp+lam)</td>
-                            <td class="fw-bold text-center text-white" style="background-color: #1e293b;" id="resPesoLaminado">@Model.PesoConLaminado.ToString("F1")</td>
+                            <td class="fw-bold text-muted text-center bg-light">gm2 (pp+lam)</td>
+                            <td class="fw-bold text-center text-dark bg-white" id="resPesoLaminado">@Model.PesoConLaminado.ToString("F1")</td>
                         </tr>
                         <tr>
-                            <td class="fw-bold text-white text-opacity-75 text-center" style="background-color: #111827;">gmp</td>
-                            <td class="fw-bold text-center text-info" style="background-color: #1e293b;" id="resGmp">@Model.PesoConRefuerzo.ToString("F1")</td>
+                            <td class="fw-bold text-muted text-center bg-light">gmp</td>
+                            <td class="fw-bold text-center bg-white" style="color: #0f766e;" id="resGmp">@Model.PesoConRefuerzo.ToString("F1")</td>
                         </tr>
                         <tr>
-                            <td class="fw-bold text-white text-opacity-75 text-center" style="background-color: #111827;">gml</td>
-                            <td class="fw-bold text-center fs-5 text-success" style="background-color: #1e293b;" id="resPesoMetro">@Model.PesoMetroLineal.ToString("F1")</td>
+                            <td class="fw-bold text-muted text-center bg-light">gml</td>
+                            <td class="fw-bold text-center fs-5 text-success bg-white" id="resPesoMetro">@Model.PesoMetroLineal.ToString("F1")</td>
                         </tr>
                     </tbody>
                 </table>
@@ -214,8 +214,8 @@
         <!-- Botón de Guardar -->
         <div class="row">
             <div class="col-12">
-                <button type="button" id="btnGuardar" class="btn w-100 py-3 fw-bold shadow-lg text-uppercase tracking-wide text-white rounded-pill border-0 hover-scale" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); transition: all 0.2s ease;">
-                    <i class="bi bi-bookmark-check-fill me-2 fs-5 align-middle"></i> Guardar Registro en Historial
+                <button type="button" id="btnGuardar" class="btn w-100 py-3 fw-bold shadow-sm text-uppercase tracking-wide text-white rounded-pill border-0 hover-scale" style="background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); transition: all 0.2s ease;">
+                    <i class="bi bi-bookmark-check-fill me-2 fs-5 align-middle"></i> GUARDAR REGISTRO EN HISTORIAL
                 </button>
             </div>
         </div>
@@ -225,13 +225,9 @@
 @section Scripts {
     <script src="~/js/calculadora.js"></script>
     <style>
-        .hover-lift:hover {
-            transform: translateY(-2px);
-            transition: transform 0.2s ease;
-        }
         .hover-scale:hover {
-            filter: brightness(1.1);
-            transform: scale(1.01);
+            filter: brightness(1.05);
+            transform: scale(1.005);
             transition: all 0.2s ease;
         }
         @@media (max-width: 768px) {
