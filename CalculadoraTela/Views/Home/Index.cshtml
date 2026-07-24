@@ -1,0 +1,268 @@
+﻿@model CalculadoraTela.ViewModels.CalculadoraTelaVM
+
+@{
+    ViewData["Title"] = "Calculadora de Tela";
+}
+
+<div class="container-fluid py-4 px-3 px-md-4" style="background-color: #f5f6f8; min-height: 100vh;">
+    <!-- Encabezado -->
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 pb-3 border-bottom border-2 gap-3">
+        <h2 class="fw-bold mb-0" style="color: #131b2c;">
+            <i class="bi bi-file-earmark-spreadsheet text-primary me-2"></i>TELA 
+        </h2>
+        <a asp-controller="Home" asp-action="Historial" class="btn btn-outline-primary shadow-sm px-4 fw-semibold w-100 w-md-auto text-center">
+            <i class="bi bi-clock-history me-1"></i> Ver Historial
+        </a>
+    </div>
+
+    <form id="calcForm">
+        <!-- MATRIZ DE CONFIGURACIÓN Y TEJIDO -->
+        <div class="card shadow-sm mb-4 border-0 rounded-3 overflow-hidden">
+            <div class="card-header text-white fw-bold d-flex flex-column flex-md-row justify-content-between align-items-md-center py-3 px-3 px-md-4 gap-2" style="background: linear-gradient(135deg, #131b2c 0%, #22314d 100%);">
+                <span><i class="bi bi-table me-2"></i> MATRIZ DE CONFIGURACIÓN Y TEJIDO</span>
+                <div class="d-flex align-items-center gap-2">
+                    <label asp-for="TipoProducto" class="text-white-50 small mb-0 fw-semibold">Tipo Producto:</label>
+                    <select asp-for="TipoProducto" class="form-select form-select-sm text-dark fw-bold calc-input shadow-none border-0" id="TipoProducto" style="width: 140px;">
+                        <option value="Plana">Plana</option>
+                        <option value="Tubular">Tubular</option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-md-none text-center text-muted small py-1 bg-light border-bottom">
+                <i class="bi bi-arrow-left-right me-1"></i>Desliza para ver toda la tabla
+            </div>
+            <div class="card-body p-0 table-responsive bg-white">
+                <!-- Orden de columnas idéntico a la Hoja2: ITEM | TEJIDO | CINTA | DENIER | OTROS -->
+                <table class="table table-bordered align-middle text-center mb-0 border-light" style="min-width: 620px;">
+                    <thead class="text-secondary uppercase fs-7" style="background-color: #f1f5f9;">
+                        <tr>
+                            <th style="width: 14%;" class="py-3">ITEM</th>
+                            <th style="width: 16%;" class="py-3">TEJIDO</th>
+                            <th style="width: 18%;" class="py-3">CINTA</th>
+                            <th style="width: 16%;" class="py-3">DENIER</th>
+                            <th colspan="2" style="width: 36%;" class="py-3">OTROS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Fila 3 Hoja2: Urdimbre -->
+                        <tr class="fila-base">
+                            <td class="fw-bold text-secondary bg-light">Urdimbre</td>
+                            <td><input asp-for="UrdimbreTejido" class="form-control form-control-sm text-center calc-input fw-bold shadow-none" type="number" inputmode="decimal" step="0.1" /></td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input asp-for="CintaUrdimbre" class="form-control text-center calc-input fw-bold shadow-none" type="number" inputmode="decimal" step="0.1" />
+                                    <span class="input-group-text bg-light text-muted small">mm</span>
+                                </div>
+                            </td>
+                            <td><input asp-for="UrdimbreDenier" class="form-control form-control-sm text-center calc-input fw-bold shadow-none" type="number" inputmode="numeric" step="1" /></td>
+                            <td class="fw-semibold text-secondary text-end pe-2" style="width:1%; white-space:nowrap;">Ancho</td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input asp-for="Ancho" id="Ancho" class="form-control text-center calc-input fw-bold shadow-none" type="number" inputmode="decimal" step="0.1" />
+                                    <span class="input-group-text bg-light text-muted small">cm</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Fila 4 Hoja2: Trama -->
+                        <tr class="fila-base">
+                            <td class="fw-bold text-secondary bg-light">Trama</td>
+                            <td><input asp-for="TramaTejido" class="form-control form-control-sm text-center calc-input fw-bold shadow-none" type="number" inputmode="decimal" step="0.1" /></td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input asp-for="CintaTrama" class="form-control text-center calc-input fw-bold shadow-none" type="number" inputmode="decimal" step="0.1" />
+                                    <span class="input-group-text bg-light text-muted small">mm</span>
+                                </div>
+                            </td>
+                            <td><input asp-for="TramaDenier" class="form-control form-control-sm text-center calc-input fw-bold shadow-none" type="number" inputmode="numeric" step="1" /></td>
+                            <td class="fw-semibold text-secondary text-end pe-2" style="white-space:nowrap;">Laminado</td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input asp-for="Laminado" class="form-control text-center calc-input fw-bold shadow-none" type="number" inputmode="decimal" step="0.1" />
+                                    <span class="input-group-text bg-light text-muted small">gm2</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Fila 5 Hoja2: Refuerzo (Tejido y Denier son fórmulas, no inputs) -->
+                        <tr class="fila-refuerzo">
+                            <td class="fw-bold" style="color: var(--tela-refuerzo, #b5652f);">Refuerzo</td>
+                            <td>
+                                <input asp-for="UrdimbreRefuerzoTejido" id="UrdimbreRefuerzoTejido" class="form-control form-control-sm text-center fw-bold shadow-none bg-light" type="number" step="0.1" readonly tabindex="-1" title="Calculado automáticamente: Urdimbre Tejido x 2 (igual que el Excel, celda B5)" />
+                            </td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input asp-for="CintaRefuerzo" class="form-control text-center calc-input fw-bold shadow-none" type="number" inputmode="decimal" step="0.1" />
+                                    <span class="input-group-text bg-light text-muted small">mm</span>
+                                </div>
+                            </td>
+                            <td><input asp-for="DenierRefuerzo" id="DenierRefuerzo" class="form-control form-control-sm text-center fw-bold shadow-none bg-light" type="number" step="1" readonly tabindex="-1" title="Calculado automáticamente: igual al Denier de Urdimbre (igual que el Excel, celda D5)" /></td>
+                            <td class="fw-semibold text-end pe-2" style="white-space:nowrap; color: var(--tela-refuerzo, #b5652f);">Ancho Ref.</td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input asp-for="AnchoRefuerzoFactor" class="form-control text-center calc-input fw-bold shadow-none" type="number" inputmode="numeric" min="0" max="12" step="1" />
+                                    <span class="input-group-text bg-light text-muted small">cm</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- BLOQUE DE RESULTADOS -->
+        <div class="card shadow-sm mb-4 border-0 rounded-3 overflow-hidden">
+            <div class="card-header fw-bold text-center fs-5 text-white py-3" style="background: linear-gradient(135deg, #22314d 0%, #3c4f70 100%);">
+                <i class="bi bi-bar-chart-fill me-2"></i> RESULTADOS
+            </div>
+            <div class="d-md-none text-center text-muted small py-1 bg-light border-bottom">
+                <i class="bi bi-arrow-left-right me-1"></i>Desliza para ver toda la tabla
+            </div>
+            <div class="card-body p-0 table-responsive bg-white">
+                <!-- Bloque A: DATOS | RESISTENCIA | PESO | % -- filas 8 a 12 de Hoja2, en el mismo orden -->
+                <table class="table table-bordered align-middle mb-0 border-light" style="min-width: 650px;">
+                    <thead class="text-secondary uppercase fs-7" style="background-color: #f1f5f9;">
+                        <tr>
+                            <th colspan="2" class="py-2">DATOS</th>
+                            <th class="py-2">&nbsp;</th>
+                            <th class="py-2">RESISTENCIA</th>
+                            <th class="py-2">PESO</th>
+                            <th class="py-2">%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Fila 8: Producto | Urdimbre -->
+                        <tr>
+                            <td class="fw-bold text-secondary bg-light" style="width: 15%;">Producto</td>
+                            <td style="width: 18%;"><span class="fw-semibold text-dark" id="lblTipoProductoRes">@Model.TipoProducto</span></td>
+                            <td class="fw-bold text-primary bg-light" style="width: 13%;">Urdimbre</td>
+                            <td><span id="resUrdimbreRes2">@Model.ResistenciaUrdimbre.ToString("F2")</span> KgF</td>
+                            <td><span id="resPesoUrdimbreTipo">@Model.PesoUrdimbre.ToString("F2")</span> gr</td>
+                            <td><span id="resUrdimbrePorc2" class="badge rounded-pill bg-light text-dark border px-2 py-1">@Model.PorcentajeUrdimbre.ToString("F1") %</span></td>
+                        </tr>
+                        <!-- Fila 9: Medida (sin datos de resistencia/peso, igual que en el Excel) -->
+                        <tr>
+                            <td class="fw-bold text-secondary bg-light">Medida</td>
+                            <td><span class="fw-semibold text-dark" id="resMedida">@Model.Ancho x @Model.Corte</span></td>
+                            <td class="text-muted small">—</td>
+                            <td class="text-muted small">—</td>
+                            <td class="text-muted small">—</td>
+                            <td class="text-muted small">—</td>
+                        </tr>
+                        <!-- Fila 10: Tejido | Trama -->
+                        <tr>
+                            <td class="fw-bold text-secondary bg-light">Tejido</td>
+                            <td><span class="fw-semibold text-dark" id="resTejidoConcatenado">@Model.UrdimbreTejido x @Model.TramaTejido</span></td>
+                            <td class="fw-bold text-primary bg-light">Trama</td>
+                            <td><span id="resTramaRes2">@Model.ResistenciaTrama.ToString("F2")</span> KgF</td>
+                            <td><span id="resPesoTramaTipo">@Model.PesoTrama.ToString("F2")</span> gr</td>
+                            <td><span id="resTramaPorc2" class="badge rounded-pill bg-light text-dark border px-2 py-1">@Model.PorcentajeTrama.ToString("F1") %</span></td>
+                        </tr>
+                        <!-- Fila 11: Denier (sin datos de resistencia/peso, igual que en el Excel) -->
+                        <tr>
+                            <td class="fw-bold text-secondary bg-light">Denier</td>
+                            <td><span class="fw-semibold text-dark" id="resDenierConcatenado">@Model.UrdimbreDenier x @Model.TramaDenier</span></td>
+                            <td class="text-muted small">—</td>
+                            <td class="text-muted small">—</td>
+                            <td class="text-muted small">—</td>
+                            <td class="text-muted small">—</td>
+                        </tr>
+                        <!-- Fila 12: Conos | Refuerzo -->
+                        <tr class="fila-refuerzo">
+                            <td class="fw-bold text-secondary bg-light">Conos</td>
+                            <td><span class="fw-bold text-dark" id="resCantidadConos">@Model.MaquinaNumero</span> <span class="text-muted small">conos</span></td>
+                            <td class="fw-bold bg-light" style="color: var(--tela-refuerzo, #b5652f);">Refuerzo</td>
+                            <td>
+                                <div class="fw-bold text-primary" id="resUrdRefRes2">@Model.UrdimbreRefuerzoResistencia.ToString("F2") KgF</div>
+                                <div class="text-muted small" id="resAnchoRefuerzoLabel">Ancho: @Model.AnchoRefuerzoFactor cm</div>
+                            </td>
+                            <td><span id="resPesoRefuerzoTipo">@Model.PesoRefuerzo.ToString("F2")</span> gr</td>
+                            <td><span id="resPorcRefuerzo" class="badge rounded-pill bg-light text-dark border px-2 py-1">100 %</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Bloque B: PESO -- filas 13 a 16 de Hoja2 (gm2, gm2+lam, gmp, gml) -->
+                <div class="fw-bold text-secondary small text-uppercase px-3 py-2 border-top border-bottom" style="background-color: #f1f5f9;">
+                    <i class="bi bi-layers-half me-1"></i> Peso
+                </div>
+                <table class="table table-bordered align-middle mb-0 border-light" style="min-width: 650px;">
+                    <tbody>
+                        <tr>
+                            <td class="bg-light fw-bold text-secondary" style="width: 30%;">GM2</td>
+                            <td class="fw-bold text-end celda-resultado-excel" id="resPesoBase">@Model.PesoTejidoBase.ToString("F1")</td>
+                        </tr>
+                        <tr>
+                            <td class="bg-light fw-bold text-secondary">GM2 (PP+LAM)</td>
+                            <td class="fw-bold text-end celda-resultado-excel" id="resPesoLaminado">@Model.PesoConLaminado.ToString("F1")</td>
+                        </tr>
+                        <tr>
+                            <td class="bg-light fw-bold text-secondary">GMP</td>
+                            <td class="fw-bold text-end celda-gmp" id="resGmp">@Model.PesoConRefuerzo.ToString("F1")</td>
+                        </tr>
+                        <tr>
+                            <td class="bg-light fw-bold text-secondary">GML</td>
+                            <td class="fw-bold text-end fs-6 celda-resultado-excel destacado" id="resPesoMetro">@Model.PesoMetroLineal.ToString("F1")</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Botón de Guardar -->
+        <div class="row">
+            <div class="col-12">
+                <button type="button" id="btnGuardar" class="btn w-100 py-3 fw-bold shadow text-uppercase tracking-wide text-white" style="background: linear-gradient(135deg, #131b2c 0%, #22314d 100%); border: none; transition: opacity 0.2s;">
+                    <i class="bi bi-bookmark-check me-2"></i> Guardar Registro en Historial
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/js/calculadora.js"></script>
+    <style>
+        /* Optimizaciones responsivas para celulares */
+        @@media (max-width: 768px) {
+            .container-fluid {
+                padding-left: 8px !important;
+                padding-right: 8px !important;
+            }
+            /* Evita el zoom automático en inputs en iOS y Android */
+            input.form-control, select.form-select {
+                font-size: 16px !important;
+            }
+            h2.fw-bold {
+                font-size: 1.3rem;
+            }
+            .card-header {
+                font-size: 0.9rem;
+            }
+
+            /* Tablas más compactas: menos padding y letra más chica
+               para que se necesite deslizar lo menos posible */
+            .table td, .table th {
+                padding: 0.45rem 0.35rem;
+                font-size: 0.82rem;
+            }
+            .table input.form-control {
+                padding: 0.35rem 0.4rem;
+                min-height: 40px; /* objetivo táctil cómodo */
+            }
+            .input-group-text {
+                padding: 0.35rem 0.45rem;
+                font-size: 0.78rem;
+            }
+
+            /* Botón guardar: buen tamaño de toque, sin ocupar demasiado */
+            #btnGuardar {
+                font-size: 0.95rem;
+                padding: 0.9rem !important;
+            }
+
+            /* La celda destacada GML de la matriz, algo más compacta */
+            #resPesoMetro {
+                font-size: 1rem !important;
+            }
+        }
+    </style>
+}
