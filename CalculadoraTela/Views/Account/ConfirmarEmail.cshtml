@@ -1,0 +1,56 @@
+@{
+    ViewData["Title"] = "Confirmación de correo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool exito = ViewBag.Exito == true;
+}
+
+<div class="d-flex align-items-center justify-content-center py-5">
+    <div style="max-width:460px; width:100%;">
+
+        <div class="card border-0 overflow-hidden text-center" style="border-radius:14px; box-shadow:0 4px 24px rgba(6,15,30,0.18);">
+
+            <div class="py-3 px-4 text-white"
+                 style="background:linear-gradient(135deg,#060f1e 0%,#0f2040 100%); border-bottom:3px solid @(exito ? "#2563eb" : "#dc2626");">
+                @if (exito)
+                {
+                    <i class="bi bi-check-circle-fill" style="font-size:2rem; color:#fbbf24;"></i>
+                    <div class="fw-black mt-2" style="letter-spacing:0.5px;">CUENTA ACTIVADA</div>
+                }
+                else
+                {
+                    <i class="bi bi-x-circle-fill" style="font-size:2rem; color:#fca5a5;"></i>
+                    <div class="fw-black mt-2" style="letter-spacing:0.5px;">ENLACE INVÁLIDO</div>
+                }
+            </div>
+
+            <div class="bg-white p-4">
+                @if (exito)
+                {
+                    <p style="color:#1e293b;">
+                        Tu cuenta está activa. Ya puedes iniciar sesión y usar la calculadora.
+                    </p>
+                    <a asp-action="Login" asp-controller="Account"
+                       class="btn w-100 fw-bold text-uppercase text-white border-0 d-flex align-items-center justify-content-center gap-2"
+                       style="background:linear-gradient(135deg,#060f1e 0%,#0f2040 100%); border-radius:11px; padding:14px; letter-spacing:0.8px;">
+                        <i class="bi bi-box-arrow-in-right fs-5" style="color:#fbbf24;"></i>
+                        INICIAR SESIÓN
+                    </a>
+                }
+                else
+                {
+                    <p style="color:#1e293b;">
+                        El enlace de confirmación expiró o no es válido. Intenta registrarte nuevamente.
+                    </p>
+                    <a asp-action="Register" asp-controller="Account"
+                       class="btn w-100 fw-bold text-uppercase text-white border-0 d-flex align-items-center justify-content-center gap-2"
+                       style="background:linear-gradient(135deg,#7f1d1d 0%,#991b1b 100%); border-radius:11px; padding:14px; letter-spacing:0.8px;">
+                        <i class="bi bi-person-plus-fill fs-5" style="color:#fca5a5;"></i>
+                        VOLVER AL REGISTRO
+                    </a>
+                }
+            </div>
+
+        </div>
+
+    </div>
+</div>

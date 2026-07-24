@@ -1,0 +1,34 @@
+@{
+    ViewData["Title"] = "Verifica tu correo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex align-items-center justify-content-center py-5">
+    <div style="max-width:480px; width:100%;">
+
+        <div class="card border-0 overflow-hidden text-center" style="border-radius:14px; box-shadow:0 4px 24px rgba(6,15,30,0.18);">
+
+            <div class="py-3 px-4 text-white"
+                 style="background:linear-gradient(135deg,#060f1e 0%,#0f2040 100%); border-bottom:3px solid #2563eb;">
+                <i class="bi bi-envelope-check-fill" style="font-size:2rem; color:#fbbf24;"></i>
+                <div class="fw-black mt-2" style="letter-spacing:0.5px;">VERIFICA TU CORREO</div>
+            </div>
+
+            <div class="bg-white p-4">
+                <p style="color:#1e293b;">
+                    Te enviamos un enlace de activación a tu Gmail.<br>
+                    Revisa tu bandeja de entrada (y la carpeta de <strong>spam</strong>) y haz clic en el enlace para activar tu cuenta.
+                </p>
+
+                <a asp-action="Login" asp-controller="Account"
+                   class="btn w-100 fw-bold text-uppercase text-white border-0 d-flex align-items-center justify-content-center gap-2 mt-2"
+                   style="background:linear-gradient(135deg,#060f1e 0%,#0f2040 100%); border-radius:11px; padding:14px; letter-spacing:0.8px;">
+                    <i class="bi bi-box-arrow-in-right fs-5" style="color:#fbbf24;"></i>
+                    IR AL LOGIN
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</div>

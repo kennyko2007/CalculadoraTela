@@ -1,0 +1,89 @@
+@model CalculadoraTela.ViewModels.LoginVM
+@{
+    ViewData["Title"] = "Iniciar sesión";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex align-items-center justify-content-center py-5">
+    <div class="w-100" style="max-width:440px;">
+
+        <!-- Tarjeta principal -->
+        <div class="card border-0 overflow-hidden" style="border-radius:14px; box-shadow:0 4px 24px rgba(6,15,30,0.18);">
+
+            <!-- Cabecera igual a la sección TELA de la calculadora -->
+            <div class="d-flex align-items-center gap-3 py-3 px-4"
+                 style="background:linear-gradient(135deg,#060f1e 0%,#0f2040 100%); border-bottom:3px solid #2563eb;">
+                <div class="d-flex align-items-center justify-content-center rounded-2 text-white flex-shrink-0"
+                     style="background:#2563eb; width:40px; height:40px;">
+                    <i class="bi bi-lock-fill" style="font-size:1.1rem;"></i>
+                </div>
+                <div>
+                    <div class="fw-black text-white" style="letter-spacing:0.5px; font-size:1rem;">ACCESO AL SISTEMA</div>
+                    <div class="small" style="color:rgba(255,255,255,0.55); font-size:0.75rem;">Calculadora Tela — Control de Planta</div>
+                </div>
+            </div>
+
+            <!-- Cuerpo -->
+            <div class="bg-white p-4">
+
+                <form asp-action="Login" asp-controller="Account" method="post">
+                    <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+                    @Html.AntiForgeryToken()
+
+                    @if (ViewData.ModelState.ErrorCount > 0)
+                    {
+                        <div class="alert alert-danger py-2 small mb-3 border-0 rounded-3">
+                            <div asp-validation-summary="All"></div>
+                        </div>
+                    }
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label fw-semibold small" style="color:#334155;"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope-fill" style="color:#2563eb;"></i></span>
+                            <input asp-for="Email" class="form-control calc-input" placeholder="tucorreo@gmail.com" autocomplete="email" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger" style="font-size:0.78rem;"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label fw-semibold small" style="color:#334155;"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock-fill" style="color:#2563eb;"></i></span>
+                            <input asp-for="Password" class="form-control calc-input" placeholder="••••••" autocomplete="current-password" />
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger" style="font-size:0.78rem;"></span>
+                    </div>
+
+                    <div class="mb-4 d-flex align-items-center gap-2">
+                        <input asp-for="RememberMe" class="form-check-input m-0" style="width:1rem;height:1rem;" />
+                        <label asp-for="RememberMe" class="form-check-label small text-muted"></label>
+                    </div>
+
+                    <button type="submit" id="btnGuardar"
+                            class="btn w-100 fw-bold text-uppercase text-white border-0 d-flex align-items-center justify-content-center gap-2"
+                            style="letter-spacing:0.8px;">
+                        <i class="bi bi-box-arrow-in-right fs-5" style="color:#fbbf24;"></i>
+                        INGRESAR
+                    </button>
+                </form>
+
+                <hr class="my-3" style="border-color:#e2e8f0;">
+
+                <p class="text-center small mb-0" style="color:#64748b;">
+                    ¿No tienes cuenta?
+                    <a asp-action="Register" asp-controller="Account"
+                       class="fw-bold" style="color:#2563eb; text-decoration:none;">
+                        Regístrate aquí
+                    </a>
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
