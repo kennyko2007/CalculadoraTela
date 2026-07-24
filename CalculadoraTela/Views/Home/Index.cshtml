@@ -4,11 +4,11 @@
     ViewData["Title"] = "Calculadora de Tela";
 }
 
-<div class="container-fluid py-4 px-3 px-md-4" style="background-color: #f1f5f9; min-height: 100vh; color: #0f172a;">
+<div class="container-fluid py-4 px-3 px-md-4" style="background-color: #f8fafc; min-height: 100vh; color: #1e293b;">
     <!-- Encabezado Estilizado Profesional -->
-    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 pb-3 border-bottom gap-3" style="border-color: #cbd5e1 !important;">
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 pb-3 border-bottom gap-3" style="border-color: #e2e8f0 !important;">
         <div class="d-flex align-items-center gap-3">
-            <div class="p-3 rounded-4 text-white shadow-sm" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+            <div class="p-3 rounded-4 text-white shadow-sm" style="background: linear-gradient(135deg, #0d9488 0%, #115e59 100%);">
                 <i class="bi bi-file-earmark-spreadsheet fs-3"></i>
             </div>
             <div>
@@ -17,7 +17,7 @@
             </div>
         </div>
         <a asp-controller="Home" asp-action="Historial" class="btn btn-white shadow-sm px-4 fw-semibold w-100 w-md-auto text-center rounded-pill border py-2 text-dark hover-bg-light" style="background-color: #ffffff; border-color: #cbd5e1 !important;">
-            <i class="bi bi-clock-history me-2 text-primary"></i> Ver Historial
+            <i class="bi bi-clock-history me-2 text-teal" style="color: #0d9488;"></i> Ver Historial
         </a>
     </div>
 
@@ -25,7 +25,7 @@
         <!-- MATRIZ DE CONFIGURACIÓN Y TEJIDO -->
         <div class="card shadow-sm mb-4 border-0 rounded-4 overflow-hidden bg-white">
             <div class="card-header fw-bold d-flex flex-column flex-md-row justify-content-between align-items-md-center py-3 px-4 gap-2 text-white" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%);">
-                <span class="d-flex align-items-center gap-2"><i class="bi bi-table text-info"></i> MATRIZ DE CONFIGURACIÓN Y TEJIDO</span>
+                <span class="d-flex align-items-center gap-2"><i class="bi bi-table text-teal" style="color: #2dd4bf;"></i> MATRIZ DE CONFIGURACIÓN Y TEJIDO</span>
                 <div class="d-flex align-items-center gap-2 bg-white bg-opacity-10 px-3 py-1.5 rounded-pill border border-light border-opacity-25 shadow-sm">
                     <label asp-for="TipoProducto" class="text-white-50 small mb-0 fw-semibold">Tipo Producto:</label>
                     <select asp-for="TipoProducto" class="form-select form-select-sm text-white fw-bold calc-input shadow-none border-0 bg-transparent py-0" id="TipoProducto" style="width: 110px;">
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div class="d-md-none text-center text-muted small py-1.5 bg-light border-bottom">
-                <i class="bi bi-arrow-left-right me-1 text-primary"></i>Desliza horizontalmente para ver toda la tabla
+                <i class="bi bi-arrow-left-right me-1 text-teal"></i>Desliza horizontalmente para ver toda la tabla
             </div>
             <div class="card-body p-0 table-responsive bg-white">
                 <table class="table table-bordered align-middle text-center mb-0 border-light" style="min-width: 650px;">
@@ -89,7 +89,7 @@
                         </tr>
                         <!-- Fila: Refuerzo -->
                         <tr class="fila-refuerzo">
-                            <td class="fw-bold text-primary bg-light">Refuerzo</td>
+                            <td class="fw-bold text-teal bg-light" style="color: #0f766e;">Refuerzo</td>
                             <td>
                                 <input asp-for="UrdimbreRefuerzoTejido" id="UrdimbreRefuerzoTejido" class="form-control form-control-sm text-center fw-bold shadow-none text-dark bg-white border rounded-2" type="number" step="0.1" readonly tabindex="-1" />
                             </td>
@@ -99,8 +99,8 @@
                                     <span class="input-group-text bg-light text-muted border small">mm</span>
                                 </div>
                             </td>
-                            <td><input asp-for="DenierRefuerzo" id="DenierRefuerzo" class="form-control form-control-sm text-center fw-bold shadow-none text-dark bg-white border rounded-2" type="number" step="1" readonly tabindex="-1" /></td>
-                            <td class="fw-semibold text-end pe-2 text-primary bg-light" style="white-space:nowrap;">Ancho Ref.</td>
+                            <td><input asp-for="DenierRefuerzo" id="DenierRefuerzo" class="form-control form-control-sm text-center calc-input fw-bold shadow-none text-dark bg-white border rounded-2" type="number" step="1" readonly tabindex="-1" /></td>
+                            <td class="fw-semibold text-end pe-2 text-teal bg-light" style="white-space:nowrap; color: #0f766e;">Ancho Ref.</td>
                             <td>
                                 <div class="input-group input-group-sm">
                                     <input asp-for="AnchoRefuerzoFactor" class="form-control text-center calc-input fw-bold shadow-none text-dark bg-white border rounded-start-2" type="number" inputmode="numeric" min="0" max="12" step="1" />
@@ -113,14 +113,14 @@
             </div>
         </div>
 
-        <!-- BLOQUE DE RESULTADOS -->
-        <div class="card shadow-sm mb-4 border-0 rounded-4 overflow-hidden bg-white">
-            <!-- Barra Estilizada con Texto de Resultados -->
-            <div class="fw-bold text-center text-white py-2.5 border-bottom" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); font-size: 1rem; letter-spacing: 1px;">
-                <i class="bi bi-activity me-2"></i> RESULTADOS Y MÉTRICAS TÉCNICAS
+        <!-- BLOQUE DE RESULTADOS (ALTAMENTE RESALTADO) -->
+        <div class="card shadow mb-4 border-0 rounded-4 overflow-hidden bg-white" style="border: 2px solid #0d9488 !important;">
+            <!-- Barra Estilizada Superior Destacada -->
+            <div class="fw-bold text-center text-white py-3 border-bottom d-flex align-items-center justify-content-center gap-2 shadow-sm" style="background: linear-gradient(135deg, #0f766e 0%, #115e59 100%); font-size: 1.1rem; letter-spacing: 1.2px;">
+                <i class="bi bi-stars text-warning fs-4"></i> RESULTADOS Y MÉTRICAS TÉCNICAS <i class="bi bi-stars text-warning fs-4"></i>
             </div>
             <div class="d-md-none text-center text-muted small py-1.5 bg-light border-bottom">
-                <i class="bi bi-arrow-left-right me-1 text-primary"></i>Desliza horizontalmente para ver toda la tabla
+                <i class="bi bi-arrow-left-right me-1 text-teal"></i>Desliza horizontalmente para ver toda la tabla
             </div>
             <div class="card-body p-0 table-responsive bg-white">
                 <table class="table table-bordered align-middle text-center mb-0 border-light" style="min-width: 650px;">
@@ -137,10 +137,10 @@
                         <tr>
                             <td class="fw-bold text-secondary text-center bg-light" style="width: 15%;">Producto</td>
                             <td style="width: 18%;" class="text-center bg-white"><span class="fw-bold text-dark" id="lblTipoProductoRes">@Model.TipoProducto</span></td>
-                            <td class="fw-bold text-primary text-center bg-light" style="width: 3%;">Urdimbre</td>
+                            <td class="fw-bold text-teal text-center bg-light" style="width: 3%; color: #0f766e;">Urdimbre</td>
                             <td style="width: 32%;" class="text-center bg-white"><span class="fw-bold text-dark" id="resUrdimbreRes2">@Model.ResistenciaUrdimbre.ToString("F2")</span> <span class="text-muted small">KgF</span></td>
                             <td style="width: 18%;" class="text-center bg-white"><span class="fw-bold text-dark" id="resPesoUrdimbreTipo">@Model.PesoUrdimbre.ToString("F2")</span> <span class="text-muted small">gr</span></td>
-                            <td style="width: 14%;" class="text-center bg-white"><span id="resUrdimbrePorc2" class="badge rounded-pill text-primary bg-primary bg-opacity-10 border border-primary border-opacity-25 px-2.5 py-1">@Model.PorcentajeUrdimbre.ToString("F1") %</span></td>
+                            <td style="width: 14%;" class="text-center bg-white"><span id="resUrdimbrePorc2" class="badge rounded-pill text-teal bg-teal bg-opacity-10 border border-teal px-2.5 py-1" style="background-color: rgba(13, 148, 136, 0.1); color: #0f766e; border-color: rgba(13, 148, 136, 0.3);">@Model.PorcentajeUrdimbre.ToString("F1") %</span></td>
                         </tr>
                         <!-- Fila: Medida -->
                         <tr>
@@ -155,10 +155,10 @@
                         <tr>
                             <td class="fw-bold text-secondary text-center bg-light">Tejido</td>
                             <td class="text-center bg-white"><span class="fw-bold text-dark" id="resTejidoConcatenado">@Model.UrdimbreTejido x @Model.TramaTejido</span></td>
-                            <td class="fw-bold text-primary text-center bg-light">Trama</td>
+                            <td class="fw-bold text-teal text-center bg-light" style="color: #0f766e;">Trama</td>
                             <td class="text-center bg-white"><span class="fw-bold text-dark" id="resTramaRes2">@Model.ResistenciaTrama.ToString("F2")</span> <span class="text-muted small">KgF</span></td>
                             <td class="text-center bg-white"><span class="fw-bold text-dark" id="resPesoTramaTipo">@Model.PesoTrama.ToString("F2")</span> <span class="text-muted small">gr</span></td>
-                            <td class="text-center bg-white"><span id="resTramaPorc2" class="badge rounded-pill text-primary bg-primary bg-opacity-10 border border-primary border-opacity-25 px-2.5 py-1">@Model.PorcentajeTrama.ToString("F1") %</span></td>
+                            <td class="text-center bg-white"><span id="resTramaPorc2" class="badge rounded-pill text-teal bg-teal bg-opacity-10 border border-teal px-2.5 py-1" style="background-color: rgba(13, 148, 136, 0.1); color: #0f766e; border-color: rgba(13, 148, 136, 0.3);">@Model.PorcentajeTrama.ToString("F1") %</span></td>
                         </tr>
                         <!-- Fila: Denier -->
                         <tr>
@@ -173,23 +173,23 @@
                         <tr>
                             <td class="fw-bold text-secondary text-center bg-light">Conos</td>
                             <td class="text-center bg-white"><span class="fw-bold text-dark" id="resCantidadConos">@Model.MaquinaNumero</span> <span class="text-muted small">conos</span></td>
-                            <td class="fw-bold text-primary text-center bg-light">Refuerzo</td>
+                            <td class="fw-bold text-teal text-center bg-light" style="color: #0f766e;">Refuerzo</td>
                             <td class="text-center bg-white">
-                                <div class="fw-bold text-primary"><span id="resUrdRefRes2">@Model.UrdimbreRefuerzoResistencia.ToString("F2")</span> <span class="small">KgF</span></div>
+                                <div class="fw-bold text-teal" style="color: #0f766e;"><span id="resUrdRefRes2">@Model.UrdimbreRefuerzoResistencia.ToString("F2")</span> <span class="small">KgF</span></div>
                                 <div class="text-muted small" id="resAnchoRefuerzoLabel">Ancho: @Model.AnchoRefuerzoFactor cm</div>
                             </td>
                             <td class="text-center bg-white"><span class="fw-bold text-dark" id="resPesoRefuerzoTipo">@Model.PesoRefuerzo.ToString("F2")</span> <span class="text-muted small">gr</span></td>
-                            <td class="text-center bg-white"><span id="resPorcRefuerzo" class="badge rounded-pill text-success bg-success bg-opacity-10 border border-success border-opacity-25 px-2.5 py-1">100 %</span></td>
+                            <td class="text-center bg-white"><span id="resPorcRefuerzo" class="badge rounded-pill text-success bg-success bg-opacity-10 border border-success px-2.5 py-1">100 %</span></td>
                         </tr>
                     </tbody>
                 </table>
 
-                <!-- Sub-bloque de Pesos Finales -->
-                <table class="table table-bordered align-middle text-center mb-0 border-light" style="min-width: 650px;">
+                <!-- Sub-bloque de Pesos Finales (Fondo con acento sutil para resaltar el resultado principal) -->
+                <table class="table table-bordered align-middle text-center mb-0" style="min-width: 650px; background-color: #f0fdf4;">
                     <tbody>
                         <tr>
-                            <td rowspan="4" class="fw-bold text-dark text-center align-middle bg-light" style="width: 33%;">
-                                <div class="fs-5 text-uppercase tracking-wide text-primary">PESO TOTAL</div>
+                            <td rowspan="4" class="fw-bold text-center align-middle bg-teal bg-opacity-10" style="width: 33%; background-color: rgba(13, 148, 136, 0.08) !important;">
+                                <div class="fs-5 text-uppercase tracking-wide fw-extrabold" style="color: #0f766e;">PESO TOTAL</div>
                             </td>
                             <td class="fw-bold text-secondary text-center bg-light" style="width: 33%;">gm2</td>
                             <td class="fw-bold text-center text-dark bg-white" style="width: 34%;" id="resPesoBase">@Model.PesoTejidoBase.ToString("F1")</td>
@@ -200,22 +200,22 @@
                         </tr>
                         <tr>
                             <td class="fw-bold text-secondary text-center bg-light">gmp</td>
-                            <td class="fw-bold text-center text-primary bg-white" id="resGmp">@Model.PesoConRefuerzo.ToString("F1")</td>
+                            <td class="fw-bold text-center bg-white" style="color: #0f766e;" id="resGmp">@Model.PesoConRefuerzo.ToString("F1")</td>
                         </tr>
                         <tr>
-                            <td class="fw-bold text-secondary text-center bg-light">gml</td>
-                            <td class="fw-bold text-center fs-5 text-success bg-white" id="resPesoMetro">@Model.PesoMetroLineal.ToString("F1")</td>
+                            <td class="fw-bold text-secondary text-center bg-light">gml <span class="badge bg-success ms-1" style="font-size: 0.65rem;">Principal</span></td>
+                            <td class="fw-bold text-center fs-4 text-success bg-white shadow-sm py-2" id="resPesoMetro" style="background-color: #ecfdf5 !important; border: 2px dashed #10b981 !important;">@Model.PesoMetroLineal.ToString("F1")</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Botón de Guardar -->
+        <!-- Botón de Guardar Destacado -->
         <div class="row">
             <div class="col-12">
-                <button type="button" id="btnGuardar" class="btn w-100 py-3 fw-bold shadow-sm text-uppercase tracking-wide text-white rounded-pill border-0 hover-scale" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); transition: all 0.2s ease;">
-                    <i class="bi bi-bookmark-check-fill me-2 fs-5 align-middle"></i> GUARDAR REGISTRO EN HISTORIAL
+                <button type="button" id="btnGuardar" class="btn w-100 py-3.5 fw-bold shadow-lg text-uppercase tracking-wide text-white rounded-pill border-0 hover-scale" style="background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); font-size: 1.05rem; transition: all 0.2s ease;">
+                    <i class="bi bi-bookmark-check-fill me-2 fs-4 align-middle text-warning"></i> GUARDAR REGISTRO EN HISTORIAL
                 </button>
             </div>
         </div>
@@ -226,8 +226,8 @@
     <script src="~/js/calculadora.js"></script>
     <style>
         .hover-scale:hover {
-            filter: brightness(1.05);
-            transform: scale(1.005);
+            filter: brightness(1.08);
+            transform: scale(1.008);
             transition: all 0.2s ease;
         }
         .hover-bg-light:hover {
@@ -260,7 +260,7 @@
                 padding: 0.85rem !important;
             }
             #resPesoMetro {
-                font-size: 1.1rem !important;
+                font-size: 1.25rem !important;
             }
         }
     </style>
