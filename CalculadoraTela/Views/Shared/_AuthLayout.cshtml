@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>@ViewData["Title"] - Calculadora de Tela</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(37,99,235,0.25), transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(37,99,235,0.18), transparent 45%),
+                linear-gradient(135deg, #060f1e 0%, #0f2040 100%);
+            font-family: "Segoe UI", Roboto, Arial, sans-serif;
+        }
+
+        .auth-wrapper {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .auth-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .auth-brand-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg,#1d4ed8,#2563eb);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.45);
+        }
+
+        .auth-brand-text {
+            color: #ffffff;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+            font-size: 1.15rem;
+        }
+
+        .auth-card {
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.35);
+            padding: 36px 32px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .auth-card h1 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #0b1629;
+            margin-bottom: 4px;
+        }
+
+        .auth-card .auth-subtitle {
+            color: #64748b;
+            font-size: 0.88rem;
+            margin-bottom: 24px;
+        }
+
+        .auth-card label {
+            font-weight: 600;
+            font-size: 0.82rem;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        .auth-card .form-control {
+            border-radius: 10px;
+            border: 1.5px solid #dbe3ef;
+            padding: 10px 14px;
+            font-size: 0.92rem;
+        }
+
+        .auth-card .form-control:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 0.2rem rgba(37,99,235,0.15);
+        }
+
+        .btn-auth-primary {
+            background: linear-gradient(135deg,#1d4ed8,#2563eb);
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            border-radius: 10px;
+            padding: 11px;
+            letter-spacing: 0.3px;
+            box-shadow: 0 6px 16px rgba(37,99,235,0.35);
+        }
+
+        .btn-auth-primary:hover {
+            filter: brightness(1.07);
+            color: #fff;
+        }
+
+        .auth-footer-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.86rem;
+            color: #64748b;
+        }
+
+        .auth-footer-link a {
+            color: #2563eb;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .auth-footer-link a:hover {
+            text-decoration: underline;
+        }
+
+        .validation-summary-errors ul {
+            margin-bottom: 0;
+            padding-left: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-brand">
+            <div class="auth-brand-icon">
+                <i class="bi bi-grid-3x3-gap-fill fs-5"></i>
+            </div>
+            <span class="auth-brand-text">CALCULADORA DE TELA</span>
+        </div>
+
+        <div class="auth-card">
+            @RenderBody()
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
