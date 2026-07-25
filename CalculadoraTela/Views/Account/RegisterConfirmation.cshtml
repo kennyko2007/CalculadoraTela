@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Revisa tu correo";
+    Layout = "_AuthLayout";
+}
+
+<div class="text-center">
+    <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
+         style="width:64px; height:64px; background:#eff6ff; color:#2563eb;">
+        <i class="bi bi-envelope-check-fill fs-2"></i>
+    </div>
+    <h1>Confirma tu correo</h1>
+    <p class="auth-subtitle mb-1">
+        Enviamos un enlace de verificación a:
+    </p>
+    <p class="fw-bold mb-3" style="color:#0b1629;">@ViewBag.Email</p>
+
+    @if (TempData["EmailError"] != null)
+    {
+        <div class="alert alert-warning small text-start">@TempData["EmailError"]</div>
+    }
+    else
+    {
+        <p class="small text-secondary">
+            Abre tu bandeja de entrada (revisa también SPAM) y haz clic en el botón del correo
+            para activar tu cuenta antes de iniciar sesión.
+        </p>
+    }
+
+    <a asp-controller="Account" asp-action="Login" class="btn btn-auth-primary w-100 mt-3">
+        <i class="bi bi-box-arrow-in-right me-1"></i> Ir a iniciar sesión
+    </a>
+</div>

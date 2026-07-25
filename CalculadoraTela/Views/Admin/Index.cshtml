@@ -1,0 +1,116 @@
+@model List<CalculadoraTela.ViewModels.AdminUserListItemViewModel>
+@{
+    ViewData["Title"] = "Administración de usuarios";
+}
+
+<div class="container-fluid py-4 px-3 px-md-4" style="min-height:100vh;">
+
+    <!-- Encabezado -->
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 pb-3 gap-3"
+         style="border-bottom:2px solid #dde3ec;">
+        <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center justify-content-center rounded-3 text-white shadow"
+                 style="background:linear-gradient(135deg,#7c3aed,#a855f7); width:48px; height:48px; flex-shrink:0;">
+                <i class="bi bi-people-fill fs-5"></i>
+            </div>
+            <div>
+                <h2 class="fw-black mb-0" style="color:#0b1629; letter-spacing:-0.5px;">Administración de usuarios</h2>
+                <span class="small fw-medium" style="color:#64748b;">@Model.Count usuario(s) registrado(s)</span>
+            </div>
+        </div>
+        <a asp-controller="Admin" asp-action="Create"
+           class="btn fw-semibold rounded-pill px-4 text-white border-0"
+           style="background:linear-gradient(135deg,#7c3aed,#a855f7);">
+            <i class="bi bi-person-plus-fill me-1"></i>Nuevo usuario
+        </a>
+    </div>
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-success py-2 px-3 small mb-3">@TempData["Mensaje"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger py-2 px-3 small mb-3">@TempData["Error"]</div>
+    }
+
+    <div class="card border-0 overflow-hidden mb-4" style="border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" style="font-size:0.87rem;">
+                <thead>
+                    <tr style="background:#0b1629;">
+                        <th class="py-3 px-3 text-white">Usuario</th>
+                        <th class="py-3 px-3 text-white">Nombre completo</th>
+                        <th class="py-3 px-3 text-white">Correo</th>
+                        <th class="py-3 px-3 text-white">Registrado</th>
+                        <th class="py-3 px-3 text-white">Rol</th>
+                        <th class="py-3 px-3 text-white text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        foreach (var u in Model)
+                        {
+                            <tr>
+                                <td class="px-3 fw-semibold" style="color:#0b1629;">@u.UserName</td>
+                                <td class="px-3" style="color:#334155;">@u.NombreCompleto</td>
+                                <td class="px-3" style="color:#475569;">@u.Email</td>
+                                <td class="px-3" style="color:#64748b;">@u.FechaRegistro.ToString("dd/MM/yyyy")</td>
+                                <td class="px-3">
+                                    @if (u.EsAdministrador)
+                                    {
+                                        <span class="badge rounded-pill fw-bold px-3 py-1" style="background:rgba(124,58,237,0.12); color:#7c3aed; border:1px solid rgba(124,58,237,0.25);">
+                                            <i class="bi bi-shield-fill-check me-1"></i>Admin
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge rounded-pill fw-bold px-3 py-1" style="background:rgba(37,99,235,0.12); color:#1d4ed8; border:1px solid rgba(37,99,235,0.25);">
+                                            Usuario
+                                        </span>
+                                    }
+                                </td>
+                                <td class="px-3 text-end">
+                                    <div class="d-inline-flex gap-2">
+                                        <form asp-controller="Admin" asp-action="ForzarCierreSesion" method="post" class="mb-0"
+                                              onsubmit="return confirm('¿Cerrar la sesión activa de @u.UserName?');">
+                                            <input type="hidden" name="id" value="@u.Id" />
+                                            <button type="submit" class="btn btn-sm" title="Forzar cierre de sesión"
+                                                    style="background:#fff7ed; color:#c2410c; border:1px solid #fed7aa; border-radius:8px;">
+                                                <i class="bi bi-power"></i>
+                                            </button>
+                                        </form>
+                                        <form asp-controller="Admin" asp-action="Delete" method="post" class="mb-0"
+                                              onsubmit="return confirm('¿Eliminar al usuario @u.UserName? Esta acción no se puede deshacer.');">
+                                            <input type="hidden" name="id" value="@u.Id" />
+                                            <button type="submit" class="btn btn-sm" title="Eliminar usuario"
+                                                    style="background:#fff0f0; color:#dc2626; border:1px solid #fecaca; border-radius:8px;">
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-5" style="color:#94a3b8;">
+                                No hay usuarios registrados todavía.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <p class="small text-secondary">
+        <i class="bi bi-info-circle me-1"></i>
+        El botón <i class="bi bi-power"></i> cierra la sesión activa de ese usuario sin borrar su cuenta
+        (vuelve a pedirle iniciar sesión en un máximo de ~30 minutos).
+    </p>
+
+</div>
