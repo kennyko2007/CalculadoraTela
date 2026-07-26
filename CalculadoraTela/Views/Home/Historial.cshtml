@@ -1,0 +1,254 @@
+@model IEnumerable<CalculadoraTela.Models.Calculo>
+
+@{
+    ViewData["Title"] = "Historial de Registros";
+}
+
+<div class="container-fluid py-4 px-3 px-md-4" style="min-height:100vh;">
+
+    <!-- Encabezado -->
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 pb-3 gap-3"
+         style="border-bottom:2px solid #dde3ec;">
+        <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center justify-content-center rounded-3 text-white shadow"
+                 style="background:linear-gradient(135deg,#1d4ed8,#2563eb); width:48px; height:48px; flex-shrink:0;">
+                <i class="bi bi-clock-history fs-5"></i>
+            </div>
+            <div>
+                <h2 class="fw-black mb-0" style="color:#0b1629; letter-spacing:-0.5px;">Historial de Cálculos</h2>
+                <span class="small fw-medium" style="color:#64748b;">Registros guardados anteriormente</span>
+            </div>
+        </div>
+        <div class="d-flex gap-2 w-100 w-md-auto">
+            @if (Model != null && Model.Any())
+            {
+                <button type="button" id="btnVaciarHistorial"
+                        class="btn btn-sm fw-semibold rounded-pill px-3 border"
+                        style="color:#dc2626; border-color:#fecaca; background:#fff5f5;">
+                    <i class="bi bi-trash3 me-1"></i>Vaciar Historial
+                </button>
+            }
+            <a asp-controller="Home" asp-action="Index"
+               class="btn btn-sm fw-semibold rounded-pill px-4 text-white border-0"
+               style="background:linear-gradient(135deg,#1d4ed8,#2563eb);">
+                <i class="bi bi-arrow-left me-1"></i>Calculadora
+            </a>
+        </div>
+    </div>
+
+    <!-- ══════ Vista de tabla (escritorio / tablet) ══════ -->
+    <div class="card border-0 overflow-hidden mb-4 d-none d-md-block" style="border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered align-middle text-center mb-0" style="font-size:0.83rem; min-width:900px;">
+                <thead>
+                    <tr class="historial-header-row">
+                        <th class="py-3">ID</th>
+                        <th class="py-3">Fecha</th>
+                        <th class="py-3">Tipo</th>
+                        <th class="py-3">Medida (Ancho × Corte)</th>
+                        <th class="py-3">Tejido (U × T)</th>
+                        <th class="py-3">Denier (U × T)</th>
+                        <th class="py-3">Urdimbre (Res / %)</th>
+                        <th class="py-3">Trama (Res / %)</th>
+                        <th class="py-3">Refuerzo</th>
+                        <th class="py-3 gml-header-col">GML</th>
+                        <th class="py-3">GM2</th>
+                        <th class="py-3">GMP</th>
+                        <th class="py-3"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="fw-semibold" style="color:#64748b;">@item.Id</td>
+                                <td class="fw-semibold" style="color:#334155; white-space:nowrap;">
+                                    @item.FechaCreacionLocal.ToString("dd/MM/yyyy HH:mm")
+                                </td>
+                                <td>
+                                    <span class="badge rounded-pill fw-bold px-3 py-1"
+                                          style="background:rgba(37,99,235,0.12); color:#1d4ed8; border:1px solid rgba(37,99,235,0.25);">
+                                        @item.TipoProducto
+                                    </span>
+                                </td>
+                                <td class="fw-semibold" style="color:#1e293b;">@item.Ancho.ToString("F1") × @item.Corte.ToString("F1")</td>
+                                <td style="color:#475569;">@item.UrdimbreTejido.ToString("F1") × @item.TramaTejido.ToString("F1")</td>
+                                <td style="color:#475569;">@item.UrdimbreDenier × @item.TramaDenier</td>
+                                <td style="color:#1d4ed8; font-weight:600;">@item.ResistenciaUrdimbre.ToString("F2") KgF (@item.PorcentajeUrdimbre.ToString("F0")%)</td>
+                                <td style="color:#1d4ed8; font-weight:600;">@item.ResistenciaTrama.ToString("F2") KgF (@item.PorcentajeTrama.ToString("F0")%)</td>
+                                <td style="color:#059669; font-weight:600;">@item.UrdimbreRefuerzoResistencia.ToString("F2") KgF</td>
+
+                                <!-- GML — columna destacada -->
+                                <td class="gml-col">
+                                    @item.PesoMetroLineal.ToString("F1")
+                                </td>
+
+                                <td class="gm2-col">@item.PesoTejidoBase.ToString("F1")</td>
+                                <td class="gmp-col">@item.PesoPorBolsa.ToString("F1")</td>
+                                <td>
+                                    <button type="button"
+                                            class="btn btn-sm btn-eliminar-registro"
+                                            data-id="@item.Id"
+                                            title="Eliminar este registro"
+                                            style="background:#fff0f0; color:#dc2626; border:1px solid #fecaca; border-radius:8px;">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="13" class="text-center py-5" style="color:#64748b;">
+                                <i class="bi bi-folder2-open display-5 d-block mb-3" style="color:#cbd5e1;"></i>
+                                <span class="fs-6 fw-medium">No hay registros guardados todavía.</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ══════ Vista de tarjetas apiladas (móvil) ══════ -->
+    <div class="d-md-none">
+        @if (Model != null && Model.Any())
+        {
+            <div class="d-flex flex-column gap-3 mb-4">
+                @foreach (var item in Model)
+                {
+                    <div class="historial-mobile-card">
+                        <div class="historial-mobile-header">
+                            <div>
+                                <span class="historial-mobile-id">#@item.Id</span><br />
+                                <span class="historial-mobile-fecha">@item.FechaCreacionLocal.ToString("dd/MM/yyyy HH:mm")</span>
+                            </div>
+                            <span class="badge rounded-pill fw-bold px-3 py-1"
+                                  style="background:rgba(255,255,255,0.14); color:#fff; border:1px solid rgba(255,255,255,0.25);">
+                                @item.TipoProducto
+                            </span>
+                        </div>
+                        <div class="historial-mobile-body">
+                            <div class="historial-mobile-row">
+                                <span class="historial-mobile-label">Medida</span>
+                                <span class="historial-mobile-value">@item.Ancho.ToString("F1") × @item.Corte.ToString("F1")</span>
+                            </div>
+                            <div class="historial-mobile-row">
+                                <span class="historial-mobile-label">Tejido (U × T)</span>
+                                <span class="historial-mobile-value">@item.UrdimbreTejido.ToString("F1") × @item.TramaTejido.ToString("F1")</span>
+                            </div>
+                            <div class="historial-mobile-row">
+                                <span class="historial-mobile-label">Denier (U × T)</span>
+                                <span class="historial-mobile-value">@item.UrdimbreDenier × @item.TramaDenier</span>
+                            </div>
+                            <div class="historial-mobile-row">
+                                <span class="historial-mobile-label">Urdimbre (Res / %)</span>
+                                <span class="historial-mobile-value">@item.ResistenciaUrdimbre.ToString("F2") KgF (@item.PorcentajeUrdimbre.ToString("F0")%)</span>
+                            </div>
+                            <div class="historial-mobile-row">
+                                <span class="historial-mobile-label">Trama (Res / %)</span>
+                                <span class="historial-mobile-value">@item.ResistenciaTrama.ToString("F2") KgF (@item.PorcentajeTrama.ToString("F0")%)</span>
+                            </div>
+                            <div class="historial-mobile-row">
+                                <span class="historial-mobile-label">Refuerzo</span>
+                                <span class="historial-mobile-value">@item.UrdimbreRefuerzoResistencia.ToString("F2") KgF</span>
+                            </div>
+                            <div class="historial-mobile-row historial-mobile-row-gml">
+                                <span class="historial-mobile-label">GML</span>
+                                <span class="historial-mobile-value">@item.PesoMetroLineal.ToString("F1")</span>
+                            </div>
+                            <div class="historial-mobile-row">
+                                <span class="historial-mobile-label">GM2</span>
+                                <span class="historial-mobile-value">@item.PesoTejidoBase.ToString("F1")</span>
+                            </div>
+                            <div class="historial-mobile-row">
+                                <span class="historial-mobile-label">GMP</span>
+                                <span class="historial-mobile-value">@item.PesoPorBolsa.ToString("F1")</span>
+                            </div>
+                        </div>
+                        <div class="historial-mobile-actions">
+                            <button type="button"
+                                    class="btn btn-sm btn-eliminar-registro"
+                                    data-id="@item.Id"
+                                    title="Eliminar este registro"
+                                    style="background:#fff0f0; color:#dc2626; border:1px solid #fecaca; border-radius:8px;">
+                                <i class="bi bi-trash3 me-1"></i>Eliminar
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="card border-0 mb-4" style="border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+                <div class="text-center py-5" style="color:#64748b;">
+                    <i class="bi bi-folder2-open display-5 d-block mb-3" style="color:#cbd5e1;"></i>
+                    <span class="fs-6 fw-medium">No hay registros guardados todavía.</span>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Eliminar un registro puntual
+            document.querySelectorAll(".btn-eliminar-registro").forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    const id = btn.getAttribute("data-id");
+                    if (!confirm("¿Eliminar este registro del historial? Esta acción no se puede deshacer.")) return;
+                    btn.disabled = true;
+                    fetch('/Home/EliminarRegistro?id=' + encodeURIComponent(id), { method: 'POST' })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data && data.success) {
+                                const row = btn.closest("tr") || btn.closest(".historial-mobile-card");
+                                if (row) row.remove();
+                                // Elimina también la contraparte (tabla o tarjeta) del mismo registro
+                                document.querySelectorAll('.btn-eliminar-registro[data-id="' + id + '"]').forEach(function (b) {
+                                    const counterpart = b.closest("tr") || b.closest(".historial-mobile-card");
+                                    if (counterpart) counterpart.remove();
+                                });
+                            } else {
+                                alert("No se pudo eliminar el registro: " + (data?.message || "Error desconocido."));
+                                btn.disabled = false;
+                            }
+                        })
+                        .catch(() => {
+                            alert("Ocurrió un error al intentar eliminar el registro.");
+                            btn.disabled = false;
+                        });
+                });
+            });
+
+            // Vaciar todo el historial
+            const btnVaciar = document.getElementById("btnVaciarHistorial");
+            if (btnVaciar) {
+                btnVaciar.addEventListener("click", function () {
+                    if (!confirm("¿Vaciar TODO el historial? Se borrarán todos los registros guardados y no se puede deshacer.")) return;
+                    btnVaciar.disabled = true;
+                    fetch('/Home/VaciarHistorial', { method: 'POST' })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data && data.success) {
+                                window.location.reload();
+                            } else {
+                                alert("No se pudo vaciar el historial: " + (data?.message || "Error desconocido."));
+                                btnVaciar.disabled = false;
+                            }
+                        })
+                        .catch(() => {
+                            alert("Ocurrió un error al intentar vaciar el historial.");
+                            btnVaciar.disabled = false;
+                        });
+                });
+            }
+        });
+    </script>
+}
